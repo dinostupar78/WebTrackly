@@ -6,4 +6,6 @@ module hr.javafx.webtrackly {
 
     opens hr.javafx.webtrackly to javafx.fxml;
     exports hr.javafx.webtrackly;
+    exports hr.javafx.webtrackly.main;
+    opens hr.javafx.webtrackly.main to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-package hr.javafx.webtrackly;
+package hr.javafx.webtrackly.main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
