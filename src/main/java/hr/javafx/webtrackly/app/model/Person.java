@@ -1,31 +1,31 @@
 package hr.javafx.webtrackly.app.model;
 
 public class Person extends Entity {
-    private String name;
-    private String surname;
+    private String firstName;
+    private String lastName;
     private PersonalData personalData;
 
-    public Person(Long id, String name, String surname, PersonalData personalData) {
+    public Person(Long id, String firstName, String lastName, PersonalData personalData) {
         super(id);
-        this.name = name;
-        this.surname = surname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.personalData = personalData;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setSurname(String lastName) {
+        this.lastName = lastName;
     }
 
     public PersonalData getPersonalData() {

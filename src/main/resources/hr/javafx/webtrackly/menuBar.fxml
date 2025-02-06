@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.FirstScreenController">
+<menus>
+    <Menu mnemonicParsing="false" text="Dashboard" />
+    <Menu mnemonicParsing="false" text="Analytics">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Traffic Overview" />
+            <MenuItem mnemonicParsing="false" text="User Behavior" />
+            <MenuItem mnemonicParsing="false" text="Performance Monitoring" />
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="User">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Profile" />
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Records">
+         <items>
+            <MenuItem mnemonicParsing="false" text="View" />
+            <MenuItem mnemonicParsing="false" text="Add" />
+            <MenuItem mnemonicParsing="false" text="Edit" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+         </items>
+    </Menu>
+      <Menu mnemonicParsing="false" text="Log" />
+    <Menu mnemonicParsing="false" text="Options">
+        <items>
+            <MenuItem mnemonicParsing="false" onAction = "#onClickLogout" text="Logout" />
+        </items>
+    </Menu>
+</menus>
+</MenuBar>
