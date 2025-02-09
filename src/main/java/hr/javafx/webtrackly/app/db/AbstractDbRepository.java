@@ -4,11 +4,11 @@ import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
 import hr.javafx.webtrackly.app.model.Entity;
 
 import java.util.List;
-import java.util.Set;
 
 public abstract class AbstractDbRepository<T extends Entity> {
+    public abstract T findById(Long id) throws RepositoryAccessException;
     public abstract List<T> findAll() throws RepositoryAccessException;
-    public abstract void save(Set<T> entities) throws RepositoryAccessException;
+    public abstract void save(List<T> entities) throws RepositoryAccessException;
     public abstract void save(T entity) throws RepositoryAccessException;
 
 

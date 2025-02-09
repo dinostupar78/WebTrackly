@@ -1,4 +1,4 @@
 package hr.javafx.webtrackly.controller;
 
-public class TrafficRecordController {
+public class UserActionController {
 }

@@ -3,8 +3,8 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.files.UserFileRepo;
 import hr.javafx.webtrackly.app.model.*;
-import hr.javafx.webtrackly.utils.OnClickUtil;
 import hr.javafx.webtrackly.utils.PasswordUtil;
+import hr.javafx.webtrackly.utils.ScreenChangeUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -82,7 +82,7 @@ public class RegisterController {
     }
 
     public void onClickSwitchToLogin(ActionEvent event) {
-        OnClickUtil.showLogin(event);
+        ScreenChangeUtil.showLoginPanel(event);
     }
 
 

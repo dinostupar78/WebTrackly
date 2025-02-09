@@ -5,8 +5,8 @@ import hr.javafx.webtrackly.app.model.AdminRole;
 import hr.javafx.webtrackly.app.model.MarketingRole;
 import hr.javafx.webtrackly.app.model.Role;
 import hr.javafx.webtrackly.app.model.User;
-import hr.javafx.webtrackly.utils.OnClickUtil;
 import hr.javafx.webtrackly.utils.PasswordUtil;
+import hr.javafx.webtrackly.utils.ScreenChangeUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -72,7 +72,7 @@ public class LoginController {
     }
 
     public void onClickRegister(ActionEvent event) {
-        OnClickUtil.showRegister(event);
+        ScreenChangeUtil.showRegisterPanel(event);
     }
 
     private void openDashboard() {
@@ -82,7 +82,6 @@ public class LoginController {
 
             Scene dashboardScene = new Scene(dashboardRoot, 800, 600);
 
-            // Retrieve the current stage from one of the components.
             Stage stage = (Stage) loginTextFieldUsername.getScene().getWindow();
 
             stage.setScene(dashboardScene);
