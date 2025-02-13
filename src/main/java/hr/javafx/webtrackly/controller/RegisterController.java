@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.enums.GenderType;
-import hr.javafx.webtrackly.app.files.UserFileRepo;
+import hr.javafx.webtrackly.app.files.UserFileRepository;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.PasswordUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeUtil;
@@ -65,7 +65,7 @@ public class RegisterController {
                 .setRole(role)
                 .build();
 
-        UserFileRepo<User> userRepo = new UserFileRepo<>();
+        UserFileRepository<User> userRepo = new UserFileRepository<>();
         try{
             userRepo.save(newUser);
             showAlert("Registration successful! You may now log in.");

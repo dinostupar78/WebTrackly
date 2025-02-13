@@ -7,12 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 public class HelloApplication extends Application {
     public static final Logger log = LoggerFactory.getLogger(HelloApplication.class);
-    private Connection connection;
-
 
     @Override
     public void start(Stage stage) throws IOException {

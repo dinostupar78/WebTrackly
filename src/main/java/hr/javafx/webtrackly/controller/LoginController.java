@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.files.UserFileRepo;
+import hr.javafx.webtrackly.app.files.UserFileRepository;
 import hr.javafx.webtrackly.app.model.AdminRole;
 import hr.javafx.webtrackly.app.model.MarketingRole;
 import hr.javafx.webtrackly.app.model.Role;
@@ -43,7 +43,7 @@ public class LoginController {
 
         String hashedInputPassword = PasswordUtil.hashPassword(password);
 
-        UserFileRepo<User> userRepo = new UserFileRepo<>();
+        UserFileRepository<User> userRepo = new UserFileRepository<>();
         List<User> users = userRepo.findAll();
 
         System.out.println("Hashed Input Password: " + hashedInputPassword);

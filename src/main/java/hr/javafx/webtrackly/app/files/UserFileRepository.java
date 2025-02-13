@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
-public class UserFileRepo<T extends User> extends AbstractFileRepo<T> {
+public class UserFileRepository<T extends User> extends AbstractFileRepository<T> {
 
     private static final String USERS_FILE_PATH = "dat/users.txt";
     private static final Integer NUMBER_OF_ROWS_PER_USER = 9;

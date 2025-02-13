@@ -5,6 +5,7 @@ public enum BehaviorType {
     SCROLL,
     NAVIGATE,
     FORM_SUBMIT,
+    PAGE_VISIT,
     VIDEO_PLAY,
     LOGIN,
     LOGOUT

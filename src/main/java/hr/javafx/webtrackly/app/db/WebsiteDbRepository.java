@@ -8,9 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -115,7 +113,7 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
             BigDecimal bounceRate = resultSet.getBigDecimal("BOUNCE_RATE");
 
             // Retrieve the users for this website from APP_USER using the WEBSITE_ID column.
-            List<User> users = fetchUsersForWebsite(id);
+            Set<User> users = fetchUsersForWebsite(id);
 
             return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users);
         } catch (SQLException e) {
@@ -124,8 +122,8 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
     }
 
 
-    private static List<User> fetchUsersForWebsite(Long websiteId) {
-        List<User> users = new ArrayList<>();
+    private static Set<User> fetchUsersForWebsite(Long websiteId) {
+        Set<User> users = new HashSet<>();
         String query = "SELECT * FROM APP_USER WHERE WEBSITE_ID = ?";
         try (Connection connection = connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {

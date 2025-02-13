@@ -32,10 +32,10 @@
 
             <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
                 <HBox alignment="CENTER" spacing="8">
-                    <TextField fx:id="websiteSearchField" prefWidth="200" promptText="Enter website URL" />
-                    <DatePicker fx:id="startDatePicker" promptText="Start Date" />
-                    <DatePicker fx:id="endDatePicker" promptText="End Date" />
-                    <Button fx:id="searchButton" text="Search" />
+                    <TextField fx:id="actionTextFieldID" prefWidth="200" promptText="Enter action ID" />
+               <TextField fx:id="actionTextFieldUser" prefHeight="25.0" prefWidth="165.0" promptText="Enter username" />
+                    <DatePicker fx:id="actionDatePickerTimestamp" promptText="Timestamp" />
+                    <Button onAction="#filterUserActions" text="Search" />
                 </HBox>
             </VBox>
 
@@ -68,13 +68,13 @@
     </center>
 
     <bottom>
-        <TableView fx:id="userActionsTable" prefHeight="276.0" prefWidth="800.0">
+        <TableView fx:id="userActionTableView" prefHeight="276.0" prefWidth="800.0">
             <columns>
-                <TableColumn fx:id="colTimestamp" prefWidth="140" text="Timestamp" />
-                <TableColumn fx:id="colUser" prefWidth="90" text="User" />
-                <TableColumn fx:id="colAction" prefWidth="140" text="Action" />
-                <TableColumn fx:id="colPageURL" prefWidth="220" text="Page URL" />
-                <TableColumn fx:id="colDetails" prefWidth="220" text="Details" />
+            <TableColumn fx:id="userActionTableColumnID" prefWidth="69.0" text="Action ID" />
+                <TableColumn fx:id="userActionTableColumnUser" prefWidth="122.0" text="User" />
+                <TableColumn fx:id="userActionTableColumnAction" prefWidth="143.0" text="Action" />
+                <TableColumn fx:id="userActionTableColumnTimestamp" prefWidth="152.0" text="Timestamp" />
+                <TableColumn fx:id="userActionTableColumnDetails" prefWidth="313.0" text="Details" />
             </columns>
         </TableView>
     </bottom>

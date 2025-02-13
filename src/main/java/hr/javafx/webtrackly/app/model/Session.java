@@ -4,24 +4,33 @@ import hr.javafx.webtrackly.app.enums.DeviceType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public class Session extends Entity{
+    private Website website;
     private User user;
     private DeviceType deviceType;
     private BigDecimal sessionDuration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Optional<Boolean> isActive;
+    private Boolean isActive;
 
-    public Session(Long id, User user, DeviceType deviceType, BigDecimal sessionDuration, LocalDateTime startTime, LocalDateTime endTime, Optional<Boolean> isActive) {
+    public Session(Long id, Website website, User user, DeviceType deviceType, BigDecimal sessionDuration, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive) {
         super(id);
+        this.website = website;
         this.user = user;
         this.deviceType = deviceType;
         this.sessionDuration = sessionDuration;
         this.startTime = startTime;
         this.endTime = endTime;
         this.isActive = isActive;
+    }
+
+    public Website getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(Website website) {
+        this.website = website;
     }
 
     public User getUser() {
@@ -64,11 +73,11 @@ public class Session extends Entity{
         this.endTime = endTime;
     }
 
-    public Optional<Boolean> getActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setActive(Optional<Boolean> active) {
+    public void setActive(Boolean active) {
         isActive = active;
     }
 }

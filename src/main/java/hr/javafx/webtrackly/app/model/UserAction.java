@@ -3,16 +3,15 @@ package hr.javafx.webtrackly.app.model;
 import hr.javafx.webtrackly.app.enums.BehaviorType;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public class UserAction extends Entity{
     private User user;
     private BehaviorType action;
-    private Optional<Website> page;
+    private Website page;
     private LocalDateTime actionTimestamp;
-    private Optional<String> details;
+    private String details;
 
-    public UserAction(Long id, User user, BehaviorType action, Optional<Website> page, LocalDateTime actionTimestamp, Optional<String> details) {
+    public UserAction(Long id, User user, BehaviorType action, Website page, LocalDateTime actionTimestamp, String details) {
         super(id);
         this.user = user;
         this.action = action;
@@ -37,11 +36,11 @@ public class UserAction extends Entity{
         this.action = action;
     }
 
-    public Optional<Website> getPage() {
+    public Website getPage() {
         return page;
     }
 
-    public void setPage(Optional<Website> page) {
+    public void setPage(Website page) {
         this.page = page;
     }
 
@@ -53,11 +52,11 @@ public class UserAction extends Entity{
         this.actionTimestamp = timestamp;
     }
 
-    public Optional<String> getDetails() {
+    public String getDetails() {
         return details;
     }
 
-    public void setDetails(Optional<String> details) {
+    public void setDetails(String details) {
         this.details = details;
     }
 }

@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.app.model;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 public class Website extends Entity {
     private String websiteName;
@@ -9,10 +9,10 @@ public class Website extends Entity {
     private String websiteUrl;
     private Integer websiteUserCount;
     private BigDecimal bounceRate;
-    private List<User> users;
+    private Set<User> users;
 
     public Website(Long id, String websiteName, Integer websiteClicks, String websiteUrl, Integer websiteUserCount,
-                   BigDecimal bounceRate, List<User> users) {
+                   BigDecimal bounceRate, Set<User> users) {
         super(id);
         this.websiteName = websiteName;
         this.websiteClicks = websiteClicks;
@@ -62,11 +62,11 @@ public class Website extends Entity {
         this.bounceRate = bounceRate;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
