@@ -127,7 +127,7 @@ public class TrafficRecordDbRepository<T extends TrafficRecord> extends Abstract
 
     private static List<Session> fetchSessionsForTrafficRecord(Long trafficRecordId){
         List<Session> sessions = new ArrayList<>();
-        String query = "SELECT * FROM SESSION WHERE ID = ?";
+        String query = "SELECT * FROM SESSION WHERE TRAFFIC_RECORD_ID = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 

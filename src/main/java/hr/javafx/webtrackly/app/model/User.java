@@ -9,7 +9,6 @@ public class User extends Person {
     private Long websiteId;
     private LocalDateTime registrationDate;
 
-    // Update the constructor to accept websiteId
     public User(Long id, String name, String surname, PersonalData personalData,
                 String username, String hashedPassword, Role role, Long websiteId, LocalDateTime registrationDate) {
         super(id, name, surname, personalData);

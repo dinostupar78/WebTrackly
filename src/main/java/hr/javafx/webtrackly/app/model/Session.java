@@ -13,8 +13,9 @@ public class Session extends Entity{
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Boolean isActive;
+    private Long trafficRecord;
 
-    public Session(Long id, Website website, User user, DeviceType deviceType, BigDecimal sessionDuration, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive) {
+    public Session(Long id, Website website, User user, DeviceType deviceType, BigDecimal sessionDuration, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive, Long trafficRecord) {
         super(id);
         this.website = website;
         this.user = user;
@@ -23,6 +24,7 @@ public class Session extends Entity{
         this.startTime = startTime;
         this.endTime = endTime;
         this.isActive = isActive;
+        this.trafficRecord = trafficRecord;
     }
 
     public Website getWebsite() {
@@ -79,5 +81,13 @@ public class Session extends Entity{
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Long getTrafficRecord() {
+        return trafficRecord;
+    }
+
+    public void setTrafficRecord(Long trafficRecord) {
+        this.trafficRecord = trafficRecord;
     }
 }

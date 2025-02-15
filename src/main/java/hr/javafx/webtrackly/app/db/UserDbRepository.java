@@ -21,8 +21,10 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
     private static final String FIND_ALL_QUERY =
             "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER";
 
-    private static final String ROLE_ADMIN = "ADMIN";
-    private static final String ROLE_MARKETING = "MARKETING";
+    private static final String ROLE_ADMIN = "AdminRole";
+    private static final String ROLE_MARKETING = "MarketingRole";
+    private static final String ROLE_USER = "UserRole";
+
 
     @Override
     public T findById(Long id) throws RepositoryAccessException {
@@ -85,6 +87,8 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
             role = new AdminRole();
         } else if (roleString.equalsIgnoreCase(ROLE_MARKETING)) {
             role = new MarketingRole();
+        } else if (roleString.equalsIgnoreCase(ROLE_USER)) {
+            role = new UserRole();
         } else {
             log.error("Unknown role type: " + roleString);
             throw new SQLException("Unknown role type: " + roleString);
@@ -113,8 +117,8 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
 
     @Override
     public void save(List<T> entities) throws RepositoryAccessException {
-        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -132,11 +136,14 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
                     roleString = ROLE_ADMIN;
                 } else if (entity.getRole() instanceof MarketingRole) {
                     roleString = ROLE_MARKETING;
+                } else if (entity.getRole() instanceof UserRole) {
+                    roleString = ROLE_USER;
                 } else {
                     roleString = entity.getRole().getClass().getSimpleName().toUpperCase();
                 }
                 stmt.setString(8, roleString);
-                stmt.setLong(9, entity.getWebsiteId());  // Set the website id
+                stmt.setLong(9, entity.getWebsiteId());
+                stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
 
                 stmt.addBatch();
             }
@@ -148,8 +155,8 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
 
     @Override
     public void save(T entity) throws RepositoryAccessException {
-        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getFirstName());
@@ -165,11 +172,14 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
                 roleString = ROLE_ADMIN;
             } else if (entity.getRole() instanceof MarketingRole) {
                 roleString = ROLE_MARKETING;
+            } else if (entity.getRole() instanceof UserRole) {
+                roleString = ROLE_USER;
             } else {
                 roleString = entity.getRole().getClass().getSimpleName().toUpperCase();
             }
             stmt.setString(8, roleString);
             stmt.setLong(9, entity.getWebsiteId());
+            stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
 
             stmt.executeUpdate();
         } catch (SQLException | IOException e) {

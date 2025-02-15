@@ -21,6 +21,9 @@
         <items>
             <MenuItem mnemonicParsing="false" onAction="#onClickShowUserPanel" text="Search" />
         </items>
+        <items>
+            <MenuItem mnemonicParsing="false" onAction="#onClickShowUserAddPanel" text="Add" />
+        </items>
     </Menu>
     <Menu fx:id="menuLog" mnemonicParsing="false" text="Log">
         <items>

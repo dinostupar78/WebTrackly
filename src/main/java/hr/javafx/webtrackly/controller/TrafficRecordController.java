@@ -73,10 +73,11 @@ public class TrafficRecordController {
 
         trafficColumnSessions.setCellValueFactory(cellData -> {
             String trafficSessions = cellData.getValue().getSessions().stream()
-                    .map(session -> session.getSessionDuration().toString())
+                    .map(session -> session.getActive().toString().toUpperCase())
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(trafficSessions);
         });
+
     }
 
     public void filterTrafficRecords(){

@@ -16,10 +16,10 @@ import java.util.List;
 
 public class SessionDbRepository<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
-            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE FROM SESSION WHERE ID = ?";
+            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION WHERE ID = ?";
 
     private static final String FIND_ALL_QUERY =
-            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE FROM SESSION";
+            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION";
 
     @Override
     public T findById(Long id) throws RepositoryAccessException {
@@ -63,8 +63,8 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
 
     @Override
     public void save(List<T> entities) throws RepositoryAccessException {
-        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -76,6 +76,7 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
                 stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
                 stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
                 stmt.setBoolean(7, entity.getActive());
+                stmt.setLong(8, entity.getTrafficRecord());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -87,8 +88,8 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
 
     @Override
     public void save(T entity) throws RepositoryAccessException {
-        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -99,6 +100,7 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
             stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
             stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
             stmt.setBoolean(7, entity.getActive());
+            stmt.setLong(8, entity.getTrafficRecord());
             stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
@@ -126,7 +128,10 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
             LocalDateTime endTime = resultSet.getTimestamp("END_TIME").toLocalDateTime();
             Boolean active = resultSet.getObject("IS_ACTIVE") != null ? resultSet.getBoolean("IS_ACTIVE") : null;
 
-            return new Session(id, website, user, deviceType, sessionDuration, startTime, endTime, active);
+            Long trafficRecordId = resultSet.getLong("TRAFFIC_RECORD_ID");
+
+
+            return new Session(id, website, user, deviceType, sessionDuration, startTime, endTime, active, trafficRecordId);
         } catch (SQLException e) {
             throw new RepositoryAccessException(e);
         }

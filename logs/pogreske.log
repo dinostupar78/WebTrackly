@@ -17,3 +17,46 @@
 2025-02-15 12:20:21,690 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
 2025-02-15 12:20:22,708 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
 2025-02-15 12:20:27,941 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 12:39:36,722 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 13:54:22,130 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 13:54:32,803 ERROR [JavaFX Application Thread] h.j.w.m.HelloApplication [UserDbRepository.java:89] Unknown role type: User
+2025-02-15 13:57:11,694 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 13:57:21,592 ERROR [JavaFX Application Thread] h.j.w.m.HelloApplication [UserDbRepository.java:89] Unknown role type: AdminRole
+2025-02-15 13:58:51,359 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:02:22,338 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:04:38,196 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:05:55,618 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:07:46,354 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:10:32,903 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:10:57,325 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:15:33,025 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:27:05,756 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:27:48,551 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:28:30,088 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 14:29:25,859 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 15:59:03,084 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:02:42,015 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:08:03,537 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:09:01,968 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:16:30,223 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:27:58,462 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:31:02,481 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:49:08,795 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:50:26,796 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 16:54:39,067 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:14:47,723 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:17:35,262 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:22:10,243 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:28:55,668 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:30:41,677 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:34:35,531 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:35:54,295 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:36:26,771 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:42:48,768 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:43:41,580 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:43:49,716 ERROR [JavaFX Application Thread] h.j.w.m.HelloApplication [UserDbRepository.java:89] Unknown role type: USERROLE
+2025-02-15 17:43:53,784 ERROR [JavaFX Application Thread] h.j.w.m.HelloApplication [UserDbRepository.java:89] Unknown role type: USERROLE
+2025-02-15 17:43:58,349 ERROR [JavaFX Application Thread] h.j.w.m.HelloApplication [UserDbRepository.java:89] Unknown role type: USERROLE
+2025-02-15 17:46:21,567 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:46:57,525 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!
+2025-02-15 17:49:12,781 INFO [JavaFX Application Thread] h.j.w.m.HelloApplication [HelloApplication.java:16] Application started!

@@ -69,5 +69,10 @@ public class FirstScreenController {
         searchClickUtils.showLogPanel(event);
     }
 
+    public void onClickShowUserAddPanel(ActionEvent event) {
+        ScreenChangeUtil searchClickUtils = new ScreenChangeUtil();
+        searchClickUtils.showUserAddPanel(event);
+    }
+
 
 }

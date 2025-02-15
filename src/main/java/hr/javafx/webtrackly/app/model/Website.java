@@ -70,4 +70,15 @@ public class Website extends Entity {
         this.users = users;
     }
 
+    @Override
+    public String toString() {
+        return "Website{" +
+                "websiteName='" + websiteName + '\'' +
+                ", websiteClicks=" + websiteClicks +
+                ", websiteUrl='" + websiteUrl + '\'' +
+                ", websiteUserCount=" + websiteUserCount +
+                ", bounceRate=" + bounceRate +
+                ", users=" + users +
+                '}';
+    }
 }
