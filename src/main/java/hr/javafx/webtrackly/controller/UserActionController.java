@@ -80,10 +80,10 @@ public class UserActionController {
                     .toList();
         }
 
-        String userActionUsernameID = actionTextFieldUser.getText();
-        if(!(userActionUsernameID.isEmpty())){
+        String userActionUsername = actionTextFieldUser.getText();
+        if(!(userActionUsername.isEmpty())){
             initialUserActionList = initialUserActionList.stream()
-                    .filter(action -> action.getUser().getUsername().toString().contains(userActionUsernameID))
+                    .filter(action -> action.getUser().getUsername().toString().contains(userActionUsername))
                     .toList();
         }
 

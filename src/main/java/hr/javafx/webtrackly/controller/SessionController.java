@@ -137,10 +137,6 @@ public class SessionController {
         sessionActivityLineChart.getData().clear();
 
         String sessionIDTextField = sessionTextFieldID.getText();
-        if (sessionIDTextField == null || sessionIDTextField.isEmpty()) {
-            ShowAlertUtil.showAlert("Error", "Session ID is required!", Alert.AlertType.ERROR);
-
-        }
 
         List<Session> filteredSessions = sessionRepository.findAll().stream()
                 .filter(session -> session.getId().toString().contains(sessionIDTextField))

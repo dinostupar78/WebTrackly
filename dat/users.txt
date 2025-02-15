@@ -34,3 +34,12 @@ MALE
 pmusa34
 e81b72ad6b7eff47a30dac338fb4126f8bd95914eb1cd42397aa0e725c261e29
 MarketingRole
+5
+Pero
+Kvrzic
+2004-02-01
+Croatian
+MALE
+perokvrzic34
+c67b911ba59080abce820aa470cab9b1ffd5d2df644cb796228a47ff7fabf92e
+MarketingRole

@@ -103,5 +103,35 @@ public class ScreenChangeUtil {
         }
     }
 
+    public void showUserPanel(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/userPanel.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            MenuItem menuItem = (MenuItem) event.getSource();
+            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showLogPanel(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/logPanel.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            MenuItem menuItem = (MenuItem) event.getSource();
+            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -3,12 +3,17 @@ package hr.javafx.webtrackly.app.db;
 import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.utils.DbActiveUtil;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -16,21 +21,13 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
     private static final String FIND_ALL_QUERY =
             "SELECT ID, WEBSITE_NAME, WEBSITE_CLICKS, WEBSITE_URL, WEBSITE_USER_COUNT, BOUNCE_RATE FROM WEBSITE";
 
-    private static Connection connectToDatabase() throws IOException, SQLException {
-        Properties props = new Properties();
-        try (FileReader reader = new FileReader("C:\\Users\\Dino\\Desktop\\PROJEKT\\WebTrackly\\src\\main\\resources\\database.properties")) {
-            props.load(reader);
-        }
-        return DriverManager.getConnection(
-                props.getProperty("databaseUrl"),
-                props.getProperty("username"),
-                props.getProperty("password"));
-    }
-
-
     @Override
     public T findById(Long id) throws RepositoryAccessException {
-        try (Connection connection = connectToDatabase();
+        if (!DbActiveUtil.isDatabaseOnline()) {
+            log.error("Database is inactive. Please check your connection.");
+            throw new RepositoryAccessException("Database is inactive. Please check your connection.");
+        }
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
             stmt.setLong(1, id);
@@ -49,8 +46,11 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
 
     @Override
     public List<T> findAll() throws RepositoryAccessException {
+        if (!(DbActiveUtil.isDatabaseOnline())) {
+            return List.of();
+        }
         List<T> websites = new ArrayList<>();
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(FIND_ALL_QUERY)) {
 
@@ -67,7 +67,7 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
     public void save(List<T> entities) throws RepositoryAccessException {
         String sql = "INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_CLICKS, WEBSITE_URL, WEBSITE_USER_COUNT, BOUNCE_RATE) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             for (T entity : entities) {
@@ -88,7 +88,7 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
     public void save(T entity) throws RepositoryAccessException {
         String sql = "INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_CLICKS, WEBSITE_URL, WEBSITE_USER_COUNT, BOUNCE_RATE) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, entity.getWebsiteName());
@@ -112,7 +112,6 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
             Integer websiteUserCount = resultSet.getInt("WEBSITE_USER_COUNT");
             BigDecimal bounceRate = resultSet.getBigDecimal("BOUNCE_RATE");
 
-            // Retrieve the users for this website from APP_USER using the WEBSITE_ID column.
             Set<User> users = fetchUsersForWebsite(id);
 
             return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users);
@@ -125,7 +124,7 @@ public class WebsiteDbRepository<T extends Website> extends AbstractDbRepository
     private static Set<User> fetchUsersForWebsite(Long websiteId) {
         Set<User> users = new HashSet<>();
         String query = "SELECT * FROM APP_USER WHERE WEBSITE_ID = ?";
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setLong(1, websiteId);

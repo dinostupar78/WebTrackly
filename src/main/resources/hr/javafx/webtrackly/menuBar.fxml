@@ -17,12 +17,18 @@
             <MenuItem mnemonicParsing="false" onAction="#onClickShowTrafficRecordPanel" text="Traffic Record" />
         </items>
     </Menu>
-    <Menu mnemonicParsing="false" text="User">
+    <Menu fx:id="menuUser" mnemonicParsing="false" text="User">
         <items>
-            <MenuItem mnemonicParsing="false" text="Profile" />
+            <MenuItem mnemonicParsing="false" onAction="#onClickShowUserPanel" text="Search" />
         </items>
     </Menu>
-      <Menu mnemonicParsing="false" text="Log" />
+    <Menu fx:id="menuLog" mnemonicParsing="false" text="Log">
+        <items>
+            <MenuItem mnemonicParsing="false" onAction="#onClickShowLogPanel" text="Show" />
+        </items>
+    </Menu>
+
+
     <Menu mnemonicParsing="false" text="Options">
         <items>
             <MenuItem mnemonicParsing="false" text="Logout" />

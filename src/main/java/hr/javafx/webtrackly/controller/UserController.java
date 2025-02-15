@@ -1,0 +1,175 @@
+package hr.javafx.webtrackly.controller;
+
+import hr.javafx.webtrackly.app.db.UserDbRepository;
+import hr.javafx.webtrackly.app.model.AdminRole;
+import hr.javafx.webtrackly.app.model.MarketingRole;
+import hr.javafx.webtrackly.app.model.Role;
+import hr.javafx.webtrackly.app.model.User;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
+import java.util.List;
+
+import static javafx.collections.FXCollections.observableArrayList;
+
+public class UserController {
+    @FXML
+    private TextField userTextFieldID;
+
+    @FXML
+    private TextField userTextFieldUsername;
+
+    @FXML
+    private TextField userTextFieldFirstName;
+
+    @FXML
+    private TextField userTextFieldLastName;
+
+    @FXML
+    private TextField userTextFieldNationality;
+
+    @FXML
+    private ComboBox<Role> userComboBoxRole;
+
+    @FXML
+    private TableView<User> userTableView;
+
+    @FXML
+    private TableColumn<User, String> userColumnID;
+
+    @FXML
+    private TableColumn<User, String> userColumnUsername;
+
+    @FXML
+    private TableColumn<User, String> userColumnFirstName;
+
+    @FXML
+    private TableColumn<User, String> userColumnLastName;
+
+    @FXML
+    private TableColumn<User, String> userColumnNationality;
+
+    @FXML
+    private TableColumn<User, String> userColumnRole;
+
+    @FXML
+    private TableColumn<User, String> userColumnRegistrationDate;
+
+    private UserDbRepository<User> userRepository = new UserDbRepository<>();
+
+    public void initialize(){
+        userColumnID.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
+        );
+
+        userColumnUsername.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getUsername()))
+        );
+
+        userColumnFirstName.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getFirstName()))
+        );
+
+        userColumnLastName.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getLastName()))
+        );
+
+        userColumnNationality.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getPersonalData().nationality()))
+        );
+
+        userColumnRole.setCellValueFactory(cellData -> {
+            Role role = cellData.getValue().getRole();
+            String roleText = (role != null) ? role.toString() : "No Role";
+            return new SimpleStringProperty(roleText);
+        });
+
+        userComboBoxRole.getItems().clear();
+        userComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole());
+
+        userComboBoxRole.setConverter(new javafx.util.StringConverter<Role>() {
+            @Override
+            public String toString(Role role) {
+                return (role != null) ? role.toString() : "";
+            }
+            @Override
+            public Role fromString(String string) {
+                return null;
+            }
+        });
+
+        userColumnRegistrationDate.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getRegistrationDate()))
+        );
+
+
+    }
+
+    public void filterUsers(){
+        List<User> initialUserList = userRepository.findAll();
+
+        String userID = userTextFieldID.getText();
+        if(!(userID.isEmpty())){
+            initialUserList = initialUserList.stream()
+                    .filter(user -> user.getId().equals(Long.valueOf(userID)))
+                    .toList();
+        }
+
+        String username = userTextFieldUsername.getText();
+        if(!(username.isEmpty())){
+            initialUserList = initialUserList.stream()
+                    .filter(user -> user.getUsername().equals(username))
+                    .toList();
+        }
+
+        String firstName = userTextFieldFirstName.getText();
+        if(!(firstName.isEmpty())){
+            initialUserList = initialUserList.stream()
+                    .filter(user -> user.getFirstName().equals(firstName))
+                    .toList();
+        }
+
+        String lastName = userTextFieldLastName.getText();
+        if(!(lastName.isEmpty())){
+            initialUserList = initialUserList.stream()
+                    .filter(user -> user.getLastName().equals(lastName))
+                    .toList();
+        }
+
+        String nationality = userTextFieldNationality.getText();
+        if(!(nationality.isEmpty())){
+            initialUserList = initialUserList.stream()
+                    .filter(user -> user.getPersonalData().nationality().equals(nationality))
+                    .toList();
+        }
+
+        Role selectedRole = userComboBoxRole.getValue();
+        if(selectedRole != null) {
+            String selectedPermission = selectedRole.toString();
+            initialUserList = initialUserList.stream()
+                    .filter(user -> {
+                        Role userRole = user.getRole();
+                        return userRole != null && userRole.toString().equals(selectedPermission);
+                    })
+                    .toList();
+        }
+
+        ObservableList<User> userObservableList = observableArrayList(initialUserList);
+
+        SortedList<User> sortedList = new SortedList<>(userObservableList);
+
+        sortedList.comparatorProperty().bind(userTableView.comparatorProperty());
+
+        userTableView.setItems(sortedList);
+
+
+    }
+
+
+}

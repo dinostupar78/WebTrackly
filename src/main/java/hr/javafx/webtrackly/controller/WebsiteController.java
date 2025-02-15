@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+
 public class WebsiteController {
     @FXML
     private TextField websiteSearchTextField;
@@ -49,6 +51,7 @@ public class WebsiteController {
 
 
         } catch (RepositoryAccessException e) {
+            log.info("Error while fetching website data: " + e.getMessage());
             throw new RuntimeException(e);
         }
 

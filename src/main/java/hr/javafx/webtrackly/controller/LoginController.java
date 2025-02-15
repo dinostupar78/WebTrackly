@@ -1,10 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.files.UserFileRepository;
-import hr.javafx.webtrackly.app.model.AdminRole;
-import hr.javafx.webtrackly.app.model.MarketingRole;
-import hr.javafx.webtrackly.app.model.Role;
-import hr.javafx.webtrackly.app.model.User;
+import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.PasswordUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeUtil;
 import javafx.event.ActionEvent;
@@ -46,7 +43,6 @@ public class LoginController {
         UserFileRepository<User> userRepo = new UserFileRepository<>();
         List<User> users = userRepo.findAll();
 
-        System.out.println("Hashed Input Password: " + hashedInputPassword);
 
         Optional<User> matchingUser = users.stream()
                 .filter(u -> {
@@ -57,6 +53,7 @@ public class LoginController {
                 .findFirst();
 
         if (matchingUser.isPresent()) {
+            UserSession.createSession(matchingUser.get());
             showAlert("Login successful! Welcome, " + username + "!");
             openDashboard();
         } else {

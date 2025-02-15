@@ -5,14 +5,13 @@ import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.utils.DbActiveUtil;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -21,21 +20,12 @@ public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepo
     private static final String FIND_ALL_QUERY =
             "SELECT ID, USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION";
 
-    private static Connection connectToDatabase() throws IOException, SQLException {
-        Properties props = new Properties();
-        try (FileReader reader = new FileReader("C:\\Users\\Dino\\Desktop\\PROJEKT\\WebTrackly\\src\\main\\resources\\database.properties")) {
-            props.load(reader);
-        }
-        return DriverManager.getConnection(
-                props.getProperty("databaseUrl"),
-                props.getProperty("username"),
-                props.getProperty("password"));
-    }
-
-
     @Override
     public T findById(Long id) throws RepositoryAccessException {
-        try (Connection connection = connectToDatabase();
+        if (!DbActiveUtil.isDatabaseOnline()) {
+            throw new RepositoryAccessException("Database is inactive. Please check your connection.");
+        }
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
             stmt.setLong(1, id);
@@ -53,8 +43,11 @@ public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepo
 
     @Override
     public List<T> findAll() throws RepositoryAccessException {
+        if (!(DbActiveUtil.isDatabaseOnline())) {
+            return List.of();
+        }
         List<T> actions = new ArrayList<>();
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(FIND_ALL_QUERY)) {
 
@@ -71,7 +64,7 @@ public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepo
     public void save(List<T> entities) throws RepositoryAccessException {
         String sql = "INSERT INTO USER_ACTION (USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             for (T entity : entities) {
@@ -94,7 +87,7 @@ public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepo
     public void save(T entity) throws RepositoryAccessException {
         String sql = "INSERT INTO USER_ACTION (USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = connectToDatabase();
+        try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, entity.getUser().getId());
