@@ -1,8 +1,9 @@
 package hr.javafx.webtrackly.app.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class User extends Person {
+public class User extends Person implements Serializable {
     private String username;
     private String hashedPassword;
     private Role role;
@@ -19,22 +20,26 @@ public class User extends Person {
         this.registrationDate = registrationDate;
     }
 
-    // Existing getters and setters
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getHashedPassword() {
         return hashedPassword;
     }
+
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
+
     public Role getRole() {
         return role;
     }
+
     public void setRole(Role role) {
         this.role = role;
     }
@@ -42,6 +47,7 @@ public class User extends Person {
     public Long getWebsiteId() {
         return websiteId;
     }
+
     public void setWebsiteId(Long websiteId) {
         this.websiteId = websiteId;
     }
@@ -52,6 +58,17 @@ public class User extends Person {
 
     public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", role=" + role +
+                ", websiteId=" + websiteId +
+                ", registrationDate=" + registrationDate +
+                '}';
     }
 
     public static class Builder {
@@ -93,7 +110,7 @@ public class User extends Person {
             this.role = role;
             return this;
         }
-        // New builder setter for websiteId
+
         public Builder setWebsiteId(Long websiteId) {
             this.websiteId = websiteId;
             return this;

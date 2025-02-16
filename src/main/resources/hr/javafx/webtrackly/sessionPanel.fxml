@@ -36,6 +36,8 @@
                     <DatePicker fx:id="sessionDatePickerStartDate" promptText="Start Date" />
                     <DatePicker fx:id="sessionDatePickerEndDate" promptText="End Date" />
                     <Button onAction="#filterSessions" text="Search" />
+               <Button onAction="#openAddSessionScreen" text="Add" />
+               <Button text="Delete" />
                 </HBox>
             </VBox>
 

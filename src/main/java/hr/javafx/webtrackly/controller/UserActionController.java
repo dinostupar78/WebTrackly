@@ -2,9 +2,11 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserActionDbRepository;
 import hr.javafx.webtrackly.app.model.UserAction;
+import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -68,6 +70,12 @@ public class UserActionController {
         );
 
         userActionTableView.getSortOrder().add(userActionTableColumnID);
+    }
+
+
+    @FXML
+    private void openAddUserActionScreen(ActionEvent event) {
+        ScreenChangeButtonUtil.openUserActionAddScreen(event);
     }
 
     public void filterUserActions(){

@@ -37,6 +37,8 @@
                <TextField fx:id="trafficTextFieldWebsite" prefHeight="25.0" prefWidth="170.0" promptText="Enter website" />
                     <DatePicker fx:id="trafficDatePickerTime" promptText="Enter time of visit" />
                     <Button onAction="#filterTrafficRecords" text="Search" />
+               <Button onAction="#openAddTrafficRecordScreen" text="Add" />
+               <Button text="Delete" />
                 </HBox>
             </VBox>
 

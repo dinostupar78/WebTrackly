@@ -2,10 +2,12 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository;
 import hr.javafx.webtrackly.app.model.Session;
+import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -60,6 +62,11 @@ public class SessionController {
     private PieChart sessionDeviceDistributionPieChart;
 
     private SessionDbRepository<Session> sessionRepository = new SessionDbRepository<>();
+
+    @FXML
+    private void openAddSessionScreen(ActionEvent event) {
+        ScreenChangeButtonUtil.openSessionAddScreen(event);
+    }
 
     public void initialize(){
         sessionColumnID.setCellValueFactory(cellData ->

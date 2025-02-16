@@ -2,9 +2,11 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
+import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -77,7 +79,11 @@ public class TrafficRecordController {
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(trafficSessions);
         });
+    }
 
+    @FXML
+    private void openAddTrafficRecordScreen(ActionEvent event) {
+        ScreenChangeButtonUtil.openTrafficRecordAddScreen(event);
     }
 
     public void filterTrafficRecords(){

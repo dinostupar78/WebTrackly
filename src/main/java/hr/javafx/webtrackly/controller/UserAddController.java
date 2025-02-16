@@ -4,6 +4,7 @@ import hr.javafx.webtrackly.app.db.UserDbRepository;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -110,6 +111,16 @@ public class UserAddController {
                     .build();
 
             userRepository.save(newUser);
+
+            DataSerialization change = new DataSerialization(
+                    "User Creation",
+                    "N/A",
+                    newUser.getUsername(),
+                    newUser.getRole().toString(),
+                    LocalDateTime.now()
+            );
+
+            DataSerializeUtil.serializeData(change);
 
             ShowAlertUtil.showAlert("Uspješno dodavanje korisnika", "Korisnik je uspješno dodan!", Alert.AlertType.INFORMATION);
             StringBuilder sb = new StringBuilder();

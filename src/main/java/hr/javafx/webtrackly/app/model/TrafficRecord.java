@@ -70,4 +70,65 @@ public class TrafficRecord extends Entity{
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
     }
+
+    public static class Builder{
+        private Long id;
+        private Website website;
+        private LocalDateTime timeOfVisit;
+        private Integer userCount;
+        private Integer pageViews;
+        private BigDecimal bounceRate;
+        private List<Session> sessions;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setWebsite(Website website) {
+            this.website = website;
+            return this;
+        }
+
+        public Builder setTimeOfVisit(LocalDateTime timeOfVisit) {
+            this.timeOfVisit = timeOfVisit;
+            return this;
+        }
+
+        public Builder setUserCount(Integer userCount) {
+            this.userCount = userCount;
+            return this;
+        }
+
+        public Builder setPageViews(Integer pageViews) {
+            this.pageViews = pageViews;
+            return this;
+        }
+
+        public Builder setBounceRate(BigDecimal bounceRate) {
+            this.bounceRate = bounceRate;
+            return this;
+        }
+
+        public Builder setSessions(List<Session> sessions) {
+            this.sessions = sessions;
+            return this;
+        }
+
+        public TrafficRecord build(){
+            return new TrafficRecord(id, website, timeOfVisit, userCount, pageViews, bounceRate, sessions);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "TrafficRecord{" +
+                "website=" + website +
+                ", timeOfVisit=" + timeOfVisit +
+                ", userCount=" + userCount +
+                ", pageViews=" + pageViews +
+                ", bounceRate=" + bounceRate +
+                ", sessions=" + sessions +
+                '}';
+    }
 }

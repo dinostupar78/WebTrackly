@@ -76,7 +76,7 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
                 stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
                 stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
                 stmt.setBoolean(7, entity.getActive());
-                stmt.setLong(8, entity.getTrafficRecord());
+                stmt.setLong(8, entity.getTrafficRecordId());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -100,7 +100,7 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
             stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
             stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
             stmt.setBoolean(7, entity.getActive());
-            stmt.setLong(8, entity.getTrafficRecord());
+            stmt.setLong(8, entity.getTrafficRecordId());
             stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {

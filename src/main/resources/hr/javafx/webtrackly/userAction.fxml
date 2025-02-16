@@ -36,6 +36,8 @@
                <TextField fx:id="actionTextFieldUser" prefHeight="25.0" prefWidth="165.0" promptText="Enter username" />
                     <DatePicker fx:id="actionDatePickerTimestamp" promptText="Timestamp" />
                     <Button onAction="#filterUserActions" text="Search" />
+               <Button onAction="#openAddUserActionScreen" text="Add" />
+               <Button  text="Delete" />
                 </HBox>
             </VBox>
 

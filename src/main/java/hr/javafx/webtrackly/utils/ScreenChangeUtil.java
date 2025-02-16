@@ -148,6 +148,21 @@ public class ScreenChangeUtil {
         }
     }
 
+    public void showDataSerializationPanel(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/dataSerializationPanel.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            MenuItem menuItem = (MenuItem) event.getSource();
+            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 

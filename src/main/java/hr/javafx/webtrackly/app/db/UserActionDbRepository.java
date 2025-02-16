@@ -70,7 +70,7 @@ public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepo
             for (T entity : entities) {
                 stmt.setLong(1, entity.getUser().getId());
                 stmt.setString(2, entity.getAction().name());
-                stmt.setString(3, entity.getPage().getWebsiteName());
+                stmt.setLong(3, entity.getPage().getId());
                 stmt.setTimestamp(4, Timestamp.valueOf(entity.getTimestamp()));
                 stmt.setString(5, entity.getDetails());
 
@@ -92,7 +92,7 @@ public class UserActionDbRepository<T extends UserAction> extends AbstractDbRepo
 
             stmt.setLong(1, entity.getUser().getId());
             stmt.setString(2, entity.getAction().name());
-            stmt.setString(3, entity.getPage().getWebsiteName());
+            stmt.setLong(3, entity.getPage().getId());
             stmt.setTimestamp(4, Timestamp.valueOf(entity.getTimestamp()));
             stmt.setString(5, entity.getDetails());
             stmt.executeUpdate();

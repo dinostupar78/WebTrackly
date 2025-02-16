@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" fillWidth="true" prefHeight="600" prefWidth="800" spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.DataSerializationController">
+
+    <fx:include source="menuBar.fxml" />
+
+    <Label alignment="CENTER" text="Data Change Log">
+        <font>
+            <Font name="Consolas Bold" size="28" />
+        </font>
+    </Label>
+
+    <GridPane alignment="CENTER" hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="CENTER" minWidth="150" />
+            <ColumnConstraints minWidth="250" />
+        </columnConstraints>
+
+        <Label alignment="CENTER" text="Enter Field Name:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <font>
+                <Font name="Calibri Bold" size="18" />
+            </font>
+        </Label>
+        <TextField fx:id="dataTextFieldFieldName" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label alignment="CENTER" text="Enter Old Value:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <font>
+                <Font name="Calibri Bold" size="18" />
+            </font>
+        </Label>
+        <TextField fx:id="dataTextFieldOldValue" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label alignment="CENTER" text="Enter New Value:" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <font>
+                <Font name="Calibri Bold" size="18" />
+            </font>
+        </Label>
+        <TextField fx:id="dataTextFieldNewValue" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <Label alignment="CENTER" text="Changed By Role:" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <font>
+                <Font name="Calibri Bold" size="18" />
+            </font>
+        </Label>
+        <ComboBox fx:id="dataComboBoxRole" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <HBox alignment="CENTER" spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+            <Button alignment="CENTER" onAction="#filterData" prefWidth="100" text="Search">
+                <font>
+                    <Font name="Calibri Bold Italic" size="16" />
+                </font>
+            </Button>
+        </HBox>
+
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+    </GridPane>
+
+    <TableView fx:id="dataTableView" prefHeight="300" prefWidth="800" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="dataColumnName" prefWidth="150.0" text="Field Name" />
+            <TableColumn fx:id="dataColumnOldValue" prefWidth="150.0" text="Old Value" />
+            <TableColumn fx:id="dataColumnNewValue" prefWidth="150.0" text="New Value" />
+            <TableColumn fx:id="dataColumnChangedByRole" prefWidth="150.0" text="Changed By Role" />
+            <TableColumn fx:id="dataColumnChangeTimestamp" prefWidth="200.0" text="Change Timestamp" />
+        </columns>
+    </TableView>
+
+</VBox>

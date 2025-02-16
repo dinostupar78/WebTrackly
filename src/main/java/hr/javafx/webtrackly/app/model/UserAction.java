@@ -59,4 +59,47 @@ public class UserAction extends Entity{
     public void setDetails(String details) {
         this.details = details;
     }
+
+    public static class Builder{
+        private Long id;
+        private User user;
+        private BehaviorType action;
+        private Website page;
+        private LocalDateTime actionTimestamp;
+        private String details;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setUser(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder setAction(BehaviorType action) {
+            this.action = action;
+            return this;
+        }
+
+        public Builder setPage(Website page) {
+            this.page = page;
+            return this;
+        }
+
+        public Builder setActionTimestamp(LocalDateTime actionTimestamp) {
+            this.actionTimestamp = actionTimestamp;
+            return this;
+        }
+
+        public Builder setDetails(String details) {
+            this.details = details;
+            return this;
+        }
+
+        public UserAction build(){
+            return new UserAction(id, user, action, page, actionTimestamp, details);
+        }
+    }
 }

@@ -13,7 +13,7 @@ public class Session extends Entity{
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Boolean isActive;
-    private Long trafficRecord;
+    private Long trafficRecordId;
 
     public Session(Long id, Website website, User user, DeviceType deviceType, BigDecimal sessionDuration, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive, Long trafficRecord) {
         super(id);
@@ -24,7 +24,7 @@ public class Session extends Entity{
         this.startTime = startTime;
         this.endTime = endTime;
         this.isActive = isActive;
-        this.trafficRecord = trafficRecord;
+        this.trafficRecordId = trafficRecord;
     }
 
     public Website getWebsite() {
@@ -83,11 +83,72 @@ public class Session extends Entity{
         isActive = active;
     }
 
-    public Long getTrafficRecord() {
-        return trafficRecord;
+    public Long getTrafficRecordId() {
+        return trafficRecordId;
     }
 
-    public void setTrafficRecord(Long trafficRecord) {
-        this.trafficRecord = trafficRecord;
+    public void setTrafficRecordId(Long trafficRecordId) {
+        this.trafficRecordId = trafficRecordId;
+    }
+
+    public static class Builder{
+        private Long id;
+        private Website website;
+        private User user;
+        private DeviceType deviceType;
+        private BigDecimal sessionDuration;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private Boolean isActive;
+        private Long trafficRecordId;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setWebsite(Website website) {
+            this.website = website;
+            return this;
+        }
+
+        public Builder setUser(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder setDeviceType(DeviceType deviceType) {
+            this.deviceType = deviceType;
+            return this;
+        }
+
+        public Builder setSessionDuration(BigDecimal sessionDuration) {
+            this.sessionDuration = sessionDuration;
+            return this;
+        }
+
+        public Builder setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+            return this;
+        }
+
+        public Builder setEndTime(LocalDateTime endTime) {
+            this.endTime = endTime;
+            return this;
+        }
+
+        public Builder setActive(Boolean active) {
+            isActive = active;
+            return this;
+        }
+
+        public Builder setTrafficRecordId(Long trafficRecordId) {
+            this.trafficRecordId = trafficRecordId;
+            return this;
+        }
+
+        public Session build(){
+            return new Session(id, website, user, deviceType, sessionDuration, startTime, endTime, isActive, trafficRecordId);
+        }
     }
 }

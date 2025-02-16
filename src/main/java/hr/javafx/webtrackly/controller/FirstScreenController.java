@@ -74,5 +74,10 @@ public class FirstScreenController {
         searchClickUtils.showUserAddPanel(event);
     }
 
+    public void onClickShowDataSerializationPanel(ActionEvent event) {
+        ScreenChangeUtil searchClickUtils = new ScreenChangeUtil();
+        searchClickUtils.showDataSerializationPanel(event);
+    }
+
 
 }

@@ -29,6 +29,9 @@
         <items>
             <MenuItem mnemonicParsing="false" onAction="#onClickShowLogPanel" text="Show" />
         </items>
+        <items>
+            <MenuItem mnemonicParsing="false" onAction="#onClickShowDataSerializationPanel" text="Serialization" />
+        </items>
     </Menu>
 
 

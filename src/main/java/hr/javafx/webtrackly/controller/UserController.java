@@ -1,10 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserDbRepository;
-import hr.javafx.webtrackly.app.model.AdminRole;
-import hr.javafx.webtrackly.app.model.MarketingRole;
-import hr.javafx.webtrackly.app.model.Role;
-import hr.javafx.webtrackly.app.model.User;
+import hr.javafx.webtrackly.app.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -84,6 +81,7 @@ public class UserController {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getPersonalData().nationality()))
         );
 
+
         userColumnRole.setCellValueFactory(cellData -> {
             Role role = cellData.getValue().getRole();
             String roleText = (role != null) ? role.toString() : "No Role";
@@ -91,7 +89,7 @@ public class UserController {
         });
 
         userComboBoxRole.getItems().clear();
-        userComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole());
+        userComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole(), new UserRole());
 
         userComboBoxRole.setConverter(new javafx.util.StringConverter<Role>() {
             @Override
