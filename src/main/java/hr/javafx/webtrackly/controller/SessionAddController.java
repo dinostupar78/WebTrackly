@@ -19,6 +19,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class SessionAddController {
 
     @FXML
@@ -54,7 +57,7 @@ public class SessionAddController {
         sessionComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
         sessionComboBoxUser.getItems().setAll(userRepository.findAll());
         sessionComboBoxDeviceType.getItems().setAll(DeviceType.values());
-        sessionComboBoxActivity.getItems().setAll(true, false);
+        sessionComboBoxActivity.getItems().setAll(TRUE, FALSE);
         sessionComboBoxTrafficRecord.getItems().setAll(trafficRecordRepository.findAll());
     }
 

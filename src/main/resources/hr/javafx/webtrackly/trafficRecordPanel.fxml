@@ -38,7 +38,7 @@
                     <DatePicker fx:id="trafficDatePickerTime" promptText="Enter time of visit" />
                     <Button onAction="#filterTrafficRecords" text="Search" />
                <Button onAction="#openAddTrafficRecordScreen" text="Add" />
-               <Button text="Delete" />
+               <Button fx:id="deleteTrafficRecord" text="Delete" />
                 </HBox>
             </VBox>
 

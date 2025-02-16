@@ -2,14 +2,12 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserDbRepository;
 import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.utils.RowDeletionUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.util.List;
 
@@ -58,6 +56,9 @@ public class UserController {
     @FXML
     private TableColumn<User, String> userColumnRegistrationDate;
 
+    @FXML
+    private Button deleteUser;
+
     private UserDbRepository<User> userRepository = new UserDbRepository<>();
 
     public void initialize(){
@@ -105,6 +106,10 @@ public class UserController {
         userColumnRegistrationDate.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getRegistrationDate()))
         );
+
+        RowDeletionUtil.addUserRowDeletionHandler(userTableView);
+
+        deleteUser.setOnAction(event -> RowDeletionUtil.deleteUserWithConfirmation(userTableView));
 
 
     }

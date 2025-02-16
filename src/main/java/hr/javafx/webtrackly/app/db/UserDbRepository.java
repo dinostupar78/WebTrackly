@@ -1,17 +1,14 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
@@ -24,7 +21,6 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
     private static final String ROLE_ADMIN = "AdminRole";
     private static final String ROLE_MARKETING = "MarketingRole";
     private static final String ROLE_USER = "UserRole";
-
 
     @Override
     public T findById(Long id) throws RepositoryAccessException {
@@ -90,7 +86,6 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
         } else if (roleString.equalsIgnoreCase(ROLE_USER)) {
             role = new UserRole();
         } else {
-            log.error("Unknown role type: " + roleString);
             throw new SQLException("Unknown role type: " + roleString);
         }
 
@@ -111,9 +106,6 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
                 .setRegistrationDate(registrationDate)
                 .build();
     }
-
-
-
 
     @Override
     public void save(List<T> entities) throws RepositoryAccessException {
@@ -180,10 +172,40 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
             stmt.setString(8, roleString);
             stmt.setLong(9, entity.getWebsiteId());
             stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
-
             stmt.executeUpdate();
         } catch (SQLException | IOException e) {
             throw new RepositoryAccessException(e);
+        }
+    }
+
+    public void delete(Long id) throws RepositoryAccessException {
+        try (Connection connection = DbActiveUtil.connectToDatabase()) {
+            connection.setAutoCommit(false);
+            performDeleteOperation(connection, id);
+        } catch (IOException | SQLException e) {
+            throw new RepositoryAccessException(e);
+        }
+    }
+
+    private void performDeleteOperation(Connection connection, Long id) throws RepositoryAccessException {
+        try {
+            executeDeleteUserQuery(connection, id);
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                throw new RepositoryAccessException("Rollback failed: " + rollbackEx.getMessage(), rollbackEx);
+            }
+            throw new RepositoryAccessException(e);
+        }
+    }
+
+    private void executeDeleteUserQuery(Connection connection, Long id) throws SQLException {
+        String deleteUserQuery = "DELETE FROM APP_USER WHERE ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(deleteUserQuery)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
         }
     }
 }

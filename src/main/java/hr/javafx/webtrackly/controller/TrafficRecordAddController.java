@@ -5,6 +5,7 @@ import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -51,7 +52,6 @@ public class TrafficRecordAddController {
         LocalDate dateOfVisit = trafficRecordDatePickerTimeOfVisit.getValue();
         LocalDateTime timeOfVisit = null;
         if (dateOfVisit != null) {
-            // Assuming the visit time is end-of-day; adjust as needed.
             timeOfVisit = dateOfVisit.atTime(LocalTime.of(23, 59));
         } else {
             errorMessages.append("Time of visit is required!\n");
@@ -93,6 +93,8 @@ public class TrafficRecordAddController {
                     website.getWebsiteName(),
                     LocalDateTime.now()
             );
+
+            DataSerializeUtil.serializeData(change);
 
             ShowAlertUtil.showAlert("Traffic Record has been successfully added!", "Traffic Record has been successfully added!", Alert.AlertType.INFORMATION);
             StringBuilder sb = new StringBuilder();

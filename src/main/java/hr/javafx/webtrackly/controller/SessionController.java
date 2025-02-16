@@ -1,7 +1,10 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository;
+import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.Session;
+import hr.javafx.webtrackly.utils.RowDeletionUtil;
+import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.beans.property.SimpleStringProperty;
@@ -56,6 +59,9 @@ public class SessionController {
     private TableColumn<Session, String> sessionColumnDevice;
 
     @FXML
+    private Button deleteSession;
+
+    @FXML
     private LineChart<String, Number> sessionActivityLineChart;
 
     @FXML
@@ -98,6 +104,15 @@ public class SessionController {
         );
 
         sessionTableView.getSortOrder().add(sessionColumnID);
+
+        RowDeletionUtil.addSessionDeletionHandler(sessionTableView);
+        deleteSession.setOnAction(event -> RowDeletionUtil.deleteSessionWithConfirmation(sessionTableView));
+
+        RowEditUtil<Session> rowEditUtil = new RowEditUtil<>();
+        rowEditUtil.addRowEditHandler(sessionTableView, selectedSession -> {
+            EditContainer<Session> container = new EditContainer<>(selectedSession);
+            ScreenChangeButtonUtil.openSessionEditScreen(container.getData());
+        });
     }
 
     public void filterSessions(){

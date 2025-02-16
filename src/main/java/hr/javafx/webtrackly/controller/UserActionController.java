@@ -1,17 +1,17 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserActionDbRepository;
+import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.UserAction;
+import hr.javafx.webtrackly.utils.RowDeletionUtil;
+import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -46,6 +46,9 @@ public class UserActionController {
     @FXML
     private TableColumn<UserAction, String> userActionTableColumnDetails;
 
+    @FXML
+    private Button deleteUserAction;
+
     private UserActionDbRepository<UserAction> userActionRepository = new UserActionDbRepository<>();
 
     public void initialize() {
@@ -70,6 +73,16 @@ public class UserActionController {
         );
 
         userActionTableView.getSortOrder().add(userActionTableColumnID);
+
+        RowDeletionUtil.addUserActionRowDeletionHandler(userActionTableView);
+
+        deleteUserAction.setOnAction(event -> RowDeletionUtil.deleteUserActionWithConfirmation(userActionTableView));
+
+        RowEditUtil<UserAction> rowEditUtil = new RowEditUtil<>();
+        rowEditUtil.addRowEditHandler(userActionTableView, selectedAction -> {
+            EditContainer<UserAction> container = new EditContainer<>(selectedAction);
+            ScreenChangeButtonUtil.openUserActionEditScreen(container.getData());
+        });
     }
 
 

@@ -70,6 +70,55 @@ public class Website extends Entity {
         this.users = users;
     }
 
+    public static class Builder{
+        private Long id;
+        private String websiteName;
+        private Integer websiteClicks;
+        private String websiteUrl;
+        private Integer websiteUserCount;
+        private BigDecimal bounceRate;
+        private Set<User> users;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setWebsiteName(String websiteName) {
+            this.websiteName = websiteName;
+            return this;
+        }
+
+        public Builder setWebsiteClicks(Integer websiteClicks) {
+            this.websiteClicks = websiteClicks;
+            return this;
+        }
+
+        public Builder setWebsiteUrl(String websiteUrl) {
+            this.websiteUrl = websiteUrl;
+            return this;
+        }
+
+        public Builder setWebsiteUserCount(Integer websiteUserCount) {
+            this.websiteUserCount = websiteUserCount;
+            return this;
+        }
+
+        public Builder setBounceRate(BigDecimal bounceRate) {
+            this.bounceRate = bounceRate;
+            return this;
+        }
+
+        public Builder setUsers(Set<User> users) {
+            this.users = users;
+            return this;
+        }
+
+        public Website build(){
+            return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users);
+        }
+    }
+
     @Override
     public String toString() {
         return "Website{" +

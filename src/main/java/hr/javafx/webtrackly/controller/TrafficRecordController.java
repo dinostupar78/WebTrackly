@@ -1,17 +1,17 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
+import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
+import hr.javafx.webtrackly.utils.RowDeletionUtil;
+import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -50,6 +50,9 @@ public class TrafficRecordController {
     @FXML
     private TableColumn<TrafficRecord, String> trafficColumnSessions;
 
+    @FXML
+    private Button deleteTrafficRecord;
+
     private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
 
     public void initialize(){
@@ -78,6 +81,16 @@ public class TrafficRecordController {
                     .map(session -> session.getActive().toString().toUpperCase())
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(trafficSessions);
+        });
+
+        RowDeletionUtil.addTrafficRecordDeletionHandler(trafficRecordTableView);
+
+        deleteTrafficRecord.setOnAction(event -> RowDeletionUtil.deleteTrafficRecordWithConfirmation(trafficRecordTableView));
+
+        RowEditUtil<TrafficRecord> rowEditUtil = new RowEditUtil<>();
+        rowEditUtil.addRowEditHandler(trafficRecordTableView, selectedTrafficRecord -> {
+            EditContainer<TrafficRecord> container = new EditContainer<>(selectedTrafficRecord);
+            ScreenChangeButtonUtil.openTrafficRecordEditScreen(container.getData());
         });
     }
 

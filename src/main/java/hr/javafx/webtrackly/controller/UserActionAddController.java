@@ -85,8 +85,8 @@ public class UserActionAddController {
             DataSerialization change = new DataSerialization(
                     "UserAction",
                     "Add",
-                    newUserAction.getUser().toString(),
                     newUserAction.toString(),
+                    newUserAction.getUser().getRole().toString(),
                     newUserAction.getTimestamp());
 
             DataSerializeUtil.serializeData(change);

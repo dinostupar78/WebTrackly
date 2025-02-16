@@ -25,6 +25,7 @@
          <HBox alignment="CENTER" spacing="10">
             <TextField fx:id="websiteSearchTextField" prefWidth="250" promptText="Enter website URL" />
             <Button onAction="#showWebsiteData" text="Search" />
+            <Button onAction="#openAddWebsiteScreen" text="Add" />
             <padding>
                <Insets bottom="10" left="10" right="10" top="10" />
             </padding>

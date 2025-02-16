@@ -3,6 +3,8 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
 import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.TextField;
@@ -33,6 +35,11 @@ public class WebsiteController {
     private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
 
     private Website currentWebsite;
+
+    @FXML
+    private void openAddWebsiteScreen(ActionEvent event) {
+        ScreenChangeButtonUtil.openWebsiteAddScreen(event);
+    }
 
     public void showWebsiteData() {
         String searchQuery = websiteSearchTextField.getText();

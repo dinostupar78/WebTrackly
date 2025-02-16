@@ -37,7 +37,7 @@
                     <DatePicker fx:id="actionDatePickerTimestamp" promptText="Timestamp" />
                     <Button onAction="#filterUserActions" text="Search" />
                <Button onAction="#openAddUserActionScreen" text="Add" />
-               <Button  text="Delete" />
+               <Button fx:id="deleteUserAction" text="Delete" />
                 </HBox>
             </VBox>
 

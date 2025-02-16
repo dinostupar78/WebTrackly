@@ -45,7 +45,7 @@ public class ScreenChangeUtil {
 
     public void showDashboardPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/dashboardPanel.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/websitePanel.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             MenuItem menuItem = (MenuItem) event.getSource();
@@ -60,7 +60,7 @@ public class ScreenChangeUtil {
 
     public void showUserActionPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/userAction.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/userActionPanel.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             MenuItem menuItem = (MenuItem) event.getSource();
@@ -75,7 +75,7 @@ public class ScreenChangeUtil {
 
     public void showSessionPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/sessionPanel.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/sessionSearchPanel.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             MenuItem menuItem = (MenuItem) event.getSource();
