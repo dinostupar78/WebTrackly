@@ -77,7 +77,7 @@
                     <Font name="Calibri Bold Italic" size="16" />
                 </font>
             </Button>
-            <Button fx:id="deleteUser" alignment="CENTER" prefWidth="100" style="-fx-background-color: #d9534f; -fx-text-fill: white;" text="Delete">
+            <Button fx:id="deleteUser" alignment="CENTER" prefWidth="100" text="Delete">
                 <font>
                     <Font name="Calibri Bold Italic" size="16" />
                 </font>

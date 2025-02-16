@@ -2,10 +2,12 @@ package hr.javafx.webtrackly.utils;
 
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
+import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.controller.SessionEditController;
 import hr.javafx.webtrackly.controller.TrafficRecordEditController;
 import hr.javafx.webtrackly.controller.UserActionEditController;
+import hr.javafx.webtrackly.controller.UserEditController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -17,6 +19,24 @@ import java.io.IOException;
 
 public class ScreenChangeButtonUtil {
     private ScreenChangeButtonUtil(){}
+
+    public static void openUserEditScreen(User user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userEditPanel.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            UserEditController controller = loader.getController();
+            controller.setUser(user);
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Edit User");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void openUserActionAddScreen(ActionEvent event) {
         try {

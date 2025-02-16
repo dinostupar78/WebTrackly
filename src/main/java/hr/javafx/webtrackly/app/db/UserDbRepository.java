@@ -12,11 +12,9 @@ import java.util.List;
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
-    private static final String FIND_BY_ID_QUERY =
-            "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER WHERE ID = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER WHERE ID = ?";
 
-    private static final String FIND_ALL_QUERY =
-            "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER";
+    private static final String FIND_ALL_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER";
 
     private static final String ROLE_ADMIN = "AdminRole";
     private static final String ROLE_MARKETING = "MarketingRole";
@@ -94,17 +92,7 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
 
         PersonalData personalData = new PersonalData(dateOfBirth, nationality, gender);
 
-        return new User.Builder()
-                .setId(id)
-                .setName(firstName)
-                .setSurname(lastName)
-                .setPersonalData(personalData)
-                .setUsername(username)
-                .setHashedPassword(hashedPassword)
-                .setRole(role)
-                .setWebsiteId(websiteId)
-                .setRegistrationDate(registrationDate)
-                .build();
+        return new User.Builder().setId(id).setName(firstName).setSurname(lastName).setPersonalData(personalData).setUsername(username).setHashedPassword(hashedPassword).setRole(role).setWebsiteId(websiteId).setRegistrationDate(registrationDate).build();
     }
 
     @Override
@@ -202,10 +190,49 @@ public class UserDbRepository<T extends User> extends AbstractDbRepository<T> {
     }
 
     private void executeDeleteUserQuery(Connection connection, Long id) throws SQLException {
+        String deleteUserActionQuery = "DELETE FROM USER_ACTION WHERE USER_ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(deleteUserActionQuery)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
+
+        String deleteSessionQuery = "DELETE FROM SESSION WHERE USER_ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(deleteSessionQuery)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
+
         String deleteUserQuery = "DELETE FROM APP_USER WHERE ID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(deleteUserQuery)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
+        }
+    }
+
+    public void update(T entity) throws RepositoryAccessException {
+        String query = "UPDATE APP_USER " +
+                "SET FIRST_NAME = ?, LAST_NAME = ?, DATE_OF_BIRTH = ?, NATIONALITY = ?, " +
+                "GENDER_TYPE = ?, USERNAME = ?, HASHED_PASSWORD = ?, ROLE = ?, WEBSITE_ID = ?, CREATED_AT = ? " +
+                "WHERE ID = ?";
+
+        try (Connection connection = DbActiveUtil.connectToDatabase();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setString(1, entity.getFirstName());
+            stmt.setString(2, entity.getLastName());
+            stmt.setDate(3, Date.valueOf(entity.getPersonalData().dateOfBirth()));
+            stmt.setString(4, entity.getPersonalData().nationality());
+            stmt.setString(5, entity.getPersonalData().gender().toString());
+            stmt.setString(6, entity.getUsername());
+            stmt.setString(7, entity.getHashedPassword());
+            stmt.setString(8, entity.getRole().toString());
+            stmt.setLong(9, entity.getWebsiteId());
+            stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
+            stmt.setLong(11, entity.getId());
+            stmt.executeUpdate();
+
+        } catch (IOException | SQLException e) {
+            throw new RepositoryAccessException(e);
         }
     }
 }
