@@ -121,13 +121,10 @@ public class Website extends Entity {
 
     @Override
     public String toString() {
-        return "Website{" +
-                "websiteName='" + websiteName + '\'' +
-                ", websiteClicks=" + websiteClicks +
-                ", websiteUrl='" + websiteUrl + '\'' +
-                ", websiteUserCount=" + websiteUserCount +
-                ", bounceRate=" + bounceRate +
-                ", users=" + users +
-                '}';
+        return String.format(
+                "Website[id=%d, Name='%s', Clicks=%d, URL='%s', Users=%d, Bounce Rate=%.2f%%, Registered Users=%d]",
+                getId(), websiteName, websiteClicks, websiteUrl, websiteUserCount,
+                bounceRate, users.size()
+        );
     }
 }

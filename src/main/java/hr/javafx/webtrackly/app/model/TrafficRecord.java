@@ -122,13 +122,16 @@ public class TrafficRecord extends Entity{
 
     @Override
     public String toString() {
-        return "TrafficRecord{" +
-                "website=" + website +
-                ", timeOfVisit=" + timeOfVisit +
-                ", userCount=" + userCount +
-                ", pageViews=" + pageViews +
-                ", bounceRate=" + bounceRate +
-                ", sessions=" + sessions +
-                '}';
+        return String.format(
+                "TrafficRecord[id=%d, Website='%s', TimeOfVisit='%s', Users=%d, PageViews=%d, BounceRate=%.2f%%]",
+                getId(),
+                website.getWebsiteName(),
+                timeOfVisit.toString(),
+                userCount,
+                pageViews,
+                bounceRate
+
+        );
     }
+
 }

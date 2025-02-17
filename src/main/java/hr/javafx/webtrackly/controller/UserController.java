@@ -3,7 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.UserDbRepository;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.*;
-import hr.javafx.webtrackly.utils.RowDeletionUtil;
+import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import javafx.beans.property.SimpleStringProperty;
@@ -110,9 +110,9 @@ public class UserController {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getRegistrationDate()))
         );
 
-        RowDeletionUtil.addUserRowDeletionHandler(userTableView);
+        RowDeletion1Util.addUserRowDeletionHandler(userTableView);
 
-        deleteUser.setOnAction(event -> RowDeletionUtil.deleteUserWithConfirmation(userTableView));
+        deleteUser.setOnAction(event -> RowDeletion1Util.deleteUserWithConfirmation(userTableView));
 
         RowEditUtil<User> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(userTableView, selectedUser -> {

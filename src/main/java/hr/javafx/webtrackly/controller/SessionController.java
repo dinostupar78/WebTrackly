@@ -3,24 +3,26 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.SessionDbRepository;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.Session;
-import hr.javafx.webtrackly.utils.RowDeletionUtil;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
+import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
-import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -88,11 +90,11 @@ public class SessionController {
         );
 
         sessionColumnStartTime.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getStartTime()))
+                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getStartTime()))
         );
 
         sessionColumnEndTime.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getEndTime()))
+                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getEndTime()))
         );
 
         sessionColumnDuration.setCellValueFactory(cellData ->
@@ -105,8 +107,8 @@ public class SessionController {
 
         sessionTableView.getSortOrder().add(sessionColumnID);
 
-        RowDeletionUtil.addSessionDeletionHandler(sessionTableView);
-        deleteSession.setOnAction(event -> RowDeletionUtil.deleteSessionWithConfirmation(sessionTableView));
+        RowDeletion1Util.addSessionDeletionHandler(sessionTableView);
+        deleteSession.setOnAction(event -> RowDeletion1Util.deleteSessionWithConfirmation(sessionTableView));
 
         RowEditUtil<Session> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(sessionTableView, selectedSession -> {
@@ -116,9 +118,10 @@ public class SessionController {
     }
 
     public void filterSessions(){
-        showSessionActivityLineChart();
-
+        showAverageSessionDurationLineChart();
         showDeviceDistributionPieChart();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         List<Session> initialSessionList = sessionRepository.findAll();
 
@@ -130,19 +133,17 @@ public class SessionController {
         }
 
         if (sessionDatePickerStartDate.getValue() != null) {
-            String sessionStartDate = sessionDatePickerStartDate.getValue()
-                    .format(DateTimeFormatter.ISO_LOCAL_DATE);
+            LocalDate filterStartDate = sessionDatePickerStartDate.getValue();
             initialSessionList = initialSessionList.stream()
-                    .filter(session -> session.getStartTime().toString().contains(sessionStartDate))
-                    .toList();
+                    .filter(session -> session.getStartTime().toLocalDate().equals(filterStartDate))
+                    .collect(Collectors.toList());
         }
 
         if (sessionDatePickerEndDate.getValue() != null) {
-            String sessionEndDate = sessionDatePickerEndDate.getValue()
-                    .format(DateTimeFormatter.ISO_LOCAL_DATE);
+            LocalDate filterEndDate = sessionDatePickerEndDate.getValue();
             initialSessionList = initialSessionList.stream()
-                    .filter(session -> session.getStartTime().toString().contains(sessionEndDate))
-                    .toList();
+                    .filter(session -> session.getEndTime().toLocalDate().equals(filterEndDate))
+                    .collect(Collectors.toList());
         }
 
         ObservableList<Session> sessionObservableList = observableArrayList(initialSessionList);
@@ -155,42 +156,44 @@ public class SessionController {
 
     }
 
-    private void showSessionActivityLineChart() {
+    private void showAverageSessionDurationLineChart() {
         sessionActivityLineChart.getData().clear();
 
-        String sessionIDTextField = sessionTextFieldID.getText();
+        List<Session> sessions = sessionRepository.findAll();
 
-        List<Session> filteredSessions = sessionRepository.findAll().stream()
-                .filter(session -> session.getId().toString().contains(sessionIDTextField))
-                .toList();
-
-        if (filteredSessions.isEmpty()) {
-            ShowAlertUtil.showAlert("Error", "No sessions found matching the given ID", Alert.AlertType.ERROR);
-        }
-
-        Map<String, Long> sessionCountByDate = new HashMap<>();
-
-        filteredSessions.forEach(session -> {
-            String sessionDate = session.getStartTime().toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE);
-            sessionCountByDate.merge(sessionDate, 1L, Long::sum);
-        });
+        Map<String, Double> avgDurationByDate = sessions.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s.getStartTime().toLocalDate().toString(),
+                        Collectors.averagingDouble(s -> s.getSessionDuration().doubleValue())
+                ));
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Session Count");
+        series.setName("Average Session Duration");
 
-        sessionCountByDate.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue())));
+        avgDurationByDate.forEach((date, avgDuration) ->
+                series.getData().add(new XYChart.Data<>(date, avgDuration))
+        );
 
         sessionActivityLineChart.getData().add(series);
-
     }
 
     private void showDeviceDistributionPieChart() {
+        sessionDeviceDistributionPieChart.getData().clear();
 
+        List<Session> sessions = sessionRepository.findAll();
+
+        Map<String, Long> deviceCounts = sessions.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s.getDeviceType().toString(),
+                        Collectors.counting()
+                ));
+
+        deviceCounts.forEach((device, count) ->
+                sessionDeviceDistributionPieChart.getData().add(new PieChart.Data(device, count))
+        );
+
+        sessionDeviceDistributionPieChart.setLegendSide(Side.BOTTOM);
+        sessionDeviceDistributionPieChart.setLabelsVisible(true);
+        sessionDeviceDistributionPieChart.layout();
     }
-
-
-
-
 }

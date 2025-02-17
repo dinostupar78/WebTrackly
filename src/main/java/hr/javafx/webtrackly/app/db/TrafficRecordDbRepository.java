@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrafficRecordDbRepository<T extends TrafficRecord> extends AbstractDbRepository<T> {
-    private static final String FIND_BY_ID_QUERY =
-            "SELECT ID, WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE FROM TRAFFIC_RECORD WHERE ID = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE FROM TRAFFIC_RECORD WHERE ID = ?";
 
-    private static final String FIND_ALL_QUERY =
-            "SELECT ID, WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE FROM TRAFFIC_RECORD";
+    private static final String FIND_ALL_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE FROM TRAFFIC_RECORD";
 
     @Override
     public T findById(Long id) throws RepositoryAccessException {
@@ -188,8 +186,14 @@ public class TrafficRecordDbRepository<T extends TrafficRecord> extends Abstract
     }
 
     private void executeDeleteSessionQuery(Connection connection, Long id) throws SQLException {
-        String deleteUserQuery = "DELETE FROM TRAFFIC_RECORD WHERE ID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(deleteUserQuery)) {
+        String deleteSessionsQuery = "DELETE FROM SESSION WHERE TRAFFIC_RECORD_ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(deleteSessionsQuery)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
+
+        String deleteTrafficRecordQuery = "DELETE FROM TRAFFIC_RECORD WHERE ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(deleteTrafficRecordQuery)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
         }

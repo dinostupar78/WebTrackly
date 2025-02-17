@@ -1,152 +1,134 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.utils.RowDeletion2Util;
+import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static javafx.collections.FXCollections.observableArrayList;
 
 public class WebsiteController {
     @FXML
     private TextField websiteSearchTextField;
 
     @FXML
-    private LineChart<String, Number> newUsersLineChart;
-    @FXML
-    private PieChart pieChartSources;
-    @FXML
-    private AreaChart<String, Number> clicksAreaChart;
-    @FXML
-    private BarChart<String, Number> ageBarChart;
+    private TableView<Website> websiteTableView;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnID;
 
-    private Website currentWebsite;
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnName;
+
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnClicks;
+
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnUrl;
+
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnCount;
+
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnBounceRate;
+
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnUsers;
+
+    @FXML
+    private Button deleteWebsite;
+
+
+    WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
 
     @FXML
     private void openAddWebsiteScreen(ActionEvent event) {
         ScreenChangeButtonUtil.openWebsiteAddScreen(event);
     }
 
-    public void showWebsiteData() {
-        String searchQuery = websiteSearchTextField.getText();
+    public void initialize(){
+        websiteTableColumnID.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
+        );
 
-        try{
-            List<Website> websites = websiteRepository.findAll();
-            currentWebsite = websites.stream()
-                    .filter(w -> w.getWebsiteName().equalsIgnoreCase(searchQuery))
-                    .findFirst()
-                    .orElse(null);
+        websiteTableColumnName.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getWebsiteName())
+        );
 
-            populateNewUsersLineChart();
-            populateUsersByNationalityPieChart();
-            populateClicksAreaChart();
-            populateUsersByAgeBarChart();
+        websiteTableColumnClicks.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getWebsiteClicks()))
+        );
 
+        websiteTableColumnUrl.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getWebsiteUrl())
+        );
 
-        } catch (RepositoryAccessException e) {
-            log.info("Error while fetching website data: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        websiteTableColumnCount.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getWebsiteUserCount()))
+        );
 
-    }
+        websiteTableColumnBounceRate.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getBounceRate()))
+        );
 
-    private void populateNewUsersLineChart() {
-        newUsersLineChart.getData().clear();
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("New Users");
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime cutoff = now.minusHours(48);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:00");
-
-        Map<String, Long> usersByHour = currentWebsite.getUsers().stream()
-                .filter(user -> user.getRegistrationDate().isAfter(cutoff))
-                .collect(Collectors.groupingBy(
-                        user -> user.getRegistrationDate().format(formatter),
-                        Collectors.counting()
-                ));
-
-        usersByHour.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> {
-                    series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-                });
-        newUsersLineChart.getData().add(series);
-    }
-
-    private void populateUsersByNationalityPieChart() {
-        pieChartSources.getData().clear();
-        Map<String, Long> countByNationality = currentWebsite.getUsers().stream()
-                .collect(Collectors.groupingBy(
-                        user -> user.getPersonalData().nationality(),
-                        Collectors.counting()
-                ));
-        countByNationality.forEach((nationality, count) -> {
-            pieChartSources.getData().add(new PieChart.Data(nationality, count));
+        websiteTableColumnUsers.setCellValueFactory(cellData -> {
+            String usernames = cellData.getValue().getUsers().stream()
+                    .map(user -> user.getUsername())
+                    .collect(Collectors.joining(", "));
+            return new SimpleStringProperty(usernames);
         });
+
+        RowDeletion2Util.addWebsiteRowDeletionHandler(websiteTableView);
+
+        deleteWebsite.setOnAction(event -> RowDeletion2Util.deleteWebsiteWithConfirmation(websiteTableView));
+
+        RowEditUtil<Website> rowEditUtil = new RowEditUtil<>();
+        rowEditUtil.addRowEditHandler(websiteTableView, selectedWebsite -> {
+            EditContainer<Website> container = new EditContainer<>(selectedWebsite);
+            ScreenChangeButtonUtil.openWebsiteEditScreen(container.getData());
+        });
+
+        websiteTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
-    private void populateClicksAreaChart() {
-        clicksAreaChart.getData().clear();
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Clicks");
+    public void filterWebsites() {
+        List<Website> initialWebsiteList = websiteRepository.findAll();
 
-        // For demonstration, we simulate hourly click counts by evenly dividing total clicks.
-        // In a real app, you would query a CLICK_LOG table.
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime cutoff = now.minusHours(48);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:00");
-        int totalClicks = currentWebsite.getWebsiteClicks();
-        int hours = 48;
-        int clicksPerHour = totalClicks / hours;
-        for (int i = 0; i < hours; i++) {
-            LocalDateTime time = cutoff.plusHours(i);
-            String timeLabel = time.format(formatter);
-            series.getData().add(new XYChart.Data<>(timeLabel, clicksPerHour));
+        String websiteName = websiteSearchTextField.getText();
+        if(!(websiteName.isEmpty())){
+            initialWebsiteList = initialWebsiteList.stream()
+                    .filter(website -> website.getWebsiteName().equals(websiteName))
+                    .toList();
         }
-        clicksAreaChart.getData().add(series);
+
+        ObservableList<Website> userObservableList = observableArrayList(initialWebsiteList);
+
+        SortedList<Website> sortedList = new SortedList<>(userObservableList);
+
+        sortedList.comparatorProperty().bind(websiteTableView.comparatorProperty());
+
+        websiteTableView.setItems(sortedList);
+
     }
 
-    private void populateUsersByAgeBarChart() {
-        ageBarChart.getData().clear();
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Users by Age");
 
-        // Group users into age bins: <18, 18-24, 25-34, 35-44, 45-54, 55+
-        Map<String, Long> ageGroups = currentWebsite.getUsers().stream()
-                .collect(Collectors.groupingBy(user -> {
-                    // Compute age from dateOfBirth:
-                    int age = Period.between(user.getPersonalData().dateOfBirth(), LocalDate.now()).getYears();
-                    if (age < 18) return "<18";
-                    else if (age <= 24) return "18-24";
-                    else if (age <= 34) return "25-34";
-                    else if (age <= 44) return "35-44";
-                    else if (age <= 54) return "45-54";
-                    else return "55+";
-                }, Collectors.counting()));
 
-        // Define the order of groups
-        String[] ageOrder = {"<18", "18-24", "25-34", "35-44", "45-54", "55+"};
-        for (String group : ageOrder) {
-            Long count = ageGroups.getOrDefault(group, 0L);
-            series.getData().add(new XYChart.Data<>(group, count));
-        }
-        ageBarChart.getData().add(series);
-    }
+
 
 
 

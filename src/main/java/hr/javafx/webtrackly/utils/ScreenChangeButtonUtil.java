@@ -1,13 +1,7 @@
 package hr.javafx.webtrackly.utils;
 
-import hr.javafx.webtrackly.app.model.Session;
-import hr.javafx.webtrackly.app.model.TrafficRecord;
-import hr.javafx.webtrackly.app.model.User;
-import hr.javafx.webtrackly.app.model.UserAction;
-import hr.javafx.webtrackly.controller.SessionEditController;
-import hr.javafx.webtrackly.controller.TrafficRecordEditController;
-import hr.javafx.webtrackly.controller.UserActionEditController;
-import hr.javafx.webtrackly.controller.UserEditController;
+import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.controller.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -158,6 +152,24 @@ public class ScreenChangeButtonUtil {
             stage.setTitle("Add Session");
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(parentStage);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openWebsiteEditScreen(Website website) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/websiteEditPanel.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            WebsiteEditController controller = loader.getController();
+            controller.setWebsite(website);
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Edit Website");
+            stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

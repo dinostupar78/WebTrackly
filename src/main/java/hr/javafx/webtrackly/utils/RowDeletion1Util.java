@@ -19,8 +19,8 @@ import java.util.Optional;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
-public class RowDeletionUtil {
-    private RowDeletionUtil() {}
+public class RowDeletion1Util {
+    private RowDeletion1Util() {}
 
     private static final String ERROR_STRING = "Error";
     private static final String SUCCESS_STRING = "Success";

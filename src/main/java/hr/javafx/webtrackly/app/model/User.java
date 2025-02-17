@@ -62,13 +62,16 @@ public class User extends Person implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                ", role=" + role +
-                ", websiteId=" + websiteId +
-                ", registrationDate=" + registrationDate +
-                '}';
+        return String.format(
+                "User[id=%d, Name='%s %s', Username='%s', Role='%s', WebsiteId=%s, Registered='%s']",
+                getId(),
+                getFirstName(),
+                getLastName(),
+                username,
+                (role != null ? role.toString() : "N/A"),
+                (websiteId != null ? websiteId.toString() : "N/A"),
+                (registrationDate != null ? registrationDate.toString() : "N/A")
+        );
     }
 
     public static class Builder {

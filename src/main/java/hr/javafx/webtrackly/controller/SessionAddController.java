@@ -18,12 +18,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 
+import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 public class SessionAddController {
-
     @FXML
     private ComboBox<Website> sessionComboBoxWebsite;
 
@@ -65,17 +66,26 @@ public class SessionAddController {
         StringBuilder errorMessages = new StringBuilder();
 
         Website website = sessionComboBoxWebsite.getValue();
-        if (website == null) {
+        Optional<Website> optWebsite = Optional.ofNullable(website);
+        if (optWebsite.isPresent()) {
+            website = optWebsite.get();
+        } else {
             errorMessages.append("Website is required!\n");
         }
 
         User user = sessionComboBoxUser.getValue();
-        if (user == null) {
+        Optional<User> optUser = Optional.ofNullable(user);
+        if (optUser.isPresent()) {
+            user = optUser.get();
+        } else {
             errorMessages.append("User is required!\n");
         }
 
         DeviceType deviceType = sessionComboBoxDeviceType.getValue();
-        if (deviceType == null) {
+        Optional<DeviceType> optDeviceType = Optional.ofNullable(deviceType);
+        if (optDeviceType.isPresent()) {
+            deviceType = optDeviceType.get();
+        } else {
             errorMessages.append("Device type is required!\n");
         }
 
@@ -90,28 +100,42 @@ public class SessionAddController {
         }
 
         LocalDate startDate = sessionDatePickerStartTime.getValue();
-        LocalDateTime startTime = (startDate != null) ? startDate.atTime(LocalTime.of(0, 0)) : null;
-
-        if (startTime == null) {
-            errorMessages.append("Start time is required!\n");
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.now());
+        Optional<LocalDateTime> optStartDate = Optional.ofNullable(startDateTime);
+        if(optStartDate.isPresent()){
+            startDateTime = optStartDate.get();
+            formatLocalDateTime(startDateTime);
+        } else {
+            errorMessages.append("Start date is required!\n");
         }
 
-        LocalDate endDate = sessionDatePickerEndTime.getValue();
-        LocalDateTime endTime = (endDate != null) ? endDate.atTime(LocalTime.of(23, 59)) : null;
 
-        if (endTime == null) {
-            errorMessages.append("End time is required!\n");
+        LocalDate endDate = sessionDatePickerStartTime.getValue();
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.now());
+        Optional<LocalDateTime> optEndDate = Optional.ofNullable(endDateTime);
+        if(optEndDate.isPresent()){
+            endDateTime = optEndDate.get();
+            formatLocalDateTime(endDateTime);
+        } else {
+            errorMessages.append("Start date is required!\n");
         }
 
         Boolean activity = sessionComboBoxActivity.getValue();
-        if (activity == null) {
+        Optional<Boolean> optActivity = Optional.ofNullable(activity);
+        if (optActivity.isPresent()) {
+            activity = optActivity.get();
+        } else {
             errorMessages.append("Activity is required!\n");
         }
 
         TrafficRecord selectedTrafficRecord = sessionComboBoxTrafficRecord.getValue();
-        if (selectedTrafficRecord == null) {
+        Optional<TrafficRecord> optTrafficRecord = Optional.ofNullable(selectedTrafficRecord);
+        if (optTrafficRecord.isPresent()) {
+            selectedTrafficRecord = optTrafficRecord.get();
+        } else {
             errorMessages.append("Traffic record is required!\n");
         }
+
 
         if (errorMessages.length() > 0) {
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
@@ -121,8 +145,8 @@ public class SessionAddController {
                     .setUser(user)
                     .setDeviceType(deviceType)
                     .setSessionDuration(duration)
-                    .setStartTime(startTime)
-                    .setEndTime(endTime)
+                    .setStartTime(startDateTime)
+                    .setEndTime(endDateTime)
                     .setActive(activity)
                     .setTrafficRecordId(selectedTrafficRecord.getId())
                     .build();
@@ -139,15 +163,7 @@ public class SessionAddController {
 
             DataSerializeUtil.serializeData(change);
 
-            ShowAlertUtil.showAlert("Uspješno dodavanje sesije", "Sesija je uspješno dodana!", Alert.AlertType.INFORMATION);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Website: ").append(website.getWebsiteName()).append("\n")
-                    .append("User: ").append(user.getUsername()).append("\n")
-                    .append("Device type: ").append(deviceType).append("\n")
-                    .append("Duration: ").append(duration).append("\n")
-                    .append("Start time: ").append(startTime).append("\n")
-                    .append("End time: ").append(endTime).append("\n")
-                    .append("Activity: ").append(activity).append("\n");
+            ShowAlertUtil.showAlert("Session successfully added", "Session is successfully added!", Alert.AlertType.INFORMATION);
 
             sessionComboBoxWebsite.getSelectionModel().clearSelection();
             sessionComboBoxUser.getSelectionModel().clearSelection();

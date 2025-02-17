@@ -3,7 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
-import hr.javafx.webtrackly.utils.RowDeletionUtil;
+import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,10 +11,16 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -51,6 +57,12 @@ public class TrafficRecordController {
     private TableColumn<TrafficRecord, String> trafficColumnSessions;
 
     @FXML
+    private BarChart<String, Number> trafficUserCountChart;
+
+    @FXML
+    private LineChart<String, Number> trafficTrendsChart;
+
+    @FXML
     private Button deleteTrafficRecord;
 
     private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
@@ -83,9 +95,9 @@ public class TrafficRecordController {
             return new SimpleStringProperty(trafficSessions);
         });
 
-        RowDeletionUtil.addTrafficRecordDeletionHandler(trafficRecordTableView);
+        RowDeletion1Util.addTrafficRecordDeletionHandler(trafficRecordTableView);
 
-        deleteTrafficRecord.setOnAction(event -> RowDeletionUtil.deleteTrafficRecordWithConfirmation(trafficRecordTableView));
+        deleteTrafficRecord.setOnAction(event -> RowDeletion1Util.deleteTrafficRecordWithConfirmation(trafficRecordTableView));
 
         RowEditUtil<TrafficRecord> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(trafficRecordTableView, selectedTrafficRecord -> {
@@ -100,6 +112,9 @@ public class TrafficRecordController {
     }
 
     public void filterTrafficRecords(){
+        showTrafficUserCountChart();
+        ShowTrafficTrendsChart();
+
         List<TrafficRecord> initialTrafficRecordList = trafficRecordRepository.findAll();
 
         String trafficRecordID = trafficTextFieldID.getText();
@@ -133,4 +148,50 @@ public class TrafficRecordController {
         trafficRecordTableView.setItems(sortedList);
 
     }
+
+    private void showTrafficUserCountChart(){
+        trafficUserCountChart.getData().clear();
+
+        List<TrafficRecord> records = trafficRecordRepository.findAll();
+
+        Map<String, Integer> userCountByWebsite = records.stream()
+                .collect(Collectors.toMap(
+                        record -> record.getWebsite().getWebsiteName(),
+                        record -> record.getUserCount(),
+                        (a, b) -> a + b
+                ));
+
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("User Count per Website");
+
+        userCountByWebsite.forEach((website, count) -> {
+            series.getData().add(new XYChart.Data<>(website, count));
+        });
+
+        trafficUserCountChart.getData().add(series);
+    }
+
+    private void ShowTrafficTrendsChart() {
+        trafficTrendsChart.getData().clear();
+
+        List<TrafficRecord> records = new ArrayList<>(trafficRecordRepository.findAll());
+        records.sort(Comparator.comparing(TrafficRecord::getTimeOfVisit));
+
+        XYChart.Series<String, Number> userSeries = new XYChart.Series<>();
+        userSeries.setName("Users");
+
+        XYChart.Series<String, Number> pageViewsSeries = new XYChart.Series<>();
+        pageViewsSeries.setName("Page Views");
+
+        records.forEach(record -> {
+            String date = record.getTimeOfVisit().toLocalDate().toString();
+            userSeries.getData().add(new XYChart.Data<>(date, record.getUserCount()));
+            pageViewsSeries.getData().add(new XYChart.Data<>(date, record.getPageViews()));
+        });
+
+        trafficTrendsChart.getData().addAll(userSeries, pageViewsSeries);
+
+    }
+
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
@@ -43,20 +43,21 @@
 
 
             <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                <Label prefWidth="156.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="User Activity Over Time" />
-                <LineChart fx:id="userActivityChart" prefHeight="208.0" prefWidth="350">
+                <Label prefWidth="156.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="User Actions Over Time" />
+                <AreaChart fx:id="userActionAreaChart" animated="false" prefHeight="208.0" prefWidth="350">
                     <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <CategoryAxis fx:id="areaChartXAxis" />
                     </xAxis>
                     <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis fx:id="areaChartYAxis" />
                     </yAxis>
-                </LineChart>
+                </AreaChart>
+
             </VBox>
 
             <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Device Distribution" />
-                <PieChart fx:id="deviceUsageChart" prefHeight="206.0" prefWidth="374.0" />
+                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="User Behaviour" />
+                <PieChart fx:id="userActionBehaviourTypeChart" animated="false" prefHeight="206.0" prefWidth="374.0" />
             </VBox>
          <columnConstraints>
             <ColumnConstraints />

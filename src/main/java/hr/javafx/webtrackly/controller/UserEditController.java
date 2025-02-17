@@ -53,6 +53,7 @@ public class UserEditController {
         userEditComboBoxGender.setValue(user.getPersonalData().gender());
         userEditTextFieldUsername.setText(user.getUsername());
         userEditTextFieldPassword.setText(user.getHashedPassword());
+        userEditComboBoxWebsite.setValue(websiteRepository.findById(user.getWebsiteId()));
     }
 
     public void initialize() {

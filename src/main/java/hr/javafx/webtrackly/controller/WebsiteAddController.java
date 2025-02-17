@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 public class WebsiteAddController {
     @FXML
@@ -41,23 +42,28 @@ public class WebsiteAddController {
     public void addWebsite() {
         StringBuilder errorMessages = new StringBuilder();
 
-        if (websiteTextFieldName.getText().isEmpty()) {
+        String name = websiteTextFieldName.getText();
+        if (name.isEmpty()) {
             errorMessages.append("Name is required!\n");
         }
 
-        if (websiteTextFieldClicks.getText().isEmpty()) {
+        Integer clicks = Integer.parseInt(websiteTextFieldClicks.getText());
+        if (clicks == null) {
             errorMessages.append("Clicks is required!\n");
         }
 
-        if (websiteTextFieldUrl.getText().isEmpty()) {
+        String url = websiteTextFieldUrl.getText();
+        if (url.isEmpty()) {
             errorMessages.append("Url is required!\n");
         }
 
-        if (websiteTextFieldUsers.getText().isEmpty()) {
+        Integer users = Integer.parseInt(websiteTextFieldUsers.getText());
+        if (users == null) {
             errorMessages.append("Users is required!\n");
         }
 
-        if (websiteTextFieldBounceRate.getText().isEmpty()) {
+        BigDecimal bounceRate = BigDecimal.valueOf(Integer.parseInt(websiteTextFieldBounceRate.getText()));
+        if (bounceRate == null) {
             errorMessages.append("Bounce rate is required!\n");
         }
 
@@ -65,11 +71,12 @@ public class WebsiteAddController {
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
         } else {
             Website newWebsite = new Website.Builder()
-                    .setWebsiteName(websiteTextFieldName.getText())
-                    .setWebsiteClicks(Integer.parseInt(websiteTextFieldClicks.getText()))
-                    .setWebsiteUrl(websiteTextFieldUrl.getText())
-                    .setWebsiteUserCount(Integer.parseInt(websiteTextFieldUsers.getText()))
-                    .setBounceRate(BigDecimal.valueOf(Integer.parseInt(websiteTextFieldBounceRate.getText())))
+                    .setWebsiteName(name)
+                    .setWebsiteClicks(clicks)
+                    .setWebsiteUrl(url)
+                    .setWebsiteUserCount(users)
+                    .setBounceRate(bounceRate)
+                    .setUsers(new HashSet<>())
                     .build();
 
             websiteRepository.save(newWebsite);

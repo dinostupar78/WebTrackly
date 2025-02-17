@@ -44,7 +44,7 @@
             <!-- LineChart for Session Activity -->
             <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
                 <Label prefWidth="156.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Session Activity Over Time" />
-                <LineChart fx:id="sessionActivityLineChart" prefHeight="208.0" prefWidth="350">
+                <LineChart fx:id="sessionActivityLineChart" animated="false" prefHeight="208.0" prefWidth="350">
                     <xAxis>
                         <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -57,7 +57,7 @@
             <!-- PieChart for Device Distribution -->
             <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
                 <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Device Distribution" />
-                <PieChart fx:id="sessionDeviceDistributionPieChart" prefHeight="206.0" prefWidth="374.0" />
+                <PieChart fx:id="sessionDeviceDistributionPieChart" animated="false" prefHeight="206.0" prefWidth="374.0" />
             </VBox>
 
             <columnConstraints>

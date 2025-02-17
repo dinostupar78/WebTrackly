@@ -14,9 +14,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Optional;
 
 public class TrafficRecordAddController {
     @FXML
@@ -45,18 +44,20 @@ public class TrafficRecordAddController {
         StringBuilder errorMessages = new StringBuilder();
 
         Website website = trafficRecordComboBoxWebsite.getValue();
-        if (website == null) {
+        Optional<Website> optWebsite = Optional.ofNullable(website);
+        if (optWebsite.isPresent()) {
+            website = optWebsite.get();
+        } else {
             errorMessages.append("Website is required!\n");
         }
 
-        LocalDate dateOfVisit = trafficRecordDatePickerTimeOfVisit.getValue();
-        LocalDateTime timeOfVisit = null;
-        if (dateOfVisit != null) {
-            timeOfVisit = dateOfVisit.atTime(LocalTime.of(23, 59));
+        LocalDateTime timeOfVisit = trafficRecordDatePickerTimeOfVisit.getValue().atStartOfDay();
+        Optional<LocalDateTime> optDate = Optional.ofNullable(timeOfVisit);
+        if (optDate.isPresent()) {
+            timeOfVisit = optDate.get();
         } else {
             errorMessages.append("Time of visit is required!\n");
         }
-
 
         Integer userCount = Integer.parseInt(trafficRecordTextFieldUserCount.getText());
         if(userCount < 0){
@@ -69,13 +70,14 @@ public class TrafficRecordAddController {
         }
 
         BigDecimal bounceRate = new BigDecimal(trafficRecordTextFieldBounceRate.getText());
-        if(bounceRate.compareTo(BigDecimal.ZERO) < 0 ){
-            errorMessages.append("Bounce rate must be a positive number!\n");
+        if(bounceRate.compareTo(BigDecimal.ZERO) < 0 || bounceRate.compareTo(BigDecimal.valueOf(100)) > 0){
+            errorMessages.append("Bounce rate must be a positive number less than 100!\n");
         }
 
         if (errorMessages.length() > 0) {
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
         } else {
+
             TrafficRecord newTrafficRecord = new TrafficRecord.Builder()
                     .setWebsite(website)
                     .setTimeOfVisit(timeOfVisit)

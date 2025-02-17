@@ -91,6 +91,15 @@ public class Session extends Entity{
         this.trafficRecordId = trafficRecordId;
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "Session[id=%d, Website='%s', User='%s', DeviceType='%s', Duration=%s, Start='%s', End='%s', Active=%s, TrafficRecordId=%s]",
+                getId(), website.getWebsiteName(), user.getUsername(), deviceType.toString(), sessionDuration.toString(),
+                startTime.toString(), endTime.toString(), isActive.toString(), trafficRecordId.toString()
+        );
+    }
+
     public static class Builder{
         private Long id;
         private Website website;

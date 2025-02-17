@@ -60,6 +60,14 @@ public class UserAction extends Entity{
         this.details = details;
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "UserAction[id=%d, User='%s', Action='%s', Page='%s', Timestamp='%s', Details='%s']",
+                getId(), user.getUsername(), action.toString(), page.getWebsiteName(), actionTimestamp.toString(), details
+        );
+    }
+
     public static class Builder{
         private Long id;
         private User user;
