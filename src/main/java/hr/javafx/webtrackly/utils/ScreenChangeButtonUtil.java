@@ -149,7 +149,7 @@ public class ScreenChangeButtonUtil {
 
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setTitle("Add Session");
+            stage.setTitle("Add Website");
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(parentStage);
             stage.show();

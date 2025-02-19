@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
+import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
@@ -65,7 +65,7 @@ public class TrafficRecordController {
     @FXML
     private Button deleteTrafficRecord;
 
-    private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
+    private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     public void initialize(){
         trafficColumnID.setCellValueFactory(cellData ->

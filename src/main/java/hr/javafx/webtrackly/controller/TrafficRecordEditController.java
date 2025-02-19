@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository2;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
@@ -34,8 +34,8 @@ public class TrafficRecordEditController {
 
     private TrafficRecord trafficRecord;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
-    private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+    private TrafficRecordDbRepository2<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository2<>();
 
     public void setTrafficRecordData(TrafficRecord trafficRecord) {
         this.trafficRecord = trafficRecord;

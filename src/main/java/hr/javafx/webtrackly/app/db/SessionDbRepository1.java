@@ -14,18 +14,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionDbRepository<T extends Session> extends AbstractDbRepository<T> {
+public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
             "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION WHERE ID = ?";
 
     private static final String FIND_ALL_QUERY =
             "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION";
 
+
     @Override
     public T findById(Long id) throws RepositoryAccessException {
         if (!DbActiveUtil.isDatabaseOnline()) {
             throw new RepositoryAccessException("Database is inactive. Please check your connection.");
         }
+
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
@@ -114,11 +116,11 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
             Long id = resultSet.getLong("ID");
             
             Long userId = resultSet.getLong("USER_ID");
-            UserDbRepository<User> userRepository = new UserDbRepository<>();
+            UserDbRepository1<User> userRepository = new UserDbRepository1<>();
             User user = userRepository.findById(userId);
 
             Long websiteId = resultSet.getLong("WEBSITE_ID");
-            WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
+            WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
             Website website = websiteRepository.findById(websiteId);
 
             String deviceTypeStr = resultSet.getString("DEVICE_TYPE");
@@ -137,59 +139,6 @@ public class SessionDbRepository<T extends Session> extends AbstractDbRepository
         }
     }
 
-    public void update(T entity) throws RepositoryAccessException {
-        String query = "UPDATE SESSION " +
-                "SET WEBSITE_ID = ?, USER_ID = ?, DEVICE_TYPE = ?, SESSION_DURATION = ?, " +
-                "START_TIME = ?, END_TIME = ?, IS_ACTIVE = ?, TRAFFIC_RECORD_ID = ? " +
-                "WHERE ID = ?";
-        try (Connection connection = DbActiveUtil.connectToDatabase();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            stmt.setLong(1, entity.getWebsite().getId());
-            stmt.setLong(2, entity.getUser().getId());
-            stmt.setString(3, entity.getDeviceType().name());
-            stmt.setBigDecimal(4, entity.getSessionDuration());
-            stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
-            stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
-            stmt.setBoolean(7, entity.getActive());
-            stmt.setLong(8, entity.getTrafficRecordId());
-            stmt.setLong(9, entity.getId());
-
-            stmt.executeUpdate();
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
-        }
-    }
-
-    public void delete(Long id) throws RepositoryAccessException {
-        try (Connection connection = DbActiveUtil.connectToDatabase()) {
-            connection.setAutoCommit(false);
-            performDeleteOperation(connection, id);
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
-        }
-    }
-
-    private void performDeleteOperation(Connection connection, Long id) throws RepositoryAccessException {
-        try {
-            executeDeleteSessionQuery(connection, id);
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new RepositoryAccessException("Rollback failed: " + rollbackEx.getMessage(), rollbackEx);
-            }
-            throw new RepositoryAccessException(e);
-        }
-    }
-
-    private void executeDeleteSessionQuery(Connection connection, Long id) throws SQLException {
-        String deleteUserQuery = "DELETE FROM SESSION WHERE ID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(deleteUserQuery)) {
-            stmt.setLong(1, id);
-            stmt.executeUpdate();
-        }
-    }
 
 }

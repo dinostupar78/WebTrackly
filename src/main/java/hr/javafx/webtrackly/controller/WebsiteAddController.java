@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.AdminRole;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.User;
@@ -31,7 +31,7 @@ public class WebsiteAddController {
     @FXML
     private TextField websiteTextFieldBounceRate;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
 
     private User getCurrentUser() {
         return new User.Builder()

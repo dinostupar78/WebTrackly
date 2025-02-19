@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.SessionDbRepository;
+import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
@@ -69,7 +69,7 @@ public class SessionController {
     @FXML
     private PieChart sessionDeviceDistributionPieChart;
 
-    private SessionDbRepository<Session> sessionRepository = new SessionDbRepository<>();
+    private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
     @FXML
     private void openAddSessionScreen(ActionEvent event) {

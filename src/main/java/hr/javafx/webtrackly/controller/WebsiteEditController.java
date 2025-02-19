@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository2;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
@@ -28,7 +28,7 @@ public class WebsiteEditController {
     @FXML
     private TextField websiteEditTextFieldBounceRate;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
+    private WebsiteDbRepository2<Website> websiteRepository = new WebsiteDbRepository2<>();
     private Website website;
 
     public void setWebsite(Website website){

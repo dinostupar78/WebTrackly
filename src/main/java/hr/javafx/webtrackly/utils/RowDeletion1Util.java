@@ -1,9 +1,6 @@
 package hr.javafx.webtrackly.utils;
 
-import hr.javafx.webtrackly.app.db.SessionDbRepository;
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
-import hr.javafx.webtrackly.app.db.UserActionDbRepository;
-import hr.javafx.webtrackly.app.db.UserDbRepository;
+import hr.javafx.webtrackly.app.db.*;
 import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
@@ -25,10 +22,10 @@ public class RowDeletion1Util {
     private static final String ERROR_STRING = "Error";
     private static final String SUCCESS_STRING = "Success";
 
-    private static final UserDbRepository<User> userRepository = new UserDbRepository<>();
-    private static final UserActionDbRepository<UserAction> userActionRepository = new UserActionDbRepository<>();
-    private static final SessionDbRepository<Session> sessionRepository = new SessionDbRepository<>();
-    private static final TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
+    private static final UserDbRepository2<User> userRepository = new UserDbRepository2<>();
+    private static final UserActionDbRepository2<UserAction> userActionRepository = new UserActionDbRepository2<>();
+    private static final SessionDbRepository2<Session> sessionRepository = new SessionDbRepository2<>();
+    private static final TrafficRecordDbRepository2<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository2<>();
 
     public static void addUserRowDeletionHandler(TableView<User> tableView) {
         tableView.setRowFactory(tv -> {

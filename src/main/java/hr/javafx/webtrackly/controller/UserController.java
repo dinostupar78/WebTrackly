@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.UserDbRepository;
+import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
@@ -62,7 +62,7 @@ public class UserController {
     @FXML
     private Button deleteUser;
 
-    private UserDbRepository<User> userRepository = new UserDbRepository<>();
+    private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
 
     public void initialize(){
         userColumnID.setCellValueFactory(cellData ->

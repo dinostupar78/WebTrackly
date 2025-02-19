@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.UserDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.UserDbRepository2;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
@@ -40,8 +40,8 @@ public class UserEditController {
 
     private User user;
 
-    private UserDbRepository<User> userRepository = new UserDbRepository<>();
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
+    private UserDbRepository2<User> userRepository = new UserDbRepository2<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
 
     public void setUser(User user) {
         this.user = user;

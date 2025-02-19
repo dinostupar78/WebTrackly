@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
@@ -33,8 +33,8 @@ public class TrafficRecordAddController {
     @FXML
     private TextField trafficRecordTextFieldBounceRate;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
-    private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+    private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     public void initialize() {
         trafficRecordComboBoxWebsite.getItems().setAll(websiteRepository.findAll());

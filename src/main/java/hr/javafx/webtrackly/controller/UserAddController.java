@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.UserDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.UserDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
@@ -40,8 +40,8 @@ public class UserAddController {
     @FXML
     private ComboBox<Website> userComboBoxWebsite;
 
-    private UserDbRepository<User> userRepository = new UserDbRepository<>();
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
+    private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
 
     public void initialize() {
         userComboBoxGender.getItems().setAll(GenderType.values());

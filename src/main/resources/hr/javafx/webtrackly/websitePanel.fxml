@@ -4,7 +4,6 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -17,6 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.chart.BarChart?>
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.WebsiteController">
 
    <top>
@@ -27,7 +27,6 @@
             <Button onAction="#filterWebsites" text="Search" />
             <Button onAction="#openAddWebsiteScreen" text="Add" />
             <Button fx:id="deleteWebsite" text="Delete" />
-            <!-- Retain top padding if desired -->
             <padding>
                <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
@@ -40,23 +39,23 @@
          <HBox alignment="CENTER" spacing="15">
             <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-border-radius: 10;">
                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Total Users" />
-               <Label fx:id="usersValue" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
-               <Label fx:id="usersChange" style="-fx-font-size: 12px;" text="New users today: N/A" />
+               <Label fx:id="totalUsersLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
+               <Label fx:id="newUsersLabel" style="-fx-font-size: 12px;" text="New Users Today: N/A" />
             </VBox>
             <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-border-radius: 10;">
                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Total Clicks" />
-               <Label fx:id="clicksValue" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
-               <Label fx:id="clicksChange" style="-fx-font-size: 12px;" text="Clicks today: N/A" />
+               <Label fx:id="totalClicksLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
+               <Label fx:id="highestClicksLabel" style="-fx-font-size: 12px;" text="Highest Clicks: N/A" />
             </VBox>
             <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-border-radius: 10;">
-               <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Avg. Session Duration" />
-               <Label fx:id="avgSessionValue" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
-               <Label fx:id="avgSessionChange" style="-fx-font-size: 12px;" text="Longest Session: N/A" />
+               <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Most Frequent Domain" />
+               <Label fx:id="mostFrequentDomainCountLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
+               <Label fx:id="mostFrequentDomainLabel" style="-fx-font-size: 12px;" text="Number of Domains: N/A" />
             </VBox>
             <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-border-radius: 10;">
-               <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Bounce Rate" />
-               <Label fx:id="bounceRateValue" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
-               <Label fx:id="bounceRateChange" style="-fx-font-size: 12px;" text="Average: N/A" />
+               <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Avg. Bounce Rate" />
+               <Label fx:id="avgBounceRateLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="N/A" />
+               <Label fx:id="highestBounceRateLabel" style="-fx-font-size: 12px;" text="Highest Bouce Rate: N/A" />
             </VBox>
          </HBox>
 
@@ -71,8 +70,8 @@
             </rowConstraints>
 
             <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
-               <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Session Trends" />
-               <LineChart fx:id="newUsersLineChart" prefHeight="200" prefWidth="350">
+               <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total Clicks per Website" />
+               <LineChart fx:id="totalClicksChart" animated="false" prefHeight="200" prefWidth="350">
                   <xAxis>
                      <CategoryAxis side="BOTTOM" />
                   </xAxis>
@@ -83,19 +82,25 @@
             </VBox>
 
             <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
-               <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Top Traffic Sources" />
-               <PieChart fx:id="pieChartSources" prefHeight="200" prefWidth="350" />
+               <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Bounce Rate per Website" />
+               <BarChart fx:id="bounceRateChart" animated="false" prefHeight="200" prefWidth="350">
+                  <xAxis>
+                     <CategoryAxis side="BOTTOM" />
+                  </xAxis>
+                  <yAxis>
+                     <NumberAxis side="LEFT" />
+                  </yAxis>
+               </BarChart>
             </VBox>
 
             <TableView fx:id="websiteTableView" prefHeight="240.0" prefWidth="800.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <columns>
                   <TableColumn fx:id="websiteTableColumnID" prefWidth="51.0" text="ID" />
-                  <TableColumn fx:id="websiteTableColumnName" prefWidth="125.0" text="Website Name" />
-                  <TableColumn fx:id="websiteTableColumnClicks" prefWidth="106.0" text="Website Clicks" />
-                  <TableColumn fx:id="websiteTableColumnUrl" minWidth="0.0" prefWidth="145.0" text="Website Url" />
-                  <TableColumn fx:id="websiteTableColumnCount" minWidth="0.0" prefWidth="79.0" text="User Count" />
-                  <TableColumn fx:id="websiteTableColumnBounceRate" minWidth="0.0" prefWidth="98.0" text="Bounce Rate" />
-                  <TableColumn fx:id="websiteTableColumnUsers" minWidth="0.0" prefWidth="195.0" text="Website Users" />
+                  <TableColumn fx:id="websiteTableColumnName" prefWidth="167.0" text="Website Name" />
+                  <TableColumn fx:id="websiteTableColumnClicks" prefWidth="103.0" text="Website Clicks" />
+                  <TableColumn fx:id="websiteTableColumnUrl" minWidth="0.0" prefWidth="267.0" text="Website Url" />
+                  <TableColumn fx:id="websiteTableColumnCount" minWidth="0.0" prefWidth="107.0" text="User Count" />
+                  <TableColumn fx:id="websiteTableColumnBounceRate" minWidth="0.0" prefWidth="104.0" text="Bounce Rate" />
                </columns>
             </TableView>
          </GridPane>

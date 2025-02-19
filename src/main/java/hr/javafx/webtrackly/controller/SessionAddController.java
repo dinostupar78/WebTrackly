@@ -1,9 +1,9 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.SessionDbRepository;
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
-import hr.javafx.webtrackly.app.db.UserDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.SessionDbRepository1;
+import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
+import hr.javafx.webtrackly.app.db.UserDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
@@ -49,10 +49,10 @@ public class SessionAddController {
     @FXML
     private ComboBox<TrafficRecord> sessionComboBoxTrafficRecord;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
-    private UserDbRepository<User> userRepository = new UserDbRepository<>();
-    private SessionDbRepository<Session> sessionRepository = new SessionDbRepository<>();
-    private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+    private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
+    private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
+    private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     public void initialize() {
         sessionComboBoxWebsite.getItems().setAll(websiteRepository.findAll());

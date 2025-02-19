@@ -1,9 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.SessionDbRepository;
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository;
-import hr.javafx.webtrackly.app.db.UserDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.*;
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
@@ -47,10 +44,10 @@ public class SessionEditController {
     @FXML
     private ComboBox<TrafficRecord> sessionEditComboBoxTrafficRecord;
 
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
-    private UserDbRepository<User> userRepository = new UserDbRepository<>();
-    private SessionDbRepository<Session> sessionRepository = new SessionDbRepository<>();
-    private TrafficRecordDbRepository<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+    private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
+    private SessionDbRepository2<Session> sessionRepository = new SessionDbRepository2<>();
+    private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     private Session session;
 

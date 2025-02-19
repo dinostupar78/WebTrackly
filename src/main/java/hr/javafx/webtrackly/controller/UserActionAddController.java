@@ -1,8 +1,8 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.UserActionDbRepository;
-import hr.javafx.webtrackly.app.db.UserDbRepository;
-import hr.javafx.webtrackly.app.db.WebsiteDbRepository;
+import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
+import hr.javafx.webtrackly.app.db.UserDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviorType;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.User;
@@ -32,9 +32,9 @@ public class UserActionAddController {
     @FXML
     private TextField actionTextFieldDetails;
 
-    private UserDbRepository<User> userRepository = new UserDbRepository<>();
-    private WebsiteDbRepository<Website> websiteRepository = new WebsiteDbRepository<>();
-    private UserActionDbRepository<UserAction> userActionRepository = new UserActionDbRepository<>();
+    private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+    private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
 
     public void initialize() {
         actionComboBoxUser.getItems().setAll(userRepository.findAll());

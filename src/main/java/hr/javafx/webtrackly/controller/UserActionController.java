@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.SessionDbRepository;
-import hr.javafx.webtrackly.app.db.UserActionDbRepository;
+import hr.javafx.webtrackly.app.db.SessionDbRepository1;
+import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviorType;
 import hr.javafx.webtrackly.app.generics.EditContainer;
 import hr.javafx.webtrackly.app.model.Session;
@@ -65,8 +65,8 @@ public class UserActionController {
     @FXML
     private Button deleteUserAction;
 
-    private UserActionDbRepository<UserAction> userActionRepository = new UserActionDbRepository<>();
-    private SessionDbRepository<Session> sessionRepository = new SessionDbRepository<>();
+    private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
+    private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
     public void initialize() {
         userActionTableColumnID.setCellValueFactory(cellData ->

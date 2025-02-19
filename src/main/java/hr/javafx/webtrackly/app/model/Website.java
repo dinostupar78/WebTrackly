@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.app.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public class Website extends Entity {
@@ -10,9 +11,10 @@ public class Website extends Entity {
     private Integer websiteUserCount;
     private BigDecimal bounceRate;
     private Set<User> users;
+    private LocalDateTime createdAt;
 
     public Website(Long id, String websiteName, Integer websiteClicks, String websiteUrl, Integer websiteUserCount,
-                   BigDecimal bounceRate, Set<User> users) {
+                   BigDecimal bounceRate, Set<User> users, LocalDateTime createdAt) {
         super(id);
         this.websiteName = websiteName;
         this.websiteClicks = websiteClicks;
@@ -20,6 +22,7 @@ public class Website extends Entity {
         this.websiteUserCount = websiteUserCount;
         this.bounceRate = bounceRate;
         this.users = users;
+        this.createdAt = createdAt;
     }
 
     public String getWebsiteName() {
@@ -70,6 +73,14 @@ public class Website extends Entity {
         this.users = users;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public static class Builder{
         private Long id;
         private String websiteName;
@@ -78,6 +89,7 @@ public class Website extends Entity {
         private Integer websiteUserCount;
         private BigDecimal bounceRate;
         private Set<User> users;
+        private LocalDateTime createdAt;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -114,8 +126,13 @@ public class Website extends Entity {
             return this;
         }
 
+        public Builder setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
         public Website build(){
-            return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users);
+            return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users, createdAt);
         }
     }
 
