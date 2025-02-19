@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.app.db;
 
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 
@@ -9,19 +10,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class WebsiteDbRepository2<T extends Website> {
-    private static boolean dbLock = false;
+import static hr.javafx.webtrackly.main.HelloApplication.log;
 
-    public  void delete(Long id) throws RepositoryAccessException {
+public class WebsiteDbRepository2<T extends Website> {
+
+    public  void delete(Long id){
         try (Connection connection = DbActiveUtil.connectToDatabase()) {
             connection.setAutoCommit(false);
             performDeleteOperation(connection, id);
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while deleting website from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting website from database");
         }
     }
 
-    private void performDeleteOperation(Connection connection, Long id) throws RepositoryAccessException {
+    private void performDeleteOperation(Connection connection, Long id) {
         try {
             executeDeleteWebsiteQuery(connection, id);
             connection.commit();
@@ -29,9 +32,11 @@ public class WebsiteDbRepository2<T extends Website> {
             try {
                 connection.rollback();
             } catch (SQLException rollbackEx) {
-                throw new RepositoryAccessException("Rollback failed: " + rollbackEx.getMessage(), rollbackEx);
+                log.error("Rollback failed: {}", rollbackEx.getMessage());
+                throw new RepositoryException("Rollback failed");
             }
-            throw new RepositoryAccessException(e);
+            log.error("Error while deleting website from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting website from database");
         }
     }
 
@@ -56,10 +61,14 @@ public class WebsiteDbRepository2<T extends Website> {
 
             deleteWebsiteStmt.setLong(1, id);
             deleteWebsiteStmt.executeUpdate();
+
+        } catch (SQLException e) {
+            log.error("Error while deleting website from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting website from database");
         }
     }
 
-    public void update(T entity) throws RepositoryAccessException {
+    public void update(T entity) throws RepositoryException {
         String query = "UPDATE WEBSITE SET WEBSITE_NAME = ?, WEBSITE_CLICKS = ?, WEBSITE_URL = ?, WEBSITE_USER_COUNT = ?, " +
                 "BOUNCE_RATE = ? WHERE ID = ?";
 
@@ -74,8 +83,9 @@ public class WebsiteDbRepository2<T extends Website> {
             stmt.setLong(6, entity.getId());
             stmt.executeUpdate();
 
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while updating website in database: {}", e.getMessage());
+            throw new RepositoryException("Error while updating website in database");
         }
     }
 }

@@ -1,7 +1,9 @@
 package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.BehaviorType;
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.DbDataException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.app.model.Website;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+
 public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
             "SELECT ID, USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION WHERE ID = ?";
@@ -21,9 +25,9 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
             "SELECT ID, USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION";
 
     @Override
-    public T findById(Long id) throws RepositoryAccessException {
+    public T findById(Long id) {
         if (!DbActiveUtil.isDatabaseOnline()) {
-            throw new RepositoryAccessException("Database is inactive. Please check your connection.");
+            throw new RepositoryException("Database is inactive. Please check your connection.");
         }
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
@@ -33,16 +37,18 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
                 if (resultSet.next()) {
                     return (T) extractFromUserActionResultSet(resultSet);
                 } else {
-                    throw new RepositoryAccessException("User Action with id " + id + " not found!");
+                    log.error("User Action with id {} not found! ", id);
+                    throw new DbDataException("User Action with id " + id + " not found!");
                 }
             }
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (DbDataException | DbConnectionException | SQLException | IOException e) {
+            log.error("Error while trying to find User Action with id {}! ", id, e);
+            throw new RepositoryException("Error while trying to find User Action with id !");
         }
     }
 
     @Override
-    public List<T> findAll() throws RepositoryAccessException {
+    public List<T> findAll(){
         if (!(DbActiveUtil.isDatabaseOnline())) {
             return List.of();
         }
@@ -54,14 +60,15 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
             while (resultSet.next()) {
                 actions.add((T) extractFromUserActionResultSet(resultSet));
             }
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+            log.error("Error while trying to find all User Actions! ", e);
+            throw new RepositoryException("Error while trying to find all User Actions!");
         }
         return actions;
     }
 
     @Override
-    public void save(List<T> entities) throws RepositoryAccessException {
+    public void save(List<T> entities){
         String sql = "INSERT INTO USER_ACTION (USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -77,14 +84,15 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
                 stmt.addBatch();
             }
             stmt.executeBatch();
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException(e);
+        } catch (SQLException | IOException | DbConnectionException e) {
+            log.error("Error while trying to save User Actions! ", e);
+            throw new RepositoryException("Error while trying to save User Actions!");
         }
 
     }
 
     @Override
-    public void save(T entity) throws RepositoryAccessException {
+    public void save(T entity){
         String sql = "INSERT INTO USER_ACTION (USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -97,37 +105,45 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
             stmt.setString(5, entity.getDetails());
             stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException(e);
+        } catch (SQLException | IOException | DbConnectionException e) {
+            log.error("Error while trying to save User Action! ", e);
+            throw new RepositoryException("Error while trying to save User Action!");
         }
 
     }
 
-    private static UserAction extractFromUserActionResultSet(ResultSet resultSet){
-        try {
-            Long id = resultSet.getLong("ID");
+    private static UserAction extractFromUserActionResultSet(ResultSet resultSet) throws SQLException, DbDataException {
+        Long id = resultSet.getLong("ID");
 
-            Long userId = resultSet.getLong("USER_ID");
-            UserDbRepository1<User> userRepository = new UserDbRepository1<>();
-            User user = userRepository.findById(userId);
+        Long userId = resultSet.getLong("USER_ID");
+        UserDbRepository1<User> userRepository = new UserDbRepository1<>();
+        User user = userRepository.findById(userId);
 
-            String action = resultSet.getString("ACTION");
-            BehaviorType behaviorType = BehaviorType.valueOf(action.toUpperCase());
-
-            Long websiteId = resultSet.getLong("WEBSITE_ID");
-            WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
-            Website website = websiteRepository.findById(websiteId);
-
-            LocalDateTime startTime = resultSet.getTimestamp("ACTION_TIMESTAMP").toLocalDateTime();
-
-            String details = resultSet.getString("DETAILS");
-
-            return new UserAction(id, user, behaviorType, website, startTime, details);
-
-        } catch (SQLException e) {
-            throw new RepositoryAccessException(e);
+        String action = resultSet.getString("ACTION");
+        BehaviorType behaviorType;
+        try{
+            behaviorType = BehaviorType.valueOf(action.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new DbDataException("Unknown behaviour type: " + action);
         }
-    }
 
+        Long websiteId = resultSet.getLong("WEBSITE_ID");
+        WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+        Website website = websiteRepository.findById(websiteId);
+
+        LocalDateTime startTime = resultSet.getTimestamp("ACTION_TIMESTAMP").toLocalDateTime();
+
+        String details = resultSet.getString("DETAILS");
+
+        return new UserAction.Builder()
+                .setId(id)
+                .setUser(user)
+                .setAction(behaviorType)
+                .setPage(website)
+                .setActionTimestamp(startTime)
+                .setDetails(details)
+                .build();
+
+    }
 
 }

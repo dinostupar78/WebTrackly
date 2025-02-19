@@ -3,7 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.generics.ChartData;
-import hr.javafx.webtrackly.app.generics.EditContainer;
+import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.threads.*;
 import hr.javafx.webtrackly.utils.RowDeletion2Util;
@@ -120,7 +120,7 @@ public class WebsiteController {
 
         RowEditUtil<Website> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(websiteTableView, selectedWebsite -> {
-            EditContainer<Website> container = new EditContainer<>(selectedWebsite);
+            EditData<Website> container = new EditData<>(selectedWebsite);
             ScreenChangeButtonUtil.openWebsiteEditScreen(container.getData());
         });
 

@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
-import hr.javafx.webtrackly.app.generics.EditContainer;
+import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
@@ -116,7 +116,7 @@ public class UserController {
 
         RowEditUtil<User> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(userTableView, selectedUser -> {
-            EditContainer<User> container = new EditContainer<>(selectedUser);
+            EditData<User> container = new EditData<>(selectedUser);
             ScreenChangeButtonUtil.openUserEditScreen(container.getData());
         });
 

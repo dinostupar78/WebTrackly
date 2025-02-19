@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.app.db;
 
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 
@@ -10,8 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+
 public class UserActionDbRepository2<T extends UserAction> {
-    public void update(T entity) throws RepositoryAccessException {
+    public void update(T entity){
         String query = "UPDATE USER_ACTION " +
                 "SET USER_ID = ?, ACTION  = ?, WEBSITE_ID = ?, ACTION_TIMESTAMP = ?, " +
                 "DETAILS  = ? WHERE ID = ?";
@@ -26,21 +29,23 @@ public class UserActionDbRepository2<T extends UserAction> {
             stmt.setLong(6, entity.getId());
             stmt.executeUpdate();
 
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while updating user action in database: {}", e.getMessage());
+            throw new RepositoryException("Error while updating user action in database");
         }
     }
 
-    public void delete(Long id) throws RepositoryAccessException {
+    public void delete(Long id){
         try (Connection connection = DbActiveUtil.connectToDatabase()) {
             connection.setAutoCommit(false);
             performDeleteOperation(connection, id);
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while deleting user action from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting user action from database");
         }
     }
 
-    private void performDeleteOperation(Connection connection, Long id) throws RepositoryAccessException {
+    private void performDeleteOperation(Connection connection, Long id){
         try {
             executeDeleteUserQuery(connection, id);
             connection.commit();
@@ -48,9 +53,11 @@ public class UserActionDbRepository2<T extends UserAction> {
             try {
                 connection.rollback();
             } catch (SQLException rollbackEx) {
-                throw new RepositoryAccessException("Rollback failed: " + rollbackEx.getMessage(), rollbackEx);
+                log.error("Rollback failed: {}", rollbackEx.getMessage());
+                throw new RepositoryException("Rollback failed");
             }
-            throw new RepositoryAccessException(e);
+            log.error("Error while deleting user action from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting user action from database");
         }
     }
 
@@ -59,6 +66,8 @@ public class UserActionDbRepository2<T extends UserAction> {
         try (PreparedStatement stmt = connection.prepareStatement(deleteUserQuery)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Error while deleting user action from database: {}", e.getMessage());
         }
     }
 }

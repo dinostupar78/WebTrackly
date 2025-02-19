@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
-import hr.javafx.webtrackly.app.generics.EditContainer;
+import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
@@ -112,7 +112,7 @@ public class SessionController {
 
         RowEditUtil<Session> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(sessionTableView, selectedSession -> {
-            EditContainer<Session> container = new EditContainer<>(selectedSession);
+            EditData<Session> container = new EditData<>(selectedSession);
             ScreenChangeButtonUtil.openSessionEditScreen(container.getData());
         });
     }
@@ -136,14 +136,14 @@ public class SessionController {
             LocalDate filterStartDate = sessionDatePickerStartDate.getValue();
             initialSessionList = initialSessionList.stream()
                     .filter(session -> session.getStartTime().toLocalDate().equals(filterStartDate))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         if (sessionDatePickerEndDate.getValue() != null) {
             LocalDate filterEndDate = sessionDatePickerEndDate.getValue();
             initialSessionList = initialSessionList.stream()
                     .filter(session -> session.getEndTime().toLocalDate().equals(filterEndDate))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         ObservableList<Session> sessionObservableList = observableArrayList(initialSessionList);

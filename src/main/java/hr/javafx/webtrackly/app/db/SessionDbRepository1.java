@@ -1,7 +1,10 @@
 package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.DeviceType;
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.DbDataException;
+import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
@@ -14,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+
 public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
             "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION WHERE ID = ?";
@@ -23,9 +28,10 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
 
     @Override
-    public T findById(Long id) throws RepositoryAccessException {
+    public T findById(Long id) {
         if (!DbActiveUtil.isDatabaseOnline()) {
-            throw new RepositoryAccessException("Database is inactive. Please check your connection.");
+            log.error("Database is inactive. Please check your connection.");
+            throw new RepositoryException("Database is inactive. Please check your connection.");
         }
 
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -36,16 +42,18 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 if (resultSet.next()) {
                     return (T) extractFromSessionResultSet(resultSet);
                 } else {
-                    throw new RepositoryAccessException("Session with id " + id + " not found!");
+                    log.error("Session with id {} not found! ", id);
+                    throw new EmptyResultSetException("Session with id not found!");
                 }
             }
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+            log.error("Error while fetching session from database: {}", e.getMessage());
+            throw new RepositoryException("Error while fetching session from database");
         }
     }
 
     @Override
-    public List<T> findAll() throws RepositoryAccessException {
+    public List<T> findAll()  {
         if (!(DbActiveUtil.isDatabaseOnline())) {
             return List.of();
         }
@@ -57,14 +65,15 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             while (resultSet.next()) {
                 sessions.add((T) extractFromSessionResultSet(resultSet));
             }
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+            log.error("Error while fetching sessions from database: {}", e.getMessage());
+            throw new RepositoryException("Error while fetching sessions from database");
         }
         return sessions;
     }
 
     @Override
-    public void save(List<T> entities) throws RepositoryAccessException {
+    public void save(List<T> entities) {
         String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -82,14 +91,15 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 stmt.addBatch();
             }
             stmt.executeBatch();
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException(e);
+        } catch (SQLException | IOException | DbConnectionException e) {
+            log.error("Error while saving sessions to database: {}", e.getMessage());
+            throw new RepositoryException("Error while saving sessions to database");
         }
 
     }
 
     @Override
-    public void save(T entity) throws RepositoryAccessException {
+    public void save(T entity) {
         String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -105,40 +115,53 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             stmt.setLong(8, entity.getTrafficRecordId());
             stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException(e);
+        } catch (SQLException | IOException | DbConnectionException e) {
+            log.error("Error while saving session to database: {}", e.getMessage());
+            throw new RepositoryException("Error while saving session to database");
         }
 
     }
 
-    public static Session extractFromSessionResultSet(ResultSet resultSet) {
-        try {
-            Long id = resultSet.getLong("ID");
-            
-            Long userId = resultSet.getLong("USER_ID");
-            UserDbRepository1<User> userRepository = new UserDbRepository1<>();
-            User user = userRepository.findById(userId);
+    public static Session extractFromSessionResultSet(ResultSet resultSet) throws SQLException, DbDataException {
+        Long id = resultSet.getLong("ID");
 
-            Long websiteId = resultSet.getLong("WEBSITE_ID");
-            WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
-            Website website = websiteRepository.findById(websiteId);
+        Long userId = resultSet.getLong("USER_ID");
+        UserDbRepository1<User> userRepository = new UserDbRepository1<>();
+        User user = userRepository.findById(userId);
 
-            String deviceTypeStr = resultSet.getString("DEVICE_TYPE");
-            DeviceType deviceType = DeviceType.valueOf(deviceTypeStr.toUpperCase());
-            BigDecimal sessionDuration = resultSet.getBigDecimal("SESSION_DURATION");
-            LocalDateTime startTime = resultSet.getTimestamp("START_TIME").toLocalDateTime();
-            LocalDateTime endTime = resultSet.getTimestamp("END_TIME").toLocalDateTime();
-            Boolean active = resultSet.getObject("IS_ACTIVE") != null ? resultSet.getBoolean("IS_ACTIVE") : null;
+        Long websiteId = resultSet.getLong("WEBSITE_ID");
+        WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+        Website website = websiteRepository.findById(websiteId);
 
-            Long trafficRecordId = resultSet.getLong("TRAFFIC_RECORD_ID");
+        String deviceTypeStr = resultSet.getString("DEVICE_TYPE");
+        DeviceType deviceType;
 
-
-            return new Session(id, website, user, deviceType, sessionDuration, startTime, endTime, active, trafficRecordId);
-        } catch (SQLException e) {
-            throw new RepositoryAccessException(e);
+        try{
+            deviceType = DeviceType.valueOf(deviceTypeStr.toUpperCase());
+        } catch (IllegalArgumentException e){
+            log.error("Device type not found! {}", deviceTypeStr);
+            throw new DbDataException("Device type not found!" + deviceTypeStr);
         }
+
+        BigDecimal sessionDuration = resultSet.getBigDecimal("SESSION_DURATION");
+        LocalDateTime startTime = resultSet.getTimestamp("START_TIME").toLocalDateTime();
+        LocalDateTime endTime = resultSet.getTimestamp("END_TIME").toLocalDateTime();
+        Boolean active = resultSet.getObject("IS_ACTIVE") != null ? resultSet.getBoolean("IS_ACTIVE") : null;
+
+        Long trafficRecordId = resultSet.getLong("TRAFFIC_RECORD_ID");
+
+        return new Session.Builder()
+                .setId(id)
+                .setUser(user)
+                .setWebsite(website)
+                .setDeviceType(deviceType)
+                .setSessionDuration(sessionDuration)
+                .setStartTime(startTime)
+                .setEndTime(endTime)
+                .setActive(active)
+                .setTrafficRecordId(trafficRecordId)
+                .build();
+
     }
-
-
 
 }

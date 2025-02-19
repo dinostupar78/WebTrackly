@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.utils;
 
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository2;
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Website;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -55,7 +55,7 @@ public class RowDeletion2Util {
                 tableView.setItems(websites);
 
                 ShowAlertUtil.showAlert(SUCCESS_STRING, "Website deleted successfully.", Alert.AlertType.INFORMATION);
-            } catch (RepositoryAccessException e) {
+            } catch (RepositoryException e) {
                 e.printStackTrace();
                 ShowAlertUtil.showAlert(ERROR_STRING, "Failed to delete user: " + e.getMessage(), Alert.AlertType.ERROR);
             }

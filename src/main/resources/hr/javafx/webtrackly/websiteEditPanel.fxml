@@ -6,109 +6,78 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="0.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.WebsiteEditController">
-    <children>
-        <GridPane prefHeight="600.0" prefWidth="800.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="462.0" minWidth="10.0" prefWidth="409.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="486.0" minWidth="10.0" prefWidth="391.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <Label text="Website Edit" GridPane.columnSpan="2" GridPane.halignment="CENTER">
-                    <font>
-                        <Font name="Consolas Bold" size="24.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label text="Enter Website Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets right="5.0" top="-40.0" />
-                    </GridPane.margin>
-                    <font>
-                        <Font name="Calibri Bold Italic" size="20.0" />
-                    </font>
-                </Label>
-                <Label text="Enter Website Clicks:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                    <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets right="5.0" top="20.0" />
-                    </GridPane.margin>
-                </Label>
-                <Button mnemonicParsing="false" onAction="#editWebsite" text="Edit Website" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-                    <GridPane.margin>
-                        <Insets top="-40.0" />
-                    </GridPane.margin>
-                    <font>
-                        <Font name="Calibri Bold Italic" size="18.0" />
-                    </font>
-                </Button>
-                <Label text="Enter Website Url:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                    <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets right="5.0" top="80.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label text="Enter Number of Users:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                    <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets left="5.0" right="5.0" top="-30.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label text="Enter Bounce Rate:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                    <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets left="5.0" right="5.0" top="30.0" />
-                    </GridPane.margin>
-                </Label>
-            <TextField fx:id="websiteEditTextFieldUrl" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-90.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="websiteEditTextFieldUsers" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-30.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="websiteEditTextFieldBounceRate" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="30.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="websiteEditTextFieldName" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-40.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="websiteEditTextFieldClicks" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            </children>
-        </GridPane>
-    </children>
+<VBox alignment="CENTER" fillWidth="true" prefHeight="600" prefWidth="800" spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.WebsiteEditController">
+
+    <Label alignment="CENTER" text="Website Edit">
+        <font>
+            <Font name="Consolas Bold" size="24" />
+        </font>
+        <VBox.margin>
+            <Insets top="60" />
+        </VBox.margin>
+    </Label>
+
+    <GridPane alignment="CENTER" hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="150" />
+            <ColumnConstraints minWidth="250" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         <RowConstraints />
+        </rowConstraints>
+        <children>
+            <Label text="Enter Website Name:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <font>
+                    <Font name="Calibri Bold Italic" size="18" />
+                </font>
+            </Label>
+            <TextField fx:id="websiteEditTextFieldName" promptText="Website Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label text="Enter Website Clicks:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <font>
+                    <Font name="Calibri Bold" size="18" />
+                </font>
+            </Label>
+            <TextField fx:id="websiteEditTextFieldClicks" promptText="Website Clicks" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Enter Website URL:" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <font>
+                    <Font name="Calibri Bold" size="18" />
+                </font>
+            </Label>
+            <TextField fx:id="websiteEditTextFieldUrl" promptText="Website URL" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="Enter Number of Users:" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                <font>
+                    <Font name="Calibri Bold" size="18" />
+                </font>
+            </Label>
+            <TextField fx:id="websiteEditTextFieldUsers" promptText="User Count" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+            <Label text="Enter Bounce Rate:" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                <font>
+                    <Font name="Calibri Bold" size="18" />
+                </font>
+            </Label>
+            <TextField fx:id="websiteEditTextFieldBounceRate" promptText="Bounce Rate" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Button onAction="#editWebsite" text="Edit Website" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+                <font>
+                    <Font name="Calibri Bold Italic" size="18" />
+                </font>
+            </Button>
+        </children>
+    </GridPane>
+
+    <Pane prefHeight="100" VBox.vgrow="ALWAYS" />
 </VBox>

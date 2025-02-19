@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
-import hr.javafx.webtrackly.app.generics.EditContainer;
+import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
@@ -101,7 +101,7 @@ public class TrafficRecordController {
 
         RowEditUtil<TrafficRecord> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(trafficRecordTableView, selectedTrafficRecord -> {
-            EditContainer<TrafficRecord> container = new EditContainer<>(selectedTrafficRecord);
+            EditData<TrafficRecord> container = new EditData<>(selectedTrafficRecord);
             ScreenChangeButtonUtil.openTrafficRecordEditScreen(container.getData());
         });
     }
@@ -113,7 +113,7 @@ public class TrafficRecordController {
 
     public void filterTrafficRecords(){
         showTrafficUserCountChart();
-        ShowTrafficTrendsChart();
+        showTrafficTrendsChart();
 
         List<TrafficRecord> initialTrafficRecordList = trafficRecordRepository.findAll();
 
@@ -172,7 +172,7 @@ public class TrafficRecordController {
         trafficUserCountChart.getData().add(series);
     }
 
-    private void ShowTrafficTrendsChart() {
+    private void showTrafficTrendsChart() {
         trafficTrendsChart.getData().clear();
 
         List<TrafficRecord> records = new ArrayList<>(trafficRecordRepository.findAll());

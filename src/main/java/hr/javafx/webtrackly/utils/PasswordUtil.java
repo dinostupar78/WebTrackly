@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.utils;
 
-import hr.javafx.webtrackly.app.exception.PasswordHashingException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -23,7 +23,7 @@ public class PasswordUtil {
             return hexString.toString();
 
         } catch (NoSuchAlgorithmException e) {
-            throw new PasswordHashingException("SHA-256 algorithm not available", e);
+            throw new RepositoryException("SHA-256 algorithm not available", e);
         }
     }
 }

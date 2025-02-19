@@ -5,159 +5,130 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="0.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.RegisterController">
-    <children>
-      <GridPane prefHeight="600.0" prefWidth="800.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="462.0" minWidth="10.0" prefWidth="409.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="486.0" minWidth="10.0" prefWidth="391.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Register" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+<VBox alignment="CENTER" fillWidth="true" prefHeight="600" prefWidth="800" spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.RegisterController">
+
+   <!-- Title -->
+   <Label alignment="CENTER" text="Register">
+      <font>
+         <Font name="Consolas Bold" size="28" />
+      </font>
+      <VBox.margin>
+         <Insets top="60.0" />
+      </VBox.margin>
+   </Label>
+
+   <!-- Form GridPane -->
+   <GridPane alignment="CENTER" hgap="10" vgap="10">
+      <padding>
+         <Insets bottom="10" left="20" right="20" top="10" />
+      </padding>
+      <columnConstraints>
+         <ColumnConstraints halignment="CENTER" minWidth="150" />
+         <ColumnConstraints minWidth="250" />
+      </columnConstraints>
+      <rowConstraints>
+         <!-- We'll need more rows for registration fields -->
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+      <children>
+         <!-- First Name -->
+         <Label alignment="CENTER" text="Enter First Name:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <TextField fx:id="registerTextFieldFirstName" prefWidth="250" promptText="Your First Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+         <!-- Last Name -->
+         <Label alignment="CENTER" text="Enter Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <TextField fx:id="registerTextFieldLastName" prefWidth="250" promptText="Your Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+         <!-- Date of Birth -->
+         <Label alignment="CENTER" text="Enter Date of Birth:" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <DatePicker fx:id="registerDatePickerBirth" prefWidth="250" promptText="Date of Birth" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+         <!-- Nationality -->
+         <Label alignment="CENTER" text="Enter Nationality:" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <TextField fx:id="registerTextFieldNationality" prefWidth="250" promptText="Your Nationality" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+         <!-- Username -->
+         <Label alignment="CENTER" text="Enter Username:" GridPane.columnIndex="0" GridPane.rowIndex="4">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <TextField fx:id="registerTextFieldUsername" prefWidth="250" promptText="Your Username" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+         <!-- Password -->
+         <Label alignment="CENTER" text="Enter Password:" GridPane.columnIndex="0" GridPane.rowIndex="5">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <PasswordField fx:id="registerTextFieldPassword" prefWidth="250" promptText="Your Password" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+         <!-- Role -->
+         <Label alignment="CENTER" text="Enter Role:" GridPane.columnIndex="0" GridPane.rowIndex="6">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <ComboBox fx:id="registerComboBoxRole" prefWidth="250" promptText="Your Role" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+         <!-- Gender -->
+         <Label alignment="CENTER" text="Enter Gender:" GridPane.columnIndex="0" GridPane.rowIndex="7">
+            <font>
+               <Font name="Calibri Bold" size="18" />
+            </font>
+         </Label>
+         <ComboBox fx:id="registerComboBoxGender" prefWidth="250" promptText="Your Gender" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+         <!-- Buttons -->
+         <HBox alignment="CENTER" spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="9">
+            <Button onAction="#onClickRegister" prefWidth="100.0" text="Register">
                <font>
-                  <Font name="Consolas Bold" size="24.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets top="5.0" />
-               </GridPane.margin>
-            </Label>
-            <Label text="Enter First Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets right="5.0" top="-40.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="Calibri Bold Italic" size="20.0" />
-               </font>
-            </Label>
-            <Label text="Enter Last Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets right="5.0" top="20.0" />
-               </GridPane.margin>
-            </Label>
-            <Label text="Enter Role:" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
-               <font>
-                  <Font name="Calibri Bold Italic" size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets right="5.0" top="-70.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="registerTextFieldLastName" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <Button mnemonicParsing="false" onAction="#onClickRegister" text="Register" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets top="25.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="Calibri Bold Italic" size="18.0" />
+                  <Font name="Calibri Bold Italic" size="16" />
                </font>
             </Button>
-            <TextField fx:id="registerTextFieldFirstName" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-40.0" />
-               </GridPane.margin>
-            </TextField>
-            <ComboBox fx:id="registerComboBoxRole" prefHeight="25.0" prefWidth="372.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-70.0" />
-               </GridPane.margin>
-            </ComboBox>
-            <Label text="Enter Date of Birth:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Button onAction="#onClickSwitchToLogin" prefWidth="150.0" text="Switch to Login">
                <font>
-                  <Font name="Calibri Bold" size="20.0" />
+                  <Font name="Calibri Bold Italic" size="16" />
                </font>
-               <GridPane.margin>
-                  <Insets right="5.0" top="80.0" />
-               </GridPane.margin>
-            </Label>
-            <DatePicker fx:id="registerDatePickerBirth" prefHeight="25.0" prefWidth="372.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="80.0" />
-               </GridPane.margin>
-            </DatePicker>
-            <Label text="Enter Nationality:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" top="-30.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="registerTextFieldNationality" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-30.0" />
-               </GridPane.margin>
-            </TextField>
-            <Label text="Enter Gender:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" top="30.0" />
-               </GridPane.margin>
-            </Label>
-            <ComboBox fx:id="registerComboBoxGender" prefHeight="25.0" prefWidth="373.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="35.0" />
-               </GridPane.margin>
-            </ComboBox>
-            <Label text="Enter Password:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Calibri Bold Italic" size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" top="40.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="registerTextFieldPassword" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="40.0" />
-               </GridPane.margin>
-            </TextField>
-            <Label text="Enter Username:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Calibri Bold Italic" size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="5.0" right="5.0" top="-20.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="registerTextFieldUsername" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets left="10.0" right="10.0" top="-20.0" />
-               </GridPane.margin>
-            </TextField>
-            <Button mnemonicParsing="false" onAction="#onClickSwitchToLogin" text="Switch to Login" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <font>
-                  <Font name="Calibri Bold Italic" size="18.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets top="-50.0" />
-               </GridPane.margin>
             </Button>
-         </children>
-      </GridPane>
-   </children>
+         </HBox>
+      </children>
+   </GridPane>
+
+   <Pane prefHeight="200" VBox.vgrow="ALWAYS" />
 </VBox>

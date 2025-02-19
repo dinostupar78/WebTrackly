@@ -1,9 +1,9 @@
 package hr.javafx.webtrackly.app.generics;
 
-public class EditContainer<T>{
+public class EditData<T>{
     private T data;
 
-    public EditContainer(T data) {
+    public EditData(T data) {
         this.data = data;
     }
 

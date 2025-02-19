@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -24,7 +25,7 @@ public class LoginController {
     private TextField loginTextFieldUsername;
 
     @FXML
-    private TextField loginTextFieldPassword;
+    private PasswordField loginPasswordFieldPass;
 
     @FXML
     private ComboBox<Role> loginComboBoxRole;
@@ -35,13 +36,13 @@ public class LoginController {
 
     public void onClickLogin() {
         String username = loginTextFieldUsername.getText();
-        String password = loginTextFieldPassword.getText();
+        String password = loginPasswordFieldPass.getText();
         Role role = loginComboBoxRole.getValue();
 
         String hashedInputPassword = PasswordUtil.hashPassword(password);
 
-        UserFileRepository<User> userRepo = new UserFileRepository<>();
-        List<User> users = userRepo.findAll();
+        UserFileRepository<User> userRepository = new UserFileRepository<>();
+        List<User> users = userRepository.findAll();
 
 
         Optional<User> matchingUser = users.stream()

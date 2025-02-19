@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.utils;
 
 import hr.javafx.webtrackly.app.db.*;
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.User;
@@ -61,7 +61,7 @@ public class RowDeletion1Util {
                 tableView.setItems(users);
 
                 ShowAlertUtil.showAlert(SUCCESS_STRING, "User deleted successfully.", Alert.AlertType.INFORMATION);
-            } catch (RepositoryAccessException e) {
+            } catch (RepositoryException e) {
                 e.printStackTrace();
                 ShowAlertUtil.showAlert(ERROR_STRING, "Failed to delete user: " + e.getMessage(), Alert.AlertType.ERROR);
             }
@@ -102,7 +102,7 @@ public class RowDeletion1Util {
                 tableView.setItems(actions);
 
                 ShowAlertUtil.showAlert(SUCCESS_STRING, "Action deleted successfully.", Alert.AlertType.INFORMATION);
-            } catch (RepositoryAccessException e) {
+            } catch (RepositoryException e) {
                 e.printStackTrace();
                 ShowAlertUtil.showAlert(ERROR_STRING, "Failed to delete action: " + e.getMessage(), Alert.AlertType.ERROR);
             }
@@ -143,7 +143,7 @@ public class RowDeletion1Util {
                 tableView.setItems(sessions);
 
                 ShowAlertUtil.showAlert(SUCCESS_STRING, "Session deleted successfully.", Alert.AlertType.INFORMATION);
-            } catch (RepositoryAccessException e) {
+            } catch (RepositoryException e) {
                 e.printStackTrace();
                 ShowAlertUtil.showAlert(ERROR_STRING, "Failed to delete session: " + e.getMessage(), Alert.AlertType.ERROR);
             }
@@ -184,7 +184,7 @@ public class RowDeletion1Util {
                 tableView.setItems(trafficRecords);
 
                 ShowAlertUtil.showAlert(SUCCESS_STRING, "Traffic record deleted successfully.", Alert.AlertType.INFORMATION);
-            } catch (RepositoryAccessException e) {
+            } catch (RepositoryException e) {
                 e.printStackTrace();
                 ShowAlertUtil.showAlert(ERROR_STRING, "Failed to delete session: " + e.getMessage(), Alert.AlertType.ERROR);
             }

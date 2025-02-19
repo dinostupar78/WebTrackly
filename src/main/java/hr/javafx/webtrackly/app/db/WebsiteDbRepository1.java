@@ -1,5 +1,8 @@
 package hr.javafx.webtrackly.app.db;
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
+import hr.javafx.webtrackly.app.exception.DbDataException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
@@ -22,20 +25,20 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
     private static boolean dbLock = false;
 
     @Override
-    public synchronized T findById(Long id) throws RepositoryAccessException {
+    public synchronized T findById(Long id){
         while (dbLock) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new RepositoryAccessException(e);
+                throw new RepositoryException(e);
             }
         }
         dbLock = true;
 
         if (!DbActiveUtil.isDatabaseOnline()) {
             log.error("Database is inactive. Please check your connection.");
-            throw new RepositoryAccessException("Database is inactive. Please check your connection.");
+            throw new RepositoryException("Database is inactive. Please check your connection.");
         }
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
@@ -45,11 +48,12 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
                 if (resultSet.next()) {
                     return (T) extractWebsiteFromResultSet(resultSet);
                 } else {
-                    throw new RepositoryAccessException("Website with id " + id + " not found!");
+                    throw new EmptyResultSetException("Website with id " + id + " not found!");
                 }
             }
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while fetching website from database: {}", e.getMessage());
+            throw new RepositoryException("Error while fetching website from database");
         } finally {
             dbLock = false;
             notifyAll();
@@ -57,20 +61,20 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
     }
 
     @Override
-    public synchronized List<T> findAll() throws RepositoryAccessException {
+    public synchronized List<T> findAll(){
         while (dbLock) {
             try {
-                System.out.println("Waiting for dbLock to be released");
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new RepositoryAccessException(e);
+                log.error("Error while fetching websites from database: {}", e.getMessage());
+                throw new RepositoryException("Error while fetching websites from database");
             }
         }
         dbLock = true;
 
         if (!(DbActiveUtil.isDatabaseOnline())) {
-            return List.of();
+            throw new RepositoryException("Database is inactive. Please check your connection.");
         }
         List<T> websites = new ArrayList<>();
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -80,18 +84,18 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
             while (resultSet.next()) {
                 websites.add((T) extractWebsiteFromResultSet(resultSet));
             }
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while fetching websites from database: {}", e.getMessage());
+            throw new RepositoryException("Error while fetching websites from database");
         } finally {
             dbLock = false;
-            System.out.println("Notifying all threads");
             notifyAll();
         }
         return websites;
     }
 
     @Override
-    public synchronized void save(List<T> entities) throws RepositoryAccessException {
+    public synchronized void save(List<T> entities){
         String sql = "INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_CLICKS, WEBSITE_URL, WEBSITE_USER_COUNT, BOUNCE_RATE) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -106,13 +110,14 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
                 stmt.addBatch();
             }
             stmt.executeBatch();
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException(e);
+        } catch (SQLException | IOException | DbConnectionException e) {
+            log.error("Error while saving websites to database: {}", e.getMessage());
+            throw new RepositoryException("Error while saving websites to database");
         }
     }
 
     @Override
-    public synchronized void save(T entity) throws RepositoryAccessException {
+    public synchronized void save(T entity){
         String sql = "INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_CLICKS, WEBSITE_URL, WEBSITE_USER_COUNT, BOUNCE_RATE) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -124,33 +129,41 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
             stmt.setInt(4, entity.getWebsiteUserCount());
             stmt.setBigDecimal(5, entity.getBounceRate());
             stmt.executeUpdate();
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException(e);
+        } catch (SQLException | IOException | DbConnectionException e) {
+            log.error("Error while saving website to database: {}", e.getMessage());
+            throw new RepositoryException("Error while saving website to database");
         }
     }
 
 
-    private static Website extractWebsiteFromResultSet(ResultSet resultSet) {
-        try {
-            Long id = resultSet.getLong("ID");
-            String websiteName = resultSet.getString("WEBSITE_NAME");
-            Integer websiteClicks = resultSet.getInt("WEBSITE_CLICKS");
-            String websiteUrl = resultSet.getString("WEBSITE_URL");
-            Integer websiteUserCount = resultSet.getInt("WEBSITE_USER_COUNT");
-            BigDecimal bounceRate = resultSet.getBigDecimal("BOUNCE_RATE");
-            Set<User> users = fetchUsersForWebsite(id);
-            LocalDateTime createdAt = resultSet.getTimestamp("CREATED_AT").toLocalDateTime();
+    private static Website extractWebsiteFromResultSet(ResultSet resultSet) throws SQLException {
+        Long id = resultSet.getLong("ID");
+        String websiteName = resultSet.getString("WEBSITE_NAME");
+        Integer websiteClicks = resultSet.getInt("WEBSITE_CLICKS");
+        String websiteUrl = resultSet.getString("WEBSITE_URL");
+        Integer websiteUserCount = resultSet.getInt("WEBSITE_USER_COUNT");
+        BigDecimal bounceRate = resultSet.getBigDecimal("BOUNCE_RATE");
+        Set<User> users = fetchUsersForWebsite(id);
+        LocalDateTime createdAt = resultSet.getTimestamp("CREATED_AT").toLocalDateTime();
 
-            return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users, createdAt);
-        } catch (SQLException e) {
-            throw new RepositoryAccessException(e);
-        }
+        return new Website.Builder()
+                .setId(id)
+                .setWebsiteName(websiteName)
+                .setWebsiteClicks(websiteClicks)
+                .setWebsiteUrl(websiteUrl)
+                .setWebsiteUserCount(websiteUserCount)
+                .setBounceRate(bounceRate)
+                .setUsers(users)
+                .setCreatedAt(createdAt)
+                .build();
+
     }
-
 
     private static Set<User> fetchUsersForWebsite(Long websiteId) {
         Set<User> users = new HashSet<>();
-        String query = "SELECT * FROM APP_USER WHERE WEBSITE_ID = ?";
+        String query = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, " +
+                "GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT " +
+                "FROM APP_USER WHERE WEBSITE_ID = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -161,11 +174,11 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
                     users.add(user);
                 }
             }
-        } catch (SQLException | IOException e) {
-            throw new RepositoryAccessException("Error fetching users for website ID: " + websiteId, e);
+        } catch (DbDataException | SQLException | IOException | DbConnectionException e) {
+            log.error("Error fetching users for website ID: {}", websiteId);
+            throw new RepositoryException("Error fetching users for website ID: " + websiteId, e);
         }
         return users;
     }
-
 
 }

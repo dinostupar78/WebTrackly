@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.app.db;
 
-import hr.javafx.webtrackly.app.exception.RepositoryAccessException;
+import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 
@@ -10,8 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+
 public class SessionDbRepository2<T extends Session> {
-    public void update(T entity) throws RepositoryAccessException {
+    public void update(T entity){
         String query = "UPDATE SESSION " +
                 "SET WEBSITE_ID = ?, USER_ID = ?, DEVICE_TYPE = ?, SESSION_DURATION = ?, " +
                 "START_TIME = ?, END_TIME = ?, IS_ACTIVE = ?, TRAFFIC_RECORD_ID = ? " +
@@ -30,21 +33,23 @@ public class SessionDbRepository2<T extends Session> {
             stmt.setLong(9, entity.getId());
 
             stmt.executeUpdate();
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while updating session in database: {}", e.getMessage());
+            throw new RepositoryException("Error while updating session in database");
         }
     }
 
-    public void delete(Long id) throws RepositoryAccessException {
+    public void delete(Long id){
         try (Connection connection = DbActiveUtil.connectToDatabase()) {
             connection.setAutoCommit(false);
             performDeleteOperation(connection, id);
-        } catch (IOException | SQLException e) {
-            throw new RepositoryAccessException(e);
+        } catch (IOException | SQLException | DbConnectionException e) {
+            log.error("Error while deleting session from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting session from database");
         }
     }
 
-    private void performDeleteOperation(Connection connection, Long id) throws RepositoryAccessException {
+    private void performDeleteOperation(Connection connection, Long id){
         try {
             executeDeleteSessionQuery(connection, id);
             connection.commit();
@@ -52,9 +57,11 @@ public class SessionDbRepository2<T extends Session> {
             try {
                 connection.rollback();
             } catch (SQLException rollbackEx) {
-                throw new RepositoryAccessException("Rollback failed: " + rollbackEx.getMessage(), rollbackEx);
+                log.error("Rollback failed: {}", rollbackEx.getMessage());
+                throw new RepositoryException("Rollback failed");
             }
-            throw new RepositoryAccessException(e);
+            log.error("Error while deleting session from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting session from database");
         }
     }
 
@@ -63,6 +70,9 @@ public class SessionDbRepository2<T extends Session> {
         try (PreparedStatement stmt = connection.prepareStatement(deleteUserQuery)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Error while deleting session from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting session from database");
         }
     }
 }

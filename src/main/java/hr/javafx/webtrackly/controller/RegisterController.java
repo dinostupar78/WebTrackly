@@ -13,6 +13,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
+import java.util.Optional;
+
+import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class RegisterController {
     @FXML
@@ -54,6 +57,39 @@ public class RegisterController {
         String password = registerTextFieldPassword.getText();
         Role role = registerComboBoxRole.getValue();
 
+        if(!Optional.ofNullable(firstName).filter(s -> !s.trim().isEmpty()).isPresent()){
+            showAlert("First name is required!");
+            return;
+        }
+        if(!Optional.ofNullable(lastName).filter(s -> !s.trim().isEmpty()).isPresent()){
+            showAlert("Last name is required!");
+            return;
+        }
+        if(dateOfBirth == null){
+            showAlert("Date of birth is required!");
+            return;
+        }
+        if(!Optional.ofNullable(nationality).filter(s -> !s.trim().isEmpty()).isPresent()){
+            showAlert("Nationality is required!");
+            return;
+        }
+        if(gender == null){
+            showAlert("Gender is required!");
+            return;
+        }
+        if(!Optional.ofNullable(username).filter(s -> !s.trim().isEmpty()).isPresent()){
+            showAlert("Username is required!");
+            return;
+        }
+        if(!Optional.ofNullable(password).filter(s -> !s.trim().isEmpty()).isPresent()){
+            showAlert("Password is required!");
+            return;
+        }
+        if(role == null){
+            showAlert("Role is required!");
+            return;
+        }
+
         String hashedPassword = PasswordUtil.hashPassword(password);
 
         User newUser = new User.Builder()
@@ -70,7 +106,7 @@ public class RegisterController {
             userRepo.save(newUser);
             showAlert("Registration successful! You may now log in.");
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Registration failed: {} ", e.getMessage());
             showAlert("Registration failed: " + e.getMessage());
         }
     }

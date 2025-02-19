@@ -1,10 +1,8 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviorType;
-import hr.javafx.webtrackly.app.generics.EditContainer;
-import hr.javafx.webtrackly.app.model.Session;
+import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
@@ -66,7 +64,6 @@ public class UserActionController {
     private Button deleteUserAction;
 
     private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
-    private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
     public void initialize() {
         userActionTableColumnID.setCellValueFactory(cellData ->
@@ -97,7 +94,7 @@ public class UserActionController {
 
         RowEditUtil<UserAction> rowEditUtil = new RowEditUtil<>();
         rowEditUtil.addRowEditHandler(userActionTableView, selectedAction -> {
-            EditContainer<UserAction> container = new EditContainer<>(selectedAction);
+            EditData<UserAction> container = new EditData<>(selectedAction);
             ScreenChangeButtonUtil.openUserActionEditScreen(container.getData());
         });
     }
