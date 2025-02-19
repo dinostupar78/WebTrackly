@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class UserAddController {
     @FXML
@@ -62,7 +63,10 @@ public class UserAddController {
         }
 
         LocalDate dateOfBirth = userDatePickerBirth.getValue();
-        if(dateOfBirth == null){
+        Optional<LocalDate> optDateOfBirth = Optional.ofNullable(dateOfBirth);
+        if (optDateOfBirth.isPresent()) {
+            dateOfBirth = optDateOfBirth.get();
+        } else {
             errorMessages.append("Date of birth is required!\n");
         }
 
@@ -72,7 +76,10 @@ public class UserAddController {
         }
 
         GenderType gender = userComboBoxGender.getValue();
-        if(gender == null){
+        Optional<GenderType> optGender = Optional.ofNullable(gender);
+        if (optGender.isPresent()) {
+            gender = optGender.get();
+        } else {
             errorMessages.append("Gender is required!\n");
         }
 
@@ -89,11 +96,16 @@ public class UserAddController {
         Role role = new UserRole();
 
         Website selectedWebsite = userComboBoxWebsite.getValue();
-        Long websiteId = (selectedWebsite != null) ? selectedWebsite.getId() : null;
-
-        if (websiteId == null) {
+        Optional<Website> optWebsite = Optional.ofNullable(selectedWebsite);
+        if (optWebsite.isPresent()) {
+            selectedWebsite = optWebsite.get();
+        } else {
             errorMessages.append("Website is required!\n");
         }
+
+        Long websiteId = Optional.ofNullable(selectedWebsite)
+                .map(Website::getId)
+                .orElse(null);
 
 
         if(errorMessages.length() > 0){
@@ -113,7 +125,7 @@ public class UserAddController {
             userRepository.save(newUser);
 
             DataSerialization change = new DataSerialization(
-                    "User Creation",
+                    "User Created",
                     "N/A",
                     newUser.getUsername(),
                     newUser.getRole().toString(),
@@ -121,29 +133,20 @@ public class UserAddController {
             );
 
             DataSerializeUtil.serializeData(change);
-
-            ShowAlertUtil.showAlert("Uspješno dodavanje korisnika", "Korisnik je uspješno dodan!", Alert.AlertType.INFORMATION);
-            StringBuilder sb = new StringBuilder();
-            sb.append("First name: ").append(firstName).append("\n")
-                    .append("Last name: ").append(lastName).append("\n")
-                    .append("Date of birth: ").append(dateOfBirth).append("\n")
-                    .append("Nationality: ").append(nationality).append("\n")
-                    .append("Gender: ").append(gender).append("\n")
-                    .append("Username: ").append(username).append("\n")
-                    .append("Password: ").append(password).append("\n")
-                    .append("Role: ").append(role).append("\n");
-
-            userTextFieldFirstName.clear();
-            userTextFieldLastName.clear();
-            userDatePickerBirth.getEditor().clear();
-            userTextFieldNationality.clear();
-            userComboBoxGender.getSelectionModel().clearSelection();
-            userTextFieldUsername.clear();
-            userTextFieldPassword.clear();
-            userComboBoxWebsite.getSelectionModel().clearSelection();
+            ShowAlertUtil.showAlert("Success", "User is successfully added!", Alert.AlertType.INFORMATION);
+            clearForm();
         }
 
+    }
 
-
+    private void clearForm(){
+        userTextFieldFirstName.clear();
+        userTextFieldLastName.clear();
+        userDatePickerBirth.getEditor().clear();
+        userTextFieldNationality.clear();
+        userComboBoxGender.getSelectionModel().clearSelection();
+        userTextFieldUsername.clear();
+        userTextFieldPassword.clear();
+        userComboBoxWebsite.getSelectionModel().clearSelection();
     }
 }

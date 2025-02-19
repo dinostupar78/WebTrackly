@@ -4,14 +4,21 @@ import hr.javafx.webtrackly.app.db.UserActionDbRepository2;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviorType;
+import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
+
+import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 
 public class UserActionEditController {
     @FXML
@@ -57,21 +64,37 @@ public class UserActionEditController {
             StringBuilder errorMessages = new StringBuilder();
 
             User user = actionEditComboBoxUser.getValue();
-            if (user == null) {
+            Optional<User> optUser = Optional.ofNullable(user);
+            if (optUser.isPresent()) {
+                user = optUser.get();
+            } else {
                 errorMessages.append("User is required!\n");
             }
 
+
             BehaviorType action = actionEditComboBoxAction.getValue();
-            if (action == null) {
+            Optional<BehaviorType> optAction = Optional.ofNullable(action);
+            if (optAction.isPresent()) {
+                action = optAction.get();
+            } else {
                 errorMessages.append("Action is required!\n");
             }
 
             Website website = actionEditComboBoxWebsite.getValue();
-            if (website == null) {
+            Optional<Website> optWebsite = Optional.ofNullable(website);
+            if (optWebsite.isPresent()) {
+                website = optWebsite.get();
+            } else {
                 errorMessages.append("Website is required!\n");
             }
 
-            if (actionEditDatePickerTimestamp.getValue() == null) {
+            LocalDate timestamp = actionEditDatePickerTimestamp.getValue();
+            LocalDateTime actionTimestamp = LocalDateTime.of(timestamp, LocalTime.now());
+            Optional<LocalDateTime> optTimestamp = Optional.ofNullable(actionTimestamp);
+            if (optTimestamp.isPresent()) {
+                actionTimestamp = optTimestamp.get();
+                formatLocalDateTime(actionTimestamp);
+            } else {
                 errorMessages.append("Timestamp is required!\n");
             }
 
@@ -83,6 +106,8 @@ public class UserActionEditController {
             if (errorMessages.length() > 0) {
                 ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
             } else {
+                String oldUserAction = userAction.toString();
+
                 UserAction newUserAction = new UserAction.Builder()
                         .setId(userAction.getId())
                         .setUser(user)
@@ -94,18 +119,29 @@ public class UserActionEditController {
 
                 userActionRepository.update(newUserAction);
 
-                ShowAlertUtil.showAlert("Success", "Traffic record updated successfully!", Alert.AlertType.INFORMATION);
+                DataSerialization change = new DataSerialization(
+                        "UserAction Edited",
+                        oldUserAction,
+                        newUserAction.toString(),
+                        Optional.ofNullable(userAction.getUser().getUsername()).orElse("Unknown User"),
+                        LocalDateTime.now()
+                );
 
-                actionEditComboBoxUser.getSelectionModel().clearSelection();
-                actionEditComboBoxAction.getSelectionModel().clearSelection();
-                actionEditComboBoxWebsite.getSelectionModel().clearSelection();
-                actionEditDatePickerTimestamp.getEditor().clear();
-                actionEditTextFieldDetails.clear();
+                DataSerializeUtil.serializeData(change);
+                ShowAlertUtil.showAlert("Success", "User Action updated successfully!", Alert.AlertType.INFORMATION);
+                clearForm();
             }
 
         } else {
             ShowAlertUtil.showAlert("Error", "User action not updated!", Alert.AlertType.ERROR);
         }
+    }
 
+    private void clearForm(){
+        actionEditComboBoxUser.getSelectionModel().clearSelection();
+        actionEditComboBoxAction.getSelectionModel().clearSelection();
+        actionEditComboBoxWebsite.getSelectionModel().clearSelection();
+        actionEditDatePickerTimestamp.getEditor().clear();
+        actionEditTextFieldDetails.clear();
     }
 }

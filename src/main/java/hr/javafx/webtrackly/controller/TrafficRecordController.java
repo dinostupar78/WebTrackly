@@ -3,6 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
@@ -77,7 +78,7 @@ public class TrafficRecordController {
         );
 
         trafficColumnTime.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getTimeOfVisit()))
+                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getTimeOfVisit()))
         );
 
         trafficColumnViews.setCellValueFactory(cellData ->
@@ -127,7 +128,7 @@ public class TrafficRecordController {
         String trafficRecordWebsite = trafficTextFieldWebsite.getText();
         if(!(trafficRecordWebsite.isEmpty())){
             initialTrafficRecordList = initialTrafficRecordList.stream()
-                    .filter(traffic -> traffic.getWebsite().getWebsiteName().toString().contains(trafficRecordWebsite))
+                    .filter(traffic -> traffic.getWebsite().getWebsiteName().contains(trafficRecordWebsite))
                     .toList();
         }
 

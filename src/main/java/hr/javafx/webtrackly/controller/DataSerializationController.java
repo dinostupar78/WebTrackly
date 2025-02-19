@@ -2,6 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -74,7 +75,7 @@ public class DataSerializationController {
         });
 
         dataColumnChangeTimestamp.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getChangeTimestamp()))
+                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getChangeTimestamp()))
         );
     }
 

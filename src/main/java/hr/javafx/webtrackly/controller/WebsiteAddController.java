@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 
 public class WebsiteAddController {
     @FXML
@@ -48,8 +49,8 @@ public class WebsiteAddController {
         }
 
         Integer clicks = Integer.parseInt(websiteTextFieldClicks.getText());
-        if (clicks == null) {
-            errorMessages.append("Clicks is required!\n");
+        if (clicks < 0 || websiteTextFieldClicks.getText().isEmpty()) {
+            errorMessages.append("Clicks are required and needs to be a positive number!\n");
         }
 
         String url = websiteTextFieldUrl.getText();
@@ -58,13 +59,13 @@ public class WebsiteAddController {
         }
 
         Integer users = Integer.parseInt(websiteTextFieldUsers.getText());
-        if (users == null) {
-            errorMessages.append("Users is required!\n");
+        if (users < 0 || websiteTextFieldUsers.getText().isEmpty()) {
+            errorMessages.append("Users are required and needs to be positive number!\n");
         }
 
-        BigDecimal bounceRate = BigDecimal.valueOf(Integer.parseInt(websiteTextFieldBounceRate.getText()));
-        if (bounceRate == null) {
-            errorMessages.append("Bounce rate is required!\n");
+        BigDecimal bounceRate = new BigDecimal(websiteTextFieldBounceRate.getText());
+        if(bounceRate.compareTo(BigDecimal.ZERO) < 0 || bounceRate.compareTo(BigDecimal.valueOf(100)) > 0){
+            errorMessages.append("Bounce rate must be a positive number less than 100!\n");
         }
 
         if (errorMessages.length() > 0){
@@ -82,8 +83,10 @@ public class WebsiteAddController {
             websiteRepository.save(newWebsite);
 
             User currentUser = getCurrentUser();
-            String roleInfo = (currentUser != null && currentUser.getRole() != null)
-                    ? currentUser.getRole().toString() : "Unknown";
+            String roleInfo = Optional.ofNullable(currentUser)
+                    .map(User::getRole)
+                    .map(Object::toString)
+                    .orElse("Unknown");
 
             DataSerialization change = new DataSerialization(
                     "Website Added",
@@ -94,21 +97,17 @@ public class WebsiteAddController {
             );
 
             DataSerializeUtil.serializeData(change);
-
-            ShowAlertUtil.showAlert("Website added", "Website successfully added!", Alert.AlertType.INFORMATION);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Name: ").append(newWebsite.getWebsiteName()).append("\n")
-                    .append("Clicks: ").append(newWebsite.getWebsiteClicks()).append("\n")
-                    .append("Url: ").append(newWebsite.getWebsiteUrl()).append("\n")
-                    .append("Users: ").append(newWebsite.getWebsiteUserCount()).append("\n")
-                    .append("Bounce rate: ").append(newWebsite.getBounceRate()).append("\n");
-
-            websiteTextFieldName.clear();
-            websiteTextFieldClicks.clear();
-            websiteTextFieldUrl.clear();
-            websiteTextFieldUsers.clear();
-            websiteTextFieldBounceRate.clear();
+            ShowAlertUtil.showAlert("Success", "Website successfully added!", Alert.AlertType.INFORMATION);
+            clearForm();
 
         }
+    }
+
+    private void clearForm(){
+        websiteTextFieldName.clear();
+        websiteTextFieldClicks.clear();
+        websiteTextFieldUrl.clear();
+        websiteTextFieldUsers.clear();
+        websiteTextFieldBounceRate.clear();
     }
 }

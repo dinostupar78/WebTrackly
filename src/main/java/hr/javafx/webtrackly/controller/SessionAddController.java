@@ -135,6 +135,9 @@ public class SessionAddController {
         } else {
             errorMessages.append("Traffic record is required!\n");
         }
+        Long trafficRecordId = Optional.ofNullable(selectedTrafficRecord)
+                .map(TrafficRecord::getId)
+                .orElse(null);
 
 
         if (errorMessages.length() > 0) {
@@ -148,7 +151,7 @@ public class SessionAddController {
                     .setStartTime(startDateTime)
                     .setEndTime(endDateTime)
                     .setActive(activity)
-                    .setTrafficRecordId(selectedTrafficRecord.getId())
+                    .setTrafficRecordId(trafficRecordId)
                     .build();
 
             sessionRepository.save(newSession);
@@ -163,7 +166,7 @@ public class SessionAddController {
 
             DataSerializeUtil.serializeData(change);
 
-            ShowAlertUtil.showAlert("Session successfully added", "Session is successfully added!", Alert.AlertType.INFORMATION);
+            ShowAlertUtil.showAlert("Success", "Session is successfully added!", Alert.AlertType.INFORMATION);
 
             sessionComboBoxWebsite.getSelectionModel().clearSelection();
             sessionComboBoxUser.getSelectionModel().clearSelection();

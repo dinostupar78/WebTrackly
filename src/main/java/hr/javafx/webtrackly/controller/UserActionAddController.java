@@ -16,6 +16,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Optional;
+
+import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
+
 public class UserActionAddController {
     @FXML
     private ComboBox<User> actionComboBoxUser;
@@ -46,21 +53,37 @@ public class UserActionAddController {
         StringBuilder errorMessages = new StringBuilder();
 
         User user = actionComboBoxUser.getValue();
-        if (user == null) {
+        Optional<User> optUser = Optional.ofNullable(user);
+        if (optUser.isPresent()) {
+            user = optUser.get();
+        } else {
             errorMessages.append("User is required!\n");
         }
 
+
         BehaviorType action = actionComboBoxAction.getValue();
-        if (action == null) {
+        Optional<BehaviorType> optAction = Optional.ofNullable(action);
+        if (optAction.isPresent()) {
+            action = optAction.get();
+        } else {
             errorMessages.append("Action is required!\n");
         }
 
         Website website = actionComboBoxWebsite.getValue();
-        if (website == null) {
+        Optional<Website> optWebsite = Optional.ofNullable(website);
+        if (optWebsite.isPresent()) {
+            website = optWebsite.get();
+        } else {
             errorMessages.append("Website is required!\n");
         }
 
-        if (actionDatePickerTimestamp.getValue() == null) {
+        LocalDate timestamp = actionDatePickerTimestamp.getValue();
+        LocalDateTime actionTimestamp = LocalDateTime.of(timestamp, LocalTime.now());
+        Optional<LocalDateTime> optTimestamp = Optional.ofNullable(actionTimestamp);
+        if (optTimestamp.isPresent()) {
+            actionTimestamp = optTimestamp.get();
+            formatLocalDateTime(actionTimestamp);
+        } else {
             errorMessages.append("Timestamp is required!\n");
         }
 
@@ -91,7 +114,7 @@ public class UserActionAddController {
 
             DataSerializeUtil.serializeData(change);
 
-            ShowAlertUtil.showAlert("Uspješno dodavanje akcije", "Akcija je uspješno dodana!", Alert.AlertType.INFORMATION);
+            ShowAlertUtil.showAlert("Success", "User Action successfully added!", Alert.AlertType.INFORMATION);
             StringBuilder sb = new StringBuilder();
             sb.append("User: ")
                     .append(user)

@@ -4,6 +4,7 @@ import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviorType;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.UserAction;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
@@ -79,7 +80,7 @@ public class UserActionController {
         );
 
         userActionTableColumnTimestamp.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getTimestamp()))
+                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getTimestamp()))
         );
 
         userActionTableColumnDetails.setCellValueFactory(cellData ->

@@ -78,7 +78,10 @@ public class UserEditController {
             }
 
             LocalDate dateOfBirth = userEditDatePickerBirth.getValue();
-            if(dateOfBirth == null){
+            Optional<LocalDate> optDateOfBirth = Optional.ofNullable(dateOfBirth);
+            if (optDateOfBirth.isPresent()) {
+                dateOfBirth = optDateOfBirth.get();
+            } else {
                 errorMessages.append("Date of birth is required!\n");
             }
 
@@ -88,7 +91,10 @@ public class UserEditController {
             }
 
             GenderType gender = userEditComboBoxGender.getValue();
-            if(gender == null){
+            Optional<GenderType> optGender = Optional.ofNullable(gender);
+            if (optGender.isPresent()) {
+                gender = optGender.get();
+            } else {
                 errorMessages.append("Gender is required!\n");
             }
 
@@ -105,14 +111,22 @@ public class UserEditController {
             Role role = new UserRole();
 
             Website selectedWebsite = userEditComboBoxWebsite.getValue();
-            Long websiteId = (selectedWebsite != null) ? selectedWebsite.getId() : null;
-
-            if (websiteId == null) {
+            Optional<Website> optWebsite = Optional.ofNullable(selectedWebsite);
+            if (optWebsite.isPresent()) {
+                selectedWebsite = optWebsite.get();
+            } else {
                 errorMessages.append("Website is required!\n");
             }
+
+            Long websiteId = Optional.ofNullable(selectedWebsite)
+                    .map(Website::getId)
+                    .orElse(null);
+
             if(errorMessages.length() > 0){
                 ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
             } else {
+                String oldUserData = user.toString();
+
                 User newUser = new User.Builder()
                         .setId(user.getId())
                         .setName(firstName)
@@ -129,29 +143,30 @@ public class UserEditController {
 
                 DataSerialization change = new DataSerialization(
                         "User Edited",
-                        user.toString(),
+                        oldUserData,
                         newUser.toString(),
                         user.getUsername(),
                         LocalDateTime.now()
                 );
 
                 DataSerializeUtil.serializeData(change);
-
                 ShowAlertUtil.showAlert("Success", "User updated successfully!", Alert.AlertType.INFORMATION);
-
-                userEditTextFieldFirstName.clear();
-                userEditTextFieldLastName.clear();
-                userEditDatePickerBirth.getEditor().clear();
-                userEditTextFieldNationality.clear();
-                userEditComboBoxGender.getSelectionModel().clearSelection();
-                userEditTextFieldUsername.clear();
-                userEditTextFieldPassword.clear();
-                userEditComboBoxWebsite.getSelectionModel().clearSelection();
-
+                clearForm();
             }
         } else {
             ShowAlertUtil.showAlert("Error", "Session not updated!", Alert.AlertType.ERROR);
         }
+    }
+
+    private void clearForm(){
+        userEditTextFieldFirstName.clear();
+        userEditTextFieldLastName.clear();
+        userEditDatePickerBirth.getEditor().clear();
+        userEditTextFieldNationality.clear();
+        userEditComboBoxGender.getSelectionModel().clearSelection();
+        userEditTextFieldUsername.clear();
+        userEditTextFieldPassword.clear();
+        userEditComboBoxWebsite.getSelectionModel().clearSelection();
     }
 
 }

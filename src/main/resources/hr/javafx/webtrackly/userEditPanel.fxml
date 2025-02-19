@@ -14,15 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="true" prefHeight="600" prefWidth="800" spacing="20"
-      xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="hr.javafx.webtrackly.controller.UserEditController">
-    <!-- Optional Menu Bar Include -->
-    <fx:include source="menuBar.fxml" />
+<VBox alignment="CENTER" prefHeight="600" prefWidth="800" spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.UserEditController">
 
-    <!-- Title -->
-    <Label text="User Edit" alignment="CENTER">
+    <Label alignment="CENTER" text="User Edit">
         <font>
             <Font name="Consolas Bold" size="28" />
         </font>
@@ -31,14 +25,12 @@
         </VBox.margin>
     </Label>
 
-    <!-- Form -->
     <GridPane alignment="CENTER" hgap="10" vgap="10">
         <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" minWidth="150" />
-            <ColumnConstraints minWidth="250" />
+            <ColumnConstraints halignment="RIGHT" minWidth="150.0" />
+            <ColumnConstraints minWidth="250.0" />
         </columnConstraints>
         <rowConstraints>
-            <!-- Adjust number of rows as needed -->
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
@@ -46,80 +38,72 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
+         <RowConstraints />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" />
         </rowConstraints>
         <children>
-            <!-- First Name -->
-            <Label text="Enter First Name:" GridPane.rowIndex="0" GridPane.columnIndex="0">
+            <Label text="Enter First Name:" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <font>
                     <Font name="Calibri Bold Italic" size="18" />
                 </font>
             </Label>
-            <TextField fx:id="userEditTextFieldFirstName" promptText="First Name"
-                       GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <TextField fx:id="userEditTextFieldFirstName" promptText="First Name" GridPane.columnIndex="1" />
 
-            <!-- Last Name -->
-            <Label text="Enter Last Name:" GridPane.rowIndex="1" GridPane.columnIndex="0">
+            <Label text="Enter Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="1">
                 <font>
                     <Font name="Calibri Bold" size="18" />
                 </font>
             </Label>
-            <TextField fx:id="userEditTextFieldLastName" promptText="Last Name"
-                       GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <TextField fx:id="userEditTextFieldLastName" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <!-- Date of Birth -->
-            <Label text="Enter Date of Birth:" GridPane.rowIndex="2" GridPane.columnIndex="0">
+            <Label text="Enter Date of Birth:" GridPane.columnIndex="0" GridPane.rowIndex="2">
                 <font>
                     <Font name="Calibri Bold" size="18" />
                 </font>
             </Label>
-            <DatePicker fx:id="userEditDatePickerBirth" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <DatePicker fx:id="userEditDatePickerBirth" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-            <!-- Nationality -->
-            <Label text="Enter Nationality:" GridPane.rowIndex="3" GridPane.columnIndex="0">
+            <Label text="Enter Nationality:" GridPane.columnIndex="0" GridPane.rowIndex="3">
                 <font>
                     <Font name="Calibri Bold" size="18" />
                 </font>
             </Label>
-            <TextField fx:id="userEditTextFieldNationality" promptText="Nationality"
-                       GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <TextField fx:id="userEditTextFieldNationality" promptText="Nationality" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-            <!-- Gender -->
-            <Label text="Enter Gender:" GridPane.rowIndex="4" GridPane.columnIndex="0">
+            <Label text="Enter Gender:" GridPane.columnIndex="0" GridPane.rowIndex="4">
                 <font>
                     <Font name="Calibri Bold" size="18" />
                 </font>
             </Label>
-            <ComboBox fx:id="userEditComboBoxGender" promptText="Gender"
-                      GridPane.rowIndex="4" GridPane.columnIndex="1" />
+            <ComboBox fx:id="userEditComboBoxGender" prefHeight="25.0" prefWidth="250.0" promptText="Gender" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-            <!-- Username -->
-            <Label text="Enter Username:" GridPane.rowIndex="5" GridPane.columnIndex="0">
+            <Label text="Enter Username:" GridPane.columnIndex="0" GridPane.rowIndex="5">
                 <font>
                     <Font name="Calibri Bold Italic" size="18" />
                 </font>
             </Label>
-            <TextField fx:id="userEditTextFieldUsername" promptText="Username"
-                       GridPane.rowIndex="5" GridPane.columnIndex="1" />
+            <TextField fx:id="userEditTextFieldUsername" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-            <!-- Password -->
-            <Label text="Enter Password:" GridPane.rowIndex="6" GridPane.columnIndex="0">
+            <Label text="Enter Password:" GridPane.columnIndex="0" GridPane.rowIndex="6">
                 <font>
                     <Font name="Calibri Bold Italic" size="18" />
                 </font>
             </Label>
-            <PasswordField fx:id="userEditTextFieldPassword" promptText="Password"
-                           GridPane.rowIndex="6" GridPane.columnIndex="1" />
+            <PasswordField fx:id="userEditTextFieldPassword" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-            <!-- Button -->
-            <Button text="Edit User" onAction="#editUser"
-                    GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="2">
+            <Button onAction="#editUser" text="Edit User" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8">
                 <font>
                     <Font name="Calibri Bold Italic" size="18" />
                 </font>
             </Button>
+         <Label text="Enter Website:" GridPane.rowIndex="7">
+            <font>
+               <Font name="Calibri Bold Italic" size="18" />
+            </font>
+         </Label>
+         <ComboBox fx:id="userEditComboBoxWebsite" prefHeight="25.0" prefWidth="250.0" promptText="Website" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         </children>
     </GridPane>
 
-    <!-- Filler Pane -->
     <Pane prefHeight="100" VBox.vgrow="ALWAYS" />
 </VBox>

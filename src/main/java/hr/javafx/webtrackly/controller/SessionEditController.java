@@ -1,11 +1,12 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.*;
+import hr.javafx.webtrackly.app.db.SessionDbRepository2;
+import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
+import hr.javafx.webtrackly.app.db.UserDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.DeviceType;
-import hr.javafx.webtrackly.app.model.Session;
-import hr.javafx.webtrackly.app.model.TrafficRecord;
-import hr.javafx.webtrackly.app.model.User;
-import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
+import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -78,18 +80,28 @@ public class SessionEditController {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             StringBuilder errorMessages = new StringBuilder();
+
             Website website = sessionEditComboBoxWebsite.getValue();
-            if (website == null) {
+            Optional<Website> optWebsite = Optional.ofNullable(website);
+            if (optWebsite.isPresent()) {
+                website = optWebsite.get();
+            } else {
                 errorMessages.append("Website is required!\n");
             }
 
             User user = sessionEditComboBoxUser.getValue();
-            if (user == null) {
+            Optional<User> optUser = Optional.ofNullable(user);
+            if (optUser.isPresent()) {
+                user = optUser.get();
+            } else {
                 errorMessages.append("User is required!\n");
             }
 
             DeviceType deviceType = sessionEditComboBoxDeviceType.getValue();
-            if (deviceType == null) {
+            Optional<DeviceType> optDeviceType = Optional.ofNullable(deviceType);
+            if (optDeviceType.isPresent()) {
+                deviceType = optDeviceType.get();
+            } else {
                 errorMessages.append("Device type is required!\n");
             }
 
@@ -104,60 +116,89 @@ public class SessionEditController {
             }
 
             LocalDate startDate = sessionEditDatePickerStartTime.getValue();
-            LocalDateTime startTime = (startDate != null) ? startDate.atTime(LocalTime.of(0, 0)) : null;
-
-            if (startTime == null) {
-                errorMessages.append("Start time is required!\n");
+            LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.now());
+            Optional<LocalDateTime> optTimestamp = Optional.ofNullable(startDateTime);
+            if(optTimestamp.isPresent()){
+                startDateTime = optTimestamp.get();
+                formatLocalDateTime(startDateTime);
+            } else {
+                errorMessages.append("Start date is required!\n");
             }
 
             LocalDate endDate = sessionEditDatePickerEndTime.getValue();
-            LocalDateTime endTime = (endDate != null) ? endDate.atTime(LocalTime.of(23, 59)) : null;
-
-            if (endTime == null) {
-                errorMessages.append("End time is required!\n");
+            LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.now());
+            Optional<LocalDateTime> optEndDate = Optional.ofNullable(endDateTime);
+            if(optEndDate.isPresent()){
+                endDateTime = optEndDate.get();
+                formatLocalDateTime(endDateTime);
+            } else {
+                errorMessages.append("Start date is required!\n");
             }
 
             Boolean activity = sessionEditComboBoxActivity.getValue();
-            if (activity == null) {
+            Optional<Boolean> optActivity = Optional.ofNullable(activity);
+            if (optActivity.isPresent()) {
+                activity = optActivity.get();
+            } else {
                 errorMessages.append("Activity is required!\n");
             }
 
             TrafficRecord selectedTrafficRecord = sessionEditComboBoxTrafficRecord.getValue();
-            if (selectedTrafficRecord == null) {
+            Optional<TrafficRecord> optTrafficRecord = Optional.ofNullable(selectedTrafficRecord);
+            if (optTrafficRecord.isPresent()) {
+                selectedTrafficRecord = optTrafficRecord.get();
+            } else {
                 errorMessages.append("Traffic record is required!\n");
             }
+            Long trafficRecordId = Optional.ofNullable(selectedTrafficRecord)
+                    .map(TrafficRecord::getId)
+                    .orElse(null);
 
             if (errorMessages.length() > 0) {
                 ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
             } else {
+                String oldSessionData = session.toString();
+
                 Session updatedSession = new Session.Builder()
                         .setId(session.getId())
                         .setWebsite(website)
                         .setUser(user)
                         .setDeviceType(deviceType)
                         .setSessionDuration(duration)
-                        .setStartTime(startTime)
-                        .setEndTime(endTime)
+                        .setStartTime(startDateTime)
+                        .setEndTime(endDateTime)
                         .setActive(activity)
-                        .setTrafficRecordId(selectedTrafficRecord.getId())
+                        .setTrafficRecordId(trafficRecordId)
                         .build();
 
                 sessionRepository.update(updatedSession);
 
-                ShowAlertUtil.showAlert("Success", "Session updated successfully!", Alert.AlertType.INFORMATION);
+                DataSerialization change = new DataSerialization(
+                        "Session Edited",
+                        oldSessionData,
+                        updatedSession.toString(),
+                        Optional.ofNullable(updatedSession.getWebsite().getWebsiteName()).orElse("Unknown Website"),
+                        LocalDateTime.now()
+                );
 
-                sessionEditComboBoxWebsite.getSelectionModel().clearSelection();
-                sessionEditComboBoxUser.getSelectionModel().clearSelection();
-                sessionEditComboBoxDeviceType.getSelectionModel().clearSelection();
-                sessionEditTextFieldDuration.clear();
-                sessionEditDatePickerStartTime.getEditor().clear();
-                sessionEditDatePickerEndTime.getEditor().clear();
-                sessionEditComboBoxActivity.getSelectionModel().clearSelection();
-                sessionEditComboBoxTrafficRecord.getSelectionModel().clearSelection();
+                DataSerializeUtil.serializeData(change);
+                ShowAlertUtil.showAlert("Success", "Session updated successfully!", Alert.AlertType.INFORMATION);
+                clearForm();
             }
 
         } else {
             ShowAlertUtil.showAlert("Error", "Session not updated!", Alert.AlertType.ERROR);
         }
+    }
+
+    private void clearForm() {
+        sessionEditComboBoxWebsite.getSelectionModel().clearSelection();
+        sessionEditComboBoxUser.getSelectionModel().clearSelection();
+        sessionEditComboBoxDeviceType.getSelectionModel().clearSelection();
+        sessionEditTextFieldDuration.clear();
+        sessionEditDatePickerStartTime.getEditor().clear();
+        sessionEditDatePickerEndTime.getEditor().clear();
+        sessionEditComboBoxActivity.getSelectionModel().clearSelection();
+        sessionEditComboBoxTrafficRecord.getSelectionModel().clearSelection();
     }
 }

@@ -33,8 +33,8 @@
             <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
                 <HBox alignment="CENTER" spacing="8">
                     <TextField fx:id="sessionTextFieldID" prefWidth="200" promptText="Search Session ID" />
-                    <DatePicker fx:id="sessionDatePickerStartDate" promptText="Start Date" />
-                    <DatePicker fx:id="sessionDatePickerEndDate" promptText="End Date" />
+                    <DatePicker fx:id="sessionDatePickerStartDate" promptText="Start Time" />
+                    <DatePicker fx:id="sessionDatePickerEndDate" promptText="End Time" />
                     <Button onAction="#filterSessions" text="Search" />
                <Button onAction="#openAddSessionScreen" text="Add" />
                <Button fx:id="deleteSession" text="Delete" />

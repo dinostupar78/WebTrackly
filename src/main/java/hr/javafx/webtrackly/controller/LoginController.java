@@ -46,12 +46,11 @@ public class LoginController {
 
 
         Optional<User> matchingUser = users.stream()
-                .filter(u -> {
-                    return u.getUsername().equals(username)
-                            && u.getHashedPassword().equals(hashedInputPassword)
-                            && u.getRole().getClass().getSimpleName().equals(role.getClass().getSimpleName());
-                })
+                .filter(u -> u.getUsername().equals(username)
+                        && u.getHashedPassword().equals(hashedInputPassword)
+                        && role.getClass().isAssignableFrom(u.getRole().getClass()))
                 .findFirst();
+
 
         if (matchingUser.isPresent()) {
             UserSession.createSession(matchingUser.get());

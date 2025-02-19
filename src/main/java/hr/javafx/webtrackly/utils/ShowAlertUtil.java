@@ -17,6 +17,14 @@ public class ShowAlertUtil {
         alert.showAndWait();
     }
 
+    public static Optional<ButtonType> showConfirmationAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
+    }
+
     public static Optional<ButtonType> getAlertResultDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");

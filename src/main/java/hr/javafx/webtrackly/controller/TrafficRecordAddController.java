@@ -50,6 +50,9 @@ public class TrafficRecordAddController {
         } else {
             errorMessages.append("Website is required!\n");
         }
+        String websiteName = Optional.ofNullable(website)
+                .map(Website::getWebsiteName)
+                .orElse("Unknown Website");
 
         LocalDateTime timeOfVisit = trafficRecordDatePickerTimeOfVisit.getValue().atStartOfDay();
         Optional<LocalDateTime> optDate = Optional.ofNullable(timeOfVisit);
@@ -60,13 +63,13 @@ public class TrafficRecordAddController {
         }
 
         Integer userCount = Integer.parseInt(trafficRecordTextFieldUserCount.getText());
-        if(userCount < 0){
-            errorMessages.append("User count must be a positive number!\n");
+        if(userCount < 0 || trafficRecordTextFieldUserCount.getText().isEmpty()){
+            errorMessages.append("User count is required and must be a positive number!\n");
         }
 
         Integer pageViews = Integer.parseInt(trafficRecordTextFieldPageViews.getText());
-        if(pageViews < 0){
-            errorMessages.append("Page views must be a positive number!\n");
+        if(pageViews < 0 || trafficRecordTextFieldPageViews.getText().isEmpty()){
+            errorMessages.append("Page views are required and must be a positive number!\n");
         }
 
         BigDecimal bounceRate = new BigDecimal(trafficRecordTextFieldBounceRate.getText());
@@ -92,27 +95,22 @@ public class TrafficRecordAddController {
                     "Traffic Record Added",
                     "N/A",
                     newTrafficRecord.toString(),
-                    website.getWebsiteName(),
+                    websiteName,
                     LocalDateTime.now()
             );
 
             DataSerializeUtil.serializeData(change);
-
-            ShowAlertUtil.showAlert("Traffic Record has been successfully added!", "Traffic Record has been successfully added!", Alert.AlertType.INFORMATION);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Website: ").append(website.getWebsiteName()).append("\n")
-                    .append("Time of Visit: ").append(timeOfVisit).append("\n")
-                    .append("User Count: ").append(userCount).append("\n")
-                    .append("Page Views: ").append(pageViews).append("\n")
-                    .append("Bounce Rate: ").append(bounceRate).append("\n");
-
-            trafficRecordComboBoxWebsite.getSelectionModel().clearSelection();
-            trafficRecordDatePickerTimeOfVisit.getEditor().clear();
-            trafficRecordTextFieldUserCount.clear();
-            trafficRecordTextFieldPageViews.clear();
-            trafficRecordTextFieldBounceRate.clear();
+            ShowAlertUtil.showAlert("Success", "Traffic Record has been successfully added!", Alert.AlertType.INFORMATION);
+            clearForm();
 
         }
+    }
 
+    private void clearForm() {
+        trafficRecordComboBoxWebsite.getSelectionModel().clearSelection();
+        trafficRecordDatePickerTimeOfVisit.getEditor().clear();
+        trafficRecordTextFieldUserCount.clear();
+        trafficRecordTextFieldPageViews.clear();
+        trafficRecordTextFieldBounceRate.clear();
     }
 }

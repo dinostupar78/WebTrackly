@@ -19,7 +19,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -120,8 +119,6 @@ public class SessionController {
     public void filterSessions(){
         showAverageSessionDurationLineChart();
         showDeviceDistributionPieChart();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         List<Session> initialSessionList = sessionRepository.findAll();
 

@@ -3,6 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
@@ -107,7 +108,7 @@ public class UserController {
         });
 
         userColumnRegistrationDate.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getRegistrationDate()))
+                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getRegistrationDate()))
         );
 
         RowDeletion1Util.addUserRowDeletionHandler(userTableView);

@@ -60,7 +60,7 @@ public class LogController {
                     String message = matcher.group(3);
                     logEntries.add(new LogEntry(timestamp, level, message));
                 } else {
-                    log.info("Unmatched log line: " + line);
+                    log.info("Unmatched log line{} ", line);
                 }
             }
         } catch (IOException e) {
