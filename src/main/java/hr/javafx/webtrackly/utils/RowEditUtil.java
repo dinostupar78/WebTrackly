@@ -6,8 +6,6 @@ import javafx.scene.control.TableView;
 import java.util.function.Consumer;
 
 public class RowEditUtil<T> {
-    public RowEditUtil() {
-    }
 
     public void addRowEditHandler(TableView<T> tableView, Consumer<T> editHandler) {
         tableView.setRowFactory(tv -> {

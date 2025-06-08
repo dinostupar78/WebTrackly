@@ -37,6 +37,9 @@
 
     <Menu mnemonicParsing="false" text="Options">
         <items>
+            <MenuItem mnemonicParsing="false" text="About" />
+        </items>
+        <items>
             <MenuItem mnemonicParsing="false" onAction="#onClickLogout" text="Logout" />
         </items>
     </Menu>

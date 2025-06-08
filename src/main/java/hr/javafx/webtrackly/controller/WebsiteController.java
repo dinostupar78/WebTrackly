@@ -29,6 +29,9 @@ public class WebsiteController {
     private TextField websiteSearchTextField;
 
     @FXML
+    private TextField websiteSearchIDTextField;
+
+    @FXML
     private TableView<Website> websiteTableView;
 
     @FXML
@@ -159,6 +162,13 @@ public class WebsiteController {
         frequentThread.start();
 
         List<Website> initialWebsiteList = websiteRepository.findAll();
+
+        String websiteID = websiteSearchIDTextField.getText();
+        if(!(websiteID.isEmpty())){
+            initialWebsiteList = initialWebsiteList.stream()
+                    .filter(website -> website.getId() == Integer.parseInt(websiteID))
+                    .toList();
+        }
 
         String websiteName = websiteSearchTextField.getText();
         if(!(websiteName.isEmpty())){

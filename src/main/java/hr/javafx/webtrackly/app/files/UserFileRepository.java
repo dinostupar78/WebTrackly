@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.app.files;
 
 import hr.javafx.webtrackly.app.enums.GenderType;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.*;
 
 import java.io.FileNotFoundException;
@@ -12,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class UserFileRepository<T extends User> extends AbstractFileRepository<T> {
 
@@ -71,7 +70,7 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
                 users.add((T) user);
             }
         } catch (Exception e) {
-            log.info("Error while reading users from file: " + e.getMessage());
+            throw new RepositoryException("Error while reading users from file", e);
         }
 
         return users;

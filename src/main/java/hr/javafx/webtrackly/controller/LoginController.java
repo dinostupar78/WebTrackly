@@ -77,7 +77,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/websitePanel.fxml"));
             Parent dashboardRoot = loader.load();
 
-            Scene dashboardScene = new Scene(dashboardRoot, 800, 600);
+            Scene dashboardScene = new Scene(dashboardRoot, 800, 650);
 
             Stage stage = (Stage) loginTextFieldUsername.getScene().getWindow();
 
