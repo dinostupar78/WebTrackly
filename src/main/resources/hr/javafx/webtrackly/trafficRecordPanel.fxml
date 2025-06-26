@@ -11,83 +11,68 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.TrafficRecordController">
+<AnchorPane prefHeight="771" prefWidth="1144" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.TrafficRecordController">
 
-    <top>
-        <fx:include source="menuBar.fxml" />
-    </top>
-
-    <center>
-        <GridPane hgap="10" vgap="10">
-            <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
-            </padding>
-
-            <!-- Search Bar -->
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
-                <HBox alignment="CENTER" spacing="8">
-                    <TextField fx:id="trafficTextFieldID" prefWidth="200" promptText="Enter Traffic ID" />
-               <TextField fx:id="trafficTextFieldWebsite" prefHeight="25.0" prefWidth="170.0" promptText="Enter website" />
-                    <DatePicker fx:id="trafficDatePickerTime" promptText="Enter time of visit" />
-                    <Button onAction="#filterTrafficRecords" text="Search" />
-               <Button onAction="#openAddTrafficRecordScreen" text="Add" />
-               <Button fx:id="deleteTrafficRecord" text="Delete" />
+    <children>
+        <fx:include source="menu.fxml" />
+        <AnchorPane styleClass="content-root" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER" layoutX="7.0" layoutY="41.0" spacing="10" styleClass="toolbar">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                    <children>
+                        <TextField fx:id="trafficTextFieldID" prefHeight="25.0" prefWidth="112.0" promptText="Enter Traffic ID" styleClass="search-field" />
+                        <TextField fx:id="trafficTextFieldWebsite" prefHeight="25.0" prefWidth="112.0" promptText="Enter Website" styleClass="search-field" />
+                        <DatePicker fx:id="trafficDatePickerTime" prefHeight="32.0" prefWidth="174.0" promptText="Enter Time of Visit" styleClass="search-datePicker" />
+                        <Button onAction="#filterTrafficRecords" styleClass="action-button" text="Search" />
+                        <Button onAction="#openAddTrafficRecordScreen" styleClass="action-button" text="Add" />
+                        <Button fx:id="deleteTrafficRecord" styleClass="action-button" text="Delete" />
+                    </children>
                 </HBox>
-            </VBox>
-
-            <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                <Label prefWidth="156.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Traffic Comparison" />
-                <BarChart fx:id="trafficUserCountChart" animated="false" prefHeight="208.0" prefWidth="350">
-                    <xAxis>
-                        <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis side="LEFT" />
-                    </yAxis>
-                </BarChart>
-            </VBox>
-
-            <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Traffic Distribution by Source" />
-                <LineChart fx:id="trafficTrendsChart" animated="false" prefHeight="208.0" prefWidth="350">
-                    <xAxis>
-                        <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis side="LEFT" />
-                    </yAxis>
-                </LineChart>
-            </VBox>
-
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
-        </GridPane>
-    </center>
-
-    <bottom>
-        <TableView fx:id="trafficRecordTableView" prefHeight="276.0" prefWidth="800.0">
-            <columns>
-                <TableColumn fx:id="trafficColumnID" prefWidth="66.0" text="Traffic ID" />
-                <TableColumn fx:id="trafficColumnWebsite" prefWidth="155.0" text="Website" />
-                <TableColumn fx:id="trafficColumnTime" prefWidth="156.0" text="Time of Visit" />
-                <TableColumn fx:id="trafficColumnViews" prefWidth="113.0" text="Views" />
-                <TableColumn fx:id="trafficColumnBounceRate" prefWidth="126.0" text="Bounce Rate" />
-            <TableColumn fx:id="trafficColumnSessions" prefWidth="183.0" text="Sessions" />
-            </columns>
-        </TableView>
-    </bottom>
-
-</BorderPane>
+                <VBox alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Traffic Comparison" />
+                        <BarChart fx:id="trafficUserCountChart" animated="false">
+                            <xAxis>
+                                <CategoryAxis side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" />
+                            </yAxis>
+                        </BarChart>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" layoutX="412.0" layoutY="144.0" prefHeight="270.0" prefWidth="361.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="Traffic Distribution by Source" />
+                        <LineChart fx:id="trafficTrendsChart" animated="false">
+                            <xAxis>
+                                <CategoryAxis side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" />
+                            </yAxis>
+                        </LineChart>
+                    </children>
+                </VBox>
+                <TableView fx:id="trafficRecordTableView" layoutX="10.0" layoutY="490.0" prefHeight="270.0" prefWidth="777.0" style="f: red;" styleClass="dashboard-table">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <columns>
+                        <TableColumn fx:id="trafficColumnID" prefWidth="85.0" text="Traffic ID" />
+                        <TableColumn fx:id="trafficColumnWebsite" prefWidth="129.0" text="Website" />
+                        <TableColumn fx:id="trafficColumnTime" minWidth="0.0" prefWidth="117.0" text="Time of Visit" />
+                        <TableColumn fx:id="trafficColumnViews" prefWidth="109.0" text="Views" />
+                        <TableColumn fx:id="trafficColumnBounceRate" prefWidth="105.0" text="Bounce Rate" />
+                        <TableColumn fx:id="trafficColumnSessions" prefWidth="222.0" text="Sessions" />
+                    </columns>
+                </TableView>
+            </children></AnchorPane>
+    </children>
+</AnchorPane>

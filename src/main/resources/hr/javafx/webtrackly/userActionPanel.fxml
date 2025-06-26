@@ -11,74 +11,60 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.UserActionController">
+<AnchorPane prefHeight="771" prefWidth="1144" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.UserActionController">
 
-    <top>
-        <fx:include source="menuBar.fxml" />
-    </top>
-
-    <center>
-        <GridPane hgap="10" vgap="10">
-            <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
-            </padding>
-
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
-                <HBox alignment="CENTER" spacing="8">
-                    <TextField fx:id="actionTextFieldID" prefWidth="200" promptText="Enter action ID" />
-               <TextField fx:id="actionTextFieldUser" prefHeight="25.0" prefWidth="165.0" promptText="Enter username" />
-                    <DatePicker fx:id="actionDatePickerTimestamp" promptText="Timestamp" />
-                    <Button onAction="#filterUserActions" text="Search" />
-               <Button onAction="#openAddUserActionScreen" text="Add" />
-               <Button fx:id="deleteUserAction" text="Delete" />
+    <children>
+        <fx:include source="menu.fxml" />
+        <AnchorPane styleClass="content-root" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER" layoutX="7.0" layoutY="41.0" spacing="10" styleClass="toolbar">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                    <children>
+                        <TextField fx:id="actionTextFieldID" prefHeight="25.0" prefWidth="112.0" promptText="Enter Session ID" styleClass="search-field" />
+                        <TextField fx:id="actionTextFieldUser" prefHeight="32.0" prefWidth="185.0" promptText="Enter Action User" styleClass="search-field" />
+                        <DatePicker fx:id="actionDatePickerTimestamp" prefHeight="32.0" prefWidth="174.0" promptText="Enter Timestamp" styleClass="search-datePicker" />
+                        <Button onAction="#filterUserActions" styleClass="action-button" text="Search" />
+                        <Button onAction="#openAddUserActionScreen" styleClass="action-button" text="Add" />
+                        <Button fx:id="deleteUserAction" styleClass="action-button" text="Delete" />
+                    </children>
                 </HBox>
-            </VBox>
-
-
-            <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                <Label prefWidth="156.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="User Actions Over Time" />
-                <AreaChart fx:id="userActionAreaChart" animated="false" prefHeight="208.0" prefWidth="350">
-                    <xAxis>
-                        <CategoryAxis fx:id="areaChartXAxis" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis fx:id="areaChartYAxis" />
-                    </yAxis>
-                </AreaChart>
-
-            </VBox>
-
-            <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="User Behaviour" />
-                <PieChart fx:id="userActionBehaviourTypeChart" animated="false" prefHeight="206.0" prefWidth="374.0" />
-            </VBox>
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
-        </GridPane>
-    </center>
-
-    <bottom>
-        <TableView fx:id="userActionTableView" prefHeight="276.0" prefWidth="800.0">
-            <columns>
-            <TableColumn fx:id="userActionTableColumnID" prefWidth="69.0" text="Action ID" />
-                <TableColumn fx:id="userActionTableColumnUser" prefWidth="122.0" text="User" />
-                <TableColumn fx:id="userActionTableColumnAction" prefWidth="143.0" text="Action" />
-                <TableColumn fx:id="userActionTableColumnTimestamp" prefWidth="152.0" text="Timestamp" />
-                <TableColumn fx:id="userActionTableColumnDetails" prefWidth="313.0" text="Details" />
-            </columns>
-        </TableView>
-    </bottom>
-</BorderPane>
+                <VBox alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="User Actions Over Time" />
+                        <AreaChart fx:id="userActionAreaChart" animated="false">
+                            <xAxis>
+                                <CategoryAxis side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" />
+                            </yAxis>
+                        </AreaChart>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" layoutX="412.0" layoutY="144.0" prefHeight="270.0" prefWidth="361.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="Bounce Rate per Website" />
+                        <PieChart fx:id="userActionBehaviourTypeChart" animated="false" />
+                    </children>
+                </VBox>
+                <TableView fx:id="userActionTableView" layoutX="10.0" layoutY="490.0" prefHeight="270.0" prefWidth="777.0" style="f: red;" styleClass="dashboard-table">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <columns>
+                        <TableColumn fx:id="userActionTableColumnID" prefWidth="85.0" text="Action ID" />
+                        <TableColumn fx:id="userActionTableColumnUser" prefWidth="118.0" text="User" />
+                        <TableColumn fx:id="userActionTableColumnAction" prefWidth="122.0" text="Action" />
+                        <TableColumn fx:id="userActionTableColumnTimestamp" prefWidth="106.0" text="Timestamp" />
+                        <TableColumn fx:id="userActionTableColumnDetails" prefWidth="344.0" text="Details" />
+                    </columns>
+                </TableView>
+            </children></AnchorPane>
+    </children>
+</AnchorPane>

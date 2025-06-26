@@ -1,13 +1,13 @@
 /* style.css */
 
 .root {
-    -fx-border-color: #F5B342;    /* gold accent */
-    -fx-border-width: 4;          /* thick frame */
-    -fx-background-color: white;  /* main content bg */
+    -fx-border-color: #E0C16D;
+    -fx-border-width: 4;
+    -fx-background-color: white;
 }
 
 .sidebar {
-    -fx-background-color: #2C5530;
+    -fx-background-color: #4A6572;
     -fx-pref-width: 350;
 }
 
@@ -23,21 +23,21 @@
 }
 
 .logo-text-button{
-    -fx-background-color: #2C5530;
+    -fx-background-color: #4A6572;
     -fx-text-fill: white;
-    -fx-font-size: 22px;
-    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 23px;
+    -fx-font-family: 'Roboto', 'Segoe UI', sans-serif;
     -fx-font-weight: bold;
     -fx-alignment: CENTER_LEFT;
     -fx-graphic-text-gap: 12;
-    -fx-padding: 20 10 20 5;
+    -fx-padding: 0 0 0 0;
     -fx-cursor: default;
 }
 
 .sidebar-accordion .arrow-button {
-    -fx-opacity: 0;      /* make the whole button invisible */
-    -fx-max-width: 0;    /* collapse its width so no gap remains */
-    -fx-padding: 0;      /* remove any extra padding */
+    -fx-opacity: 0;
+    -fx-max-width: 0;
+    -fx-padding: 0;
     -fx-background-color: transparent;
 }
 
@@ -47,29 +47,31 @@
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
-    -fx-padding: 0;            /* removes any leftover insets */
+    -fx-padding: 0;
 }
 
 .sidebar-accordion > .titled-pane {
     -fx-text-fill: white;
     -fx-font-size: 1.1em;
-    -fx-background-color: transparent;  /* no default gray */
+    -fx-background-color: transparent;
 }
 
 .sidebar-accordion .titled-pane > .title:hover {
-    -fx-background-color: #3a6d45;   /* pick a “whiter” green—here about 20% lighter */
+    -fx-background-color: #27343C;
 }
 
 .sidebar-accordion > .titled-pane > .title {
-    -fx-background-color: #2C5530;   /* normal */
+    -fx-background-color: #4A6572;
     -fx-background-insets: 0;
     -fx-background-radius: 4;
-    -fx-padding: 8 16;
-    -fx-font-family: "Times New Roman";
-    -fx-font-size: 21px;
+    -fx-padding: 13 14;
+    -fx-font-size: 22px;
     -fx-text-fill: white;
     -fx-transition: background-color 200ms ease-in;
-
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 3px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
 .sidebar-accordion > .titled-pane > .content {
@@ -77,10 +79,11 @@
 }
 
 .sidebar-accordion .titled-pane .content-container {
-    -fx-background-color: transparent;  /* no fill */
-    -fx-border-color: transparent;      /* no border */
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 0;
+    -fx-spacing: 16;
 }
 
 .sidebar-accordion .titled-pane:focused,
@@ -91,30 +94,31 @@
 
 .sidebar-subbutton {
     -fx-text-fill: white;
-    -fx-font-size: 17px;
-    -fx-font-family: "Times New Roman";
+    -fx-font-size: 19px;
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 6 20;
-    -fx-background-color: #2C5530;
+    -fx-background-color: #4A6572;
     -fx-background-radius: 0 6 6 0;
     -fx-max-width: Infinity;
     -fx-transition: background-color 200ms ease-in-out;
+    -fx-font-weight: bold;
+
 }
 
 .sidebar-subbutton:hover {
-    -fx-background-color: #3A6D45;
+    -fx-background-color: #27343C;
 
 }
 
 .logout-button {
-    -fx-background-color: #B00020;
+    -fx-background-color: #27343C;
     -fx-text-fill: white;
     -fx-font-size: 20px;
-    -fx-font-family: "Segoe UI", "Arial";
+    -fx-font-family: 'Roboto', 'Segoe UI', sans-serif;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
     -fx-cursor: hand;
     -fx-margin: 10;
+
 }
 
 .logout-button:hover {
@@ -122,6 +126,322 @@
 }
 
 
+.content-root {
+    -fx-background-color: #F0F5F0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, -5, 0);
+}
+
+.toolbar {
+    -fx-padding: 10;
+
+}
+
+.search-field {
+    -fx-font-size: 14px;
+    -fx-pref-width: 180px;
+    -fx-padding: 6 8;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 6;
+    -fx-background-color: white;
+    -fx-border-radius: 5;
+}
+
+.search-datePicker > .text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-width: 0;
+    -fx-padding: 6 8;
+    -fx-font-size: 14px;
+}
+
+.search-datePicker {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.action-button {
+    -fx-background-color: #4A6572;
+    -fx-text-fill: #F7F7F7;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4;
+    -fx-padding: 6 12;
+}
+
+.action-button:hover {
+    -fx-background-color: #27343C;
+}
+
+
+
+.stat-card {
+    /* 1) soft white→light‐gray gradient for a beveled surface */
+    -fx-background-color:
+            linear-gradient(
+                    to bottom right,
+                    #ffffff 0%,
+                    #f2f2f2 100%
+            );
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    /* 2) thicker, darker outer shadow for depth */
+    -fx-effect:
+            dropshadow(
+                    gaussian,
+                    rgba(0, 0, 0, 0.25), /* color */
+                    10,                  /* radius */
+                    0.5,                 /* spread */
+                    4,                   /* offsetX */
+                    4                    /* offsetY */
+            )
+                /* 3) light inner‐highlight on top edge */
+            , innershadow(
+                    gaussian,
+                    rgba(255, 255, 255, 0.8),
+                    8,    /* radius */
+                    0.5,  /* choke */
+                    0,    /* offsetX */
+                    2     /* offsetY */
+            );
+
+    /* 4) padding & centering */
+    -fx-padding: 16;
+    -fx-alignment: center;
+
+    /* 5) smooth lift animation */
+    -fx-transition:
+            -fx-effect       200ms ease-in-out,
+            -fx-translate-y  200ms ease-in-out;
+}
+
+.stat-card:hover {
+    /* push it up and deepen the shadow on hover */
+    -fx-effect:
+            dropshadow(
+                    gaussian,
+                    rgba(0, 0, 0, 0.35),
+                    12,
+                    0.5,
+                    6,
+                    6
+            )
+            , innershadow(
+                    gaussian,
+                    rgba(255, 255, 255, 0.85),
+                    10,
+                    0.5,
+                    0,
+                    3
+            );
+    -fx-translate-y: -3;
+}
+
+
+
+.card-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #000;
+    -fx-font-weight: bold;
+}
+.card-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000;
+}
+.card-subvalue {
+    -fx-font-size: 11px;
+    -fx-text-fill: #000;
+    -fx-font-weight: bold;
+}
+
+
+
+.chart-panel {
+    /* 1) soft white→light‐gray gradient */
+    -fx-background-color:
+            linear-gradient(
+                    to bottom right,
+                    #ffffff 0%,
+                    #f2f2f2 100%
+            );
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    /* 2) outer shadow for depth */
+    -fx-effect:
+            dropshadow(
+                    gaussian,
+                    rgba(0, 0, 0, 0.25),
+                    10,    /* blur radius */
+                    0.5,   /* spread */
+                    4,     /* offsetX */
+                    4      /* offsetY */
+            )
+                /* 3) inner highlight along top edge */
+            , innershadow(
+                    gaussian,
+                    rgba(255, 255, 255, 0.8),
+                    8,    /* radius */
+                    0.5,  /* choke */
+                    0,    /* offsetX */
+                    2     /* offsetY */
+            );
+
+    /* 4) padding & centering */
+    -fx-padding: 10;
+    -fx-alignment: center;
+
+    /* 5) smooth lift animation */
+    -fx-transition:
+            -fx-effect      200ms ease-in-out,
+            -fx-translate-y 200ms ease-in-out;
+}
+
+.chart-panel:hover {
+    /* deepen the shadow & lift on hover */
+    -fx-effect:
+            dropshadow(
+                    gaussian,
+                    rgba(0, 0, 0, 0.35),
+                    12,
+                    0.5,
+                    6,
+                    6
+            )
+            , innershadow(
+                    gaussian,
+                    rgba(255, 255, 255, 0.85),
+                    10,
+                    0.5,
+                    0,
+                    3
+            );
+    -fx-translate-y: -3;
+}
+
+.chart-panel .chart {
+    -fx-background-color: transparent;
+}
+
+/* hide the zero‐axis line (it can look heavy) */
+.chart-panel .chart-plot-zero-line {
+    -fx-stroke: transparent;
+}
+
+/* style the plot‐area */
+.chart-panel .chart-plot-background {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+/* very light, dashed grid lines for subtle guidance */
+.chart-panel .chart-horizontal-grid-lines line,
+.chart-panel .chart-vertical-grid-lines line {
+    -fx-stroke:    #DDDDDD;
+    -fx-stroke-dash-array: 2 4;
+}
+
+/* axes */
+.chart-panel .axis {
+    -fx-axis-line-stroke:  #CCCCCC;
+    -fx-tick-mark-stroke: #CCCCCC;
+}
+.chart-panel .axis .axis-label {
+    -fx-text-fill:   #666666;
+    -fx-font-size:   12px;
+    -fx-font-weight: bold;
+}
+.chart-panel .axis .tick-label {
+    -fx-text-fill: #888888;
+    -fx-font-size: 10px;
+}
+
+/* series lines & bars get clean, cool colors and a bit of weight */
+.chart-panel .chart-series-line {
+    -fx-stroke-width: 3px;
+}
+.default-color0.chart-series-line { -fx-stroke: #4A90E2; }
+.default-color1.chart-series-line { -fx-stroke: #50E3C2; }
+
+.chart-panel .chart-bar {
+    -fx-bar-fill: #4A90E2;
+}
+
+/* legend (if you choose to show it) */
+.chart-panel .chart-legend {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 11px;
+    -fx-text-fill: #555555;
+}
+
+/* your title styling can remain the same */
+.chart-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000;
+    -fx-padding: 0 0 6 0;
+}
+
+.table-view.dashboard-table {
+    fx-background-color:
+            linear-gradient(
+                    to bottom right,
+                    #ffffff 0%,    /* pure white at the top/left */
+                    #f2f2f2 100%   /* very light grey at the bottom/right */
+            );
+    -fx-border: none;
+}
+.table-view.dashboard-table .column-header {
+    -fx-background-color: #4A6572;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 15;
+    -fx-alignment: CENTER;
+    -fx-border-radius: 6;
+}
+.table-view.dashboard-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.table-view.dashboard-table .table-row-cell:odd {
+    -fx-background-color: white;
+}
+
+.table-view.dashboard-table .table-row-cell:even {
+    -fx-background-color: white;
+}
+
+.table-view.dashboard-table .table-row-cell:selected {
+    -fx-background-color: #4A6572;  /* slightly deeper mint */
+    -fx-text-fill: white;           /* keep text legible */
+}
+
+.table-view.dashboard-table .table-row-cell:hover {
+    -fx-background-color: #4A6572;
+}
+
+.table-view.dashboard-table .table-row-cell:hover .table-cell {
+    -fx-text-fill: white;
+}
+
+.table-view.dashboard-table:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view.dashboard-table .scroll-bar:horizontal {
+    -fx-max-height: 0;
+    -fx-padding: 0;
+    -fx-opacity: 0;
+    -fx-background-color: transparent;
+}
 
 
 

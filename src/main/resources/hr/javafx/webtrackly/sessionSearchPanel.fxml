@@ -11,78 +11,62 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.SessionController">
+<AnchorPane prefHeight="771" prefWidth="1144" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.SessionController">
 
-    <top>
-        <fx:include source="menuBar.fxml" />
-    </top>
-
-    <center>
-        <GridPane hgap="10" vgap="10">
-            <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
-            </padding>
-
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
-                <HBox alignment="CENTER" spacing="8">
-                    <TextField fx:id="sessionTextFieldID" prefWidth="200" promptText="Search Session ID" />
-                    <DatePicker fx:id="sessionDatePickerStartDate" promptText="Start Time" />
-                    <DatePicker fx:id="sessionDatePickerEndDate" promptText="End Time" />
-                    <Button onAction="#filterSessions" text="Search" />
-               <Button onAction="#openAddSessionScreen" text="Add" />
-               <Button fx:id="deleteSession" text="Delete" />
+    <children>
+        <fx:include source="menu.fxml" />
+        <AnchorPane styleClass="content-root" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER" layoutX="7.0" layoutY="41.0" spacing="10" styleClass="toolbar">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                    <children>
+                        <TextField fx:id="sessionTextFieldID" prefHeight="25.0" prefWidth="112.0" promptText="Enter Session ID" styleClass="search-field" />
+                        <DatePicker fx:id="sessionDatePickerStartDate" prefHeight="32.0" prefWidth="174.0" promptText="Start Time" styleClass="search-datePicker" />
+                        <DatePicker fx:id="sessionDatePickerEndDate" prefHeight="32.0" prefWidth="174.0" promptText="End Time" styleClass="search-datePicker" />
+                        <Button onAction="#filterSessions" styleClass="action-button" text="Search" />
+                        <Button onAction="#openAddSessionScreen" styleClass="action-button" text="Add" />
+                        <Button fx:id="deleteSession" styleClass="action-button" text="Delete" />
+                    </children>
                 </HBox>
-            </VBox>
-
-            <!-- LineChart for Session Activity -->
-            <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                <Label prefWidth="156.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Session Activity Over Time" />
-                <LineChart fx:id="sessionActivityLineChart" animated="false" prefHeight="208.0" prefWidth="350">
-                    <xAxis>
-                        <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis side="LEFT" />
-                    </yAxis>
-                </LineChart>
-            </VBox>
-
-            <!-- PieChart for Device Distribution -->
-            <VBox alignment="CENTER" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Device Distribution" />
-                <PieChart fx:id="sessionDeviceDistributionPieChart" animated="false" prefHeight="206.0" prefWidth="374.0" />
-            </VBox>
-
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
-        </GridPane>
-    </center>
-
-    <bottom>
-        <TableView fx:id="sessionTableView" prefHeight="276.0" prefWidth="800.0">
-            <columns>
-                <TableColumn fx:id="sessionColumnID" prefWidth="67.0" text="Session ID" />
-            <TableColumn fx:id="sessionColumnWebsite" prefWidth="130.0" text="Website" />
-                <TableColumn fx:id="sessionColumnUser" prefWidth="96.0" text="User" />
-                <TableColumn fx:id="sessionColumnStartTime" prefWidth="129.0" text="Start Time" />
-                <TableColumn fx:id="sessionColumnEndTime" prefWidth="118.0" text="End Time" />
-                <TableColumn fx:id="sessionColumnDuration" prefWidth="100.0" text="Duration (min)" />
-                <TableColumn fx:id="sessionColumnDevice" prefWidth="159.0" text="Device" />
-            </columns>
-        </TableView>
-    </bottom>
-
-</BorderPane>
+                <VBox alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Session Activity Over Time" />
+                        <LineChart fx:id="sessionActivityLineChart" animated="false">
+                            <xAxis>
+                                <CategoryAxis side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" />
+                            </yAxis>
+                        </LineChart>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" layoutX="412.0" layoutY="144.0" prefHeight="270.0" prefWidth="361.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="Device Distribution" />
+                        <PieChart fx:id="sessionDeviceDistributionPieChart" animated="false" />
+                    </children>
+                </VBox>
+                <TableView fx:id="sessionTableView" layoutX="10.0" layoutY="490.0" prefHeight="270.0" prefWidth="777.0" style="f: red;" styleClass="dashboard-table">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <columns>
+                        <TableColumn fx:id="sessionColumnID" prefWidth="99.0" text="Session ID" />
+                        <TableColumn fx:id="sessionColumnWebsite" prefWidth="114.0" text="Website" />
+                        <TableColumn fx:id="sessionColumnUser" minWidth="0.0" prefWidth="108.0" text="User" />
+                        <TableColumn fx:id="sessionColumnStartTime" prefWidth="106.0" text="Start Time" />
+                        <TableColumn fx:id="sessionColumnEndTime" prefWidth="125.0" text="End Time" />
+                        <TableColumn fx:id="sessionColumnDuration" prefWidth="89.0" text="Duration" />
+                        <TableColumn fx:id="sessionColumnDevice" prefWidth="136.0" text="Device" />
+                    </columns>
+                </TableView>
+            </children></AnchorPane>
+    </children>
+</AnchorPane>

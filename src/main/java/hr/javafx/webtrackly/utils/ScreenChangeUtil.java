@@ -45,14 +45,11 @@ public class ScreenChangeUtil {
 
     public void showDashboardPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/websitePanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/dashboard.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,14 +57,11 @@ public class ScreenChangeUtil {
 
     public void showUserActionPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/userActionPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/userActionPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,14 +69,11 @@ public class ScreenChangeUtil {
 
     public void showSessionPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/sessionSearchPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/sessionSearchPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,14 +81,11 @@ public class ScreenChangeUtil {
 
     public void showTrafficRecordPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/trafficRecordPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/trafficRecordPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,14 +93,11 @@ public class ScreenChangeUtil {
 
     public void showUserPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/userPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/userPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,8 +147,5 @@ public class ScreenChangeUtil {
             e.printStackTrace();
         }
     }
-
-
-
 
 }
