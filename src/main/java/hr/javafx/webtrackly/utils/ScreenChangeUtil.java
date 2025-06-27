@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -105,14 +104,11 @@ public class ScreenChangeUtil {
 
     public void showUserAddPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/userAddPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/userAddPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,14 +116,11 @@ public class ScreenChangeUtil {
 
     public void showLogPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/logPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/logPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,14 +128,11 @@ public class ScreenChangeUtil {
 
     public void showDataSerializationPanel(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/dataSerializationPanel.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-
-            MenuItem menuItem = (MenuItem) event.getSource();
-            Stage stage = (Stage) (menuItem).getParentPopup().getOwnerWindow();
-
-            stage.setScene(scene);
-            stage.show();
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/hr/javafx/webtrackly/dataSerializationPanel.fxml")
+            );
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
