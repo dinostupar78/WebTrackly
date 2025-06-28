@@ -233,7 +233,6 @@
 
 
 .chart-panel {
-    /* 1) soft white→light‐gray gradient */
     -fx-background-color:
             linear-gradient(
                     to bottom right,
@@ -243,38 +242,19 @@
     -fx-background-radius: 10;
     -fx-border-radius: 10;
 
-    /* 2) outer shadow for depth */
     -fx-effect:
-            dropshadow(
-                    gaussian,
-                    rgba(0, 0, 0, 0.25),
-                    10,    /* blur radius */
-                    0.5,   /* spread */
-                    4,     /* offsetX */
-                    4      /* offsetY */
-            )
-                /* 3) inner highlight along top edge */
-            , innershadow(
-                    gaussian,
-                    rgba(255, 255, 255, 0.8),
-                    8,    /* radius */
-                    0.5,  /* choke */
-                    0,    /* offsetX */
-                    2     /* offsetY */
-            );
+            dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.5, 4, 4)
+            , innershadow(gaussian, rgba(255, 255, 255, 0.8), 8, 0.5, 0, 2);
 
-    /* 4) padding & centering */
     -fx-padding: 10;
     -fx-alignment: center;
 
-    /* 5) smooth lift animation */
     -fx-transition:
             -fx-effect      200ms ease-in-out,
             -fx-translate-y 200ms ease-in-out;
 }
 
 .chart-panel:hover {
-    /* deepen the shadow & lift on hover */
     -fx-effect:
             dropshadow(
                     gaussian,
@@ -299,25 +279,21 @@
     -fx-background-color: transparent;
 }
 
-/* hide the zero‐axis line (it can look heavy) */
 .chart-panel .chart-plot-zero-line {
     -fx-stroke: transparent;
 }
 
-/* style the plot‐area */
 .chart-panel .chart-plot-background {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
 
-/* very light, dashed grid lines for subtle guidance */
 .chart-panel .chart-horizontal-grid-lines line,
 .chart-panel .chart-vertical-grid-lines line {
     -fx-stroke:    #DDDDDD;
     -fx-stroke-dash-array: 2 4;
 }
 
-/* axes */
 .chart-panel .axis {
     -fx-axis-line-stroke:  #CCCCCC;
     -fx-tick-mark-stroke: #CCCCCC;
@@ -332,7 +308,6 @@
     -fx-font-size: 10px;
 }
 
-/* series lines & bars get clean, cool colors and a bit of weight */
 .chart-panel .chart-series-line {
     -fx-stroke-width: 3px;
 }
@@ -343,7 +318,6 @@
     -fx-bar-fill: #4A90E2;
 }
 
-/* legend (if you choose to show it) */
 .chart-panel .chart-legend {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -351,7 +325,6 @@
     -fx-text-fill: #555555;
 }
 
-/* your title styling can remain the same */
 .chart-title {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -363,8 +336,8 @@
     fx-background-color:
             linear-gradient(
                     to bottom right,
-                    #ffffff 0%,    /* pure white at the top/left */
-                    #f2f2f2 100%   /* very light grey at the bottom/right */
+                    #ffffff 0%,
+                    #f2f2f2 100%
             );
     -fx-border: none;
 }
@@ -391,8 +364,8 @@
 }
 
 .table-view.dashboard-table .table-row-cell:selected {
-    -fx-background-color: #4A6572;  /* slightly deeper mint */
-    -fx-text-fill: white;           /* keep text legible */
+    -fx-background-color: #4A6572;
+    -fx-text-fill: white;
 }
 
 .table-view.dashboard-table .table-row-cell:hover {
@@ -554,7 +527,7 @@
 .welcome-button:hover {
     -fx-background-color: linear-gradient(to bottom right, #2E4E59, #1F2A30);
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0.4, 0, 3);
-    -fx-translate-y: -2;   /* lift up 2px on hover */
+    -fx-translate-y: -2;
 }
 
 
