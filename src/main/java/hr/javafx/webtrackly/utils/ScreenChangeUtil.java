@@ -37,7 +37,7 @@ public class ScreenChangeUtil {
     public void showDashboardPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/websitePanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/website.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -49,7 +49,7 @@ public class ScreenChangeUtil {
     public void showUserActionPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/userActionPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/userAction.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -73,7 +73,7 @@ public class ScreenChangeUtil {
     public void showTrafficRecordPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/trafficRecordPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/trafficRecord.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -85,7 +85,7 @@ public class ScreenChangeUtil {
     public void showUserPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/userPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/user.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -121,7 +121,7 @@ public class ScreenChangeUtil {
     public void showDataSerializationPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/dataSerializationPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/dataSerialization.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
