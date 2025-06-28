@@ -61,7 +61,7 @@ public class ScreenChangeUtil {
     public void showSessionPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/sessionSearchPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/session.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
