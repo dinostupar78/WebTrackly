@@ -74,7 +74,7 @@ public class LoginController {
 
     private void openDashboard() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/websitePanel.fxml"));
             Parent dashboardRoot = loader.load();
 
             Scene dashboardScene = new Scene(dashboardRoot, 1144, 771);

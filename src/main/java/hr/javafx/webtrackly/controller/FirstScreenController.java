@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -44,30 +43,22 @@ public class FirstScreenController {
             ShowAlertUtil.showAlert("Logout Success", "You have been logged out!", Alert.AlertType.INFORMATION);
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/hr/javafx/webtrackly/loginPanel.fxml"));
-                Parent loginRoot = loader.load();
-                Scene loginScene = new Scene(loginRoot, 800, 600);
-
-                Stage stage;
-                if (event.getSource() instanceof MenuItem) {
-                    stage = (Stage) ((MenuItem) event.getSource()).getParentPopup().getOwnerWindow();
-                } else {
-                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                }
-
-                stage.setScene(loginScene);
-                stage.show();
+                Parent root = FXMLLoader.load(
+                        ScreenChangeUtil.class.getResource("/hr/javafx/webtrackly/login.fxml")
+                );
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public Scene showLoginPanel() {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/hr/javafx/webtrackly/loginPanel.fxml"));
+    public Scene showWelcomeScreen() {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/hr/javafx/webtrackly/welcomeScreen.fxml"));
         Scene scene = null;
         try {
-            scene = new Scene(fxmlLoader.load(), 800, 600);
+            scene = new Scene(fxmlLoader.load(), 1144, 771);
         } catch (IOException e) {
             e.printStackTrace();
         }

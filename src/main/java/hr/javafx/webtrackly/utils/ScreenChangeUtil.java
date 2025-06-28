@@ -12,15 +12,11 @@ import java.io.IOException;
 public class ScreenChangeUtil {
     public static void showLoginPanel(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeUtil.class.getResource("/hr/javafx/webtrackly/loginPanel.fxml"));
-            Parent loginRoot = loader.load();
-
-            Scene loginScene = new Scene(loginRoot, 800, 600);
-
+            Parent root = FXMLLoader.load(
+                    ScreenChangeUtil.class.getResource("/hr/javafx/webtrackly/login.fxml")
+            );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            stage.setScene(loginScene);
-            stage.show();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,15 +24,11 @@ public class ScreenChangeUtil {
 
     public static void showRegisterPanel(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeUtil.class.getResource("/hr/javafx/webtrackly/registerPanel.fxml"));
-            Parent loginRoot = loader.load();
-
-            Scene registerScene = new Scene(loginRoot, 800, 600);
-
+            Parent root = FXMLLoader.load(
+                    ScreenChangeUtil.class.getResource("/hr/javafx/webtrackly/register.fxml")
+            );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            stage.setScene(registerScene);
-            stage.show();
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,7 +37,7 @@ public class ScreenChangeUtil {
     public void showDashboardPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/dashboard.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/websitePanel.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -105,7 +97,7 @@ public class ScreenChangeUtil {
     public void showUserAddPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/userAddPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/userAdd.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -117,7 +109,7 @@ public class ScreenChangeUtil {
     public void showLogPanel(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    getClass().getResource("/hr/javafx/webtrackly/logPanel.fxml")
+                    getClass().getResource("/hr/javafx/webtrackly/logs.fxml")
             );
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

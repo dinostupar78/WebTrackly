@@ -16,7 +16,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openUserEditScreen(User user) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userEditPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userEdit.fxml"));
             Scene scene = new Scene(loader.load());
 
             UserEditController controller = loader.getController();
@@ -34,7 +34,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openUserActionAddScreen(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userActionAddPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userActionAdd.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -52,7 +52,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openUserActionEditScreen(UserAction userAction) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userActionEditPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userActionEdit.fxml"));
             Scene scene = new Scene(loader.load());
 
             UserActionEditController controller = loader.getController();
@@ -70,7 +70,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openSessionAddScreen(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/sessionAddPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/sessionAdd.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -88,7 +88,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openSessionEditScreen(Session session) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/sessionEditPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/sessionEdit.fxml"));
             Scene scene = new Scene(loader.load());
 
             SessionEditController controller = loader.getController();
@@ -106,7 +106,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openTrafficRecordAddScreen(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/trafficRecordAddPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/trafficRecordAdd.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -124,7 +124,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openTrafficRecordEditScreen(TrafficRecord trafficRecord) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/trafficRecordEditPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/trafficRecordEdit.fxml"));
             Scene scene = new Scene(loader.load());
 
             TrafficRecordEditController controller = loader.getController();
@@ -142,7 +142,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openWebsiteAddScreen(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/websiteAddPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/websiteAdd.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage parentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -160,7 +160,7 @@ public class ScreenChangeButtonUtil {
 
     public static void openWebsiteEditScreen(Website website) {
         try {
-            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/websiteEditPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/websiteEdit.fxml"));
             Scene scene = new Scene(loader.load());
 
             WebsiteEditController controller = loader.getController();

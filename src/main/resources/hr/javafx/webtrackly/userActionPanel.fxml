@@ -18,8 +18,8 @@
 <AnchorPane prefHeight="771" prefWidth="1144" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.UserActionController">
 
     <children>
-        <fx:include source="menu.fxml" />
-        <AnchorPane styleClass="content-root" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <fx:include source="sidebar.fxml" />
+        <AnchorPane styleClass="content-root" stylesheets="@css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="CENTER" layoutX="7.0" layoutY="41.0" spacing="10" styleClass="toolbar">
                     <padding>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="771" prefWidth="1166.0" styleClass="welcome-screen" stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.javafx.webtrackly.controller.WelcomeController">
+   <children>
+      <HBox alignment="CENTER" layoutX="341.0" layoutY="259.0">
+         <children>
+            <ImageView fitHeight="145.0" fitWidth="155.0">
+               <image>
+                  <Image url="@images/WebTracklyLogo.png" />
+               </image>
+            </ImageView>
+
+            <!-- VBox stacks title and slogan vertically -->
+            <VBox alignment="CENTER_LEFT" spacing="5">
+               <children>
+                  <Button styleClass="welcome-text-button" text="WebTrackly" />
+                  <Label styleClass="welcome-slogan" text="The smarter way to track the web." />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Button layoutX="534.0" layoutY="392.0" onAction="#onClickSwitchToLogin" prefHeight="56.0" prefWidth="155.0" styleClass="welcome-button" text="Enter App" />
+   </children>
+</AnchorPane>
