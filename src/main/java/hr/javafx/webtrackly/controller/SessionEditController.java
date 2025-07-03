@@ -8,13 +8,16 @@ import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.converter.LocalTimeStringConverter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
@@ -32,19 +35,26 @@ public class SessionEditController {
     private ComboBox<DeviceType> sessionEditComboBoxDeviceType;
 
     @FXML
-    private TextField sessionEditTextFieldDuration;
+    private DatePicker sessionEditDatePickerStartDate;
 
     @FXML
-    private DatePicker sessionEditDatePickerStartTime;
+    private TextField sessionEditTextFieldStartTime;
 
     @FXML
-    private DatePicker sessionEditDatePickerEndTime;
+    private DatePicker sessionEditDatePickerEndDate;
+
+    @FXML
+    private TextField sessionEditTextFieldEndTime;
 
     @FXML
     private ComboBox<Boolean> sessionEditComboBoxActivity;
 
     @FXML
     private ComboBox<TrafficRecord> sessionEditComboBoxTrafficRecord;
+
+    private ObjectBinding<LocalDateTime> startDateTimeBinding;
+
+    private ObjectBinding<LocalDateTime> endDateTimeBinding;
 
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
@@ -59,9 +69,10 @@ public class SessionEditController {
         sessionEditComboBoxWebsite.setValue(session.getWebsite());
         sessionEditComboBoxUser.setValue(session.getUser());
         sessionEditComboBoxDeviceType.setValue(session.getDeviceType());
-        sessionEditTextFieldDuration.setText(session.getSessionDuration().toString());
-        sessionEditDatePickerStartTime.setValue(session.getStartTime().toLocalDate());
-        sessionEditDatePickerEndTime.setValue(session.getEndTime().toLocalDate());
+        sessionEditDatePickerStartDate.setValue(session.getStartTime().toLocalDate());
+        sessionEditTextFieldStartTime.setText(session.getStartTime().toLocalTime().toString());
+        sessionEditDatePickerEndDate.setValue(session.getEndTime().toLocalDate());
+        sessionEditTextFieldEndTime.setText(session.getEndTime().toLocalTime().toString());
         sessionEditComboBoxActivity.setValue(session.getActive());
         sessionEditComboBoxTrafficRecord.setValue(trafficRecordRepository.findById(session.getTrafficRecordId()));
     }
@@ -73,6 +84,27 @@ public class SessionEditController {
         sessionEditComboBoxDeviceType.getItems().setAll(DeviceType.values());
         sessionEditComboBoxActivity.getItems().setAll(TRUE, FALSE);
         sessionEditComboBoxTrafficRecord.getItems().setAll(trafficRecordRepository.findAll());
+
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
+
+        TextFormatter<LocalTime> startFormatter = new TextFormatter<>(converter, null);
+        sessionEditTextFieldStartTime.setTextFormatter(startFormatter);
+
+        startDateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate date = sessionEditDatePickerStartDate.getValue();
+            LocalTime time = startFormatter.getValue();
+            return (date != null && time != null) ? LocalDateTime.of(date, time) : null;
+        }, sessionEditDatePickerStartDate.valueProperty(), startFormatter.valueProperty());
+
+        TextFormatter<LocalTime> endFormatter = new TextFormatter<>(converter, null);
+        sessionEditTextFieldEndTime.setTextFormatter(endFormatter);
+
+        endDateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate date = sessionEditDatePickerEndDate.getValue();
+            LocalTime time = endFormatter.getValue();
+            return (date != null && time != null) ? LocalDateTime.of(date, time) : null;
+        }, sessionEditDatePickerEndDate.valueProperty(), endFormatter.valueProperty());
     }
 
     public void editSession(){
@@ -105,34 +137,22 @@ public class SessionEditController {
                 errorMessages.append("Device type is required!\n");
             }
 
-            BigDecimal duration = BigDecimal.ZERO;
-            try {
-                duration = new BigDecimal(sessionEditTextFieldDuration.getText());
-                if (duration.compareTo(BigDecimal.ZERO) <= 0) {
-                    errorMessages.append("Duration must be greater than zero!\n");
-                }
-            } catch (NumberFormatException e) {
-                errorMessages.append("Invalid duration format!\n");
-            }
-
-            LocalDate startDate = sessionEditDatePickerStartTime.getValue();
-            LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.now());
-            Optional<LocalDateTime> optTimestamp = Optional.ofNullable(startDateTime);
-            if(optTimestamp.isPresent()){
-                startDateTime = optTimestamp.get();
+            LocalDateTime startDateTime = startDateTimeBinding.get();
+            Optional<LocalDateTime> optStartDate = Optional.ofNullable(startDateTime);
+            if(optStartDate.isPresent()){
+                startDateTime = optStartDate.get();
                 formatLocalDateTime(startDateTime);
             } else {
                 errorMessages.append("Start date is required!\n");
             }
 
-            LocalDate endDate = sessionEditDatePickerEndTime.getValue();
-            LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.now());
+            LocalDateTime endDateTime = endDateTimeBinding.get();
             Optional<LocalDateTime> optEndDate = Optional.ofNullable(endDateTime);
             if(optEndDate.isPresent()){
                 endDateTime = optEndDate.get();
                 formatLocalDateTime(endDateTime);
             } else {
-                errorMessages.append("Start date is required!\n");
+                errorMessages.append("End date is required!\n");
             }
 
             Boolean activity = sessionEditComboBoxActivity.getValue();
@@ -164,7 +184,6 @@ public class SessionEditController {
                         .setWebsite(website)
                         .setUser(user)
                         .setDeviceType(deviceType)
-                        .setSessionDuration(duration)
                         .setStartTime(startDateTime)
                         .setEndTime(endDateTime)
                         .setActive(activity)
@@ -195,9 +214,10 @@ public class SessionEditController {
         sessionEditComboBoxWebsite.getSelectionModel().clearSelection();
         sessionEditComboBoxUser.getSelectionModel().clearSelection();
         sessionEditComboBoxDeviceType.getSelectionModel().clearSelection();
-        sessionEditTextFieldDuration.clear();
-        sessionEditDatePickerStartTime.getEditor().clear();
-        sessionEditDatePickerEndTime.getEditor().clear();
+        sessionEditDatePickerStartDate.getEditor().clear();
+        sessionEditTextFieldStartTime.clear();
+        sessionEditDatePickerEndDate.getEditor().clear();
+        sessionEditTextFieldEndTime.clear();
         sessionEditComboBoxActivity.getSelectionModel().clearSelection();
         sessionEditComboBoxTrafficRecord.getSelectionModel().clearSelection();
     }

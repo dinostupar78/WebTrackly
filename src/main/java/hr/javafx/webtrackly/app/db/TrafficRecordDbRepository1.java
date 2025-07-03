@@ -1,16 +1,13 @@
 package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
-import hr.javafx.webtrackly.app.exception.DbDataException;
 import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
-import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,9 +16,9 @@ import java.util.List;
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class TrafficRecordDbRepository1<T extends TrafficRecord> extends AbstractDbRepository<T> {
-    private static final String FIND_BY_ID_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE FROM TRAFFIC_RECORD WHERE ID = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT FROM TRAFFIC_RECORD WHERE ID = ?";
 
-    private static final String FIND_ALL_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE FROM TRAFFIC_RECORD";
+    private static final String FIND_ALL_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT FROM TRAFFIC_RECORD";
 
     @Override
     public T findById(Long id){
@@ -69,17 +66,14 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
 
     @Override
     public void save(List<T> entities){
-        String sql = "INSERT INTO TRAFFIC_RECORD (WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TRAFFIC_RECORD (WEBSITE_ID, TIME_OF_VISIT) " +
+                "VALUES (?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             for (T entity : entities) {
                 stmt.setLong(1, entity.getWebsite().getId());
                 stmt.setTimestamp(2, Timestamp.valueOf(entity.getTimeOfVisit()));
-                stmt.setInt(3, entity.getUserCount());
-                stmt.setInt(4, entity.getPageViews());
-                stmt.setBigDecimal(5, entity.getBounceRate());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -92,16 +86,13 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
 
     @Override
     public void save(T entity){
-        String sql = "INSERT INTO TRAFFIC_RECORD (WEBSITE_ID, TIME_OF_VISIT , USER_COUNT, PAGE_VIEWS, BOUNCE_RATE) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TRAFFIC_RECORD (WEBSITE_ID, TIME_OF_VISIT) " +
+                "VALUES (?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, entity.getWebsite().getId());
             stmt.setTimestamp(2, Timestamp.valueOf(entity.getTimeOfVisit()));
-            stmt.setInt(3, entity.getUserCount());
-            stmt.setInt(4, entity.getPageViews());
-            stmt.setBigDecimal(5, entity.getBounceRate());
             stmt.executeUpdate();
         } catch (SQLException | IOException | DbConnectionException e) {
             log.error("Error saving traffic records ", e);
@@ -118,44 +109,16 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
         Website website = websiteRepository.findById(websiteId);
 
         LocalDateTime timeOfVisit = resultSet.getTimestamp("TIME_OF_VISIT").toLocalDateTime();
-        Integer userCount = resultSet.getInt("USER_COUNT");
-        Integer pageViews = resultSet.getInt("PAGE_VIEWS");
-        BigDecimal bounceRate = resultSet.getBigDecimal("BOUNCE_RATE");
 
-        List<Session> sessions = fetchSessionsForTrafficRecord(id);
 
         return new TrafficRecord.Builder()
                 .setId(id)
                 .setWebsite(website)
                 .setTimeOfVisit(timeOfVisit)
-                .setUserCount(userCount)
-                .setPageViews(pageViews)
-                .setBounceRate(bounceRate)
-                .setSessions(sessions)
                 .build();
 
     }
 
-    private static List<Session> fetchSessionsForTrafficRecord(Long trafficRecordId){
-        List<Session> sessions = new ArrayList<>();
-        String query = "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION\n" +
-                "WHERE TRAFFIC_RECORD_ID = ?";
-        try (Connection connection = DbActiveUtil.connectToDatabase();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-
-            stmt.setLong(1, trafficRecordId);
-            try (ResultSet resultSet = stmt.executeQuery()) {
-                while (resultSet.next()) {
-                    Session session = SessionDbRepository1.extractFromSessionResultSet(resultSet);
-                    sessions.add(session);
-                }
-            }
-        } catch (SQLException | IOException | DbConnectionException | DbDataException e) {
-            log.error("Error fetching users for website ID: {}", trafficRecordId, e);
-            throw new RepositoryException("Error fetching users for website ID");
-        }
-        return sessions;
-    }
 
 
 }

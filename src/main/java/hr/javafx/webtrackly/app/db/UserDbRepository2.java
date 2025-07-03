@@ -14,7 +14,7 @@ public class UserDbRepository2<T extends User> {
     public void update(T entity){
         String query = "UPDATE APP_USER " +
                 "SET FIRST_NAME = ?, LAST_NAME = ?, DATE_OF_BIRTH = ?, NATIONALITY = ?, " +
-                "GENDER_TYPE = ?, USERNAME = ?, HASHED_PASSWORD = ?, ROLE = ?, WEBSITE_ID = ?, CREATED_AT = ? " +
+                "GENDER_TYPE = ?, USERNAME = ?, EMAIL = ? ,PASSWORD = ?, ROLE = ?, WEBSITE_ID = ? " +
                 "WHERE ID = ?";
 
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -26,10 +26,10 @@ public class UserDbRepository2<T extends User> {
             stmt.setString(4, entity.getPersonalData().nationality());
             stmt.setString(5, entity.getPersonalData().gender().toString());
             stmt.setString(6, entity.getUsername());
-            stmt.setString(7, entity.getHashedPassword());
-            stmt.setString(8, entity.getRole().toString());
-            stmt.setLong(9, entity.getWebsiteId());
-            stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
+            stmt.setString(7, entity.getEmail());
+            stmt.setString(8, entity.getPassword());
+            stmt.setString(9, entity.getRole().toString());
+            stmt.setLong(10, entity.getWebsiteId());
             stmt.setLong(11, entity.getId());
             stmt.executeUpdate();
 

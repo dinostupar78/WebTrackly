@@ -423,8 +423,8 @@
 
 .search-combo {
     -fx-pref-width: 240px;
-    -fx-font-size:  12px;
-    -fx-padding:4 0 4 10;
+    -fx-font-size: 12px;
+    -fx-padding: 4 0 4 10;
     -fx-background-color: white;
     -fx-background-radius: 6;
     -fx-border-color: #CCC;

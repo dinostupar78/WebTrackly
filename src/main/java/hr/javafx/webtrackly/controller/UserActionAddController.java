@@ -1,24 +1,23 @@
 package hr.javafx.webtrackly.controller;
 
+import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
-import hr.javafx.webtrackly.app.enums.BehaviorType;
-import hr.javafx.webtrackly.app.model.DataSerialization;
-import hr.javafx.webtrackly.app.model.User;
-import hr.javafx.webtrackly.app.model.UserAction;
-import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.app.enums.BehaviourType;
+import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.util.converter.LocalTimeStringConverter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
@@ -28,13 +27,21 @@ public class UserActionAddController {
     private ComboBox<User> actionComboBoxUser;
 
     @FXML
-    private ComboBox<BehaviorType> actionComboBoxAction;
+    private ComboBox<BehaviourType> actionComboBoxAction;
 
     @FXML
     private ComboBox<Website> actionComboBoxWebsite;
 
     @FXML
-    private DatePicker actionDatePickerTimestamp;
+    private ComboBox<Session> actionComboBoxSession;
+
+    @FXML
+    private DatePicker actionDatePickerDateOfAction;
+
+    @FXML
+    private TextField actionTextFieldTimeOfAction;
+
+    private ObjectBinding<LocalDateTime> dateTimeBinding;
 
     @FXML
     private TextField actionTextFieldDetails;
@@ -42,11 +49,24 @@ public class UserActionAddController {
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
+    private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
     public void initialize() {
         actionComboBoxUser.getItems().setAll(userRepository.findAll());
-        actionComboBoxAction.getItems().setAll(BehaviorType.values());
+        actionComboBoxAction.getItems().setAll(BehaviourType.values());
         actionComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
+        actionComboBoxSession.getItems().setAll(sessionRepository.findAll());
+
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
+        TextFormatter<LocalTime> tf = new TextFormatter<>(converter, null);
+        actionTextFieldTimeOfAction.setTextFormatter(tf);
+
+        dateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate ld = actionDatePickerDateOfAction.getValue();
+            LocalTime lt = tf.getValue();
+            return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
+        }, actionDatePickerDateOfAction.valueProperty(), tf.valueProperty());
     }
 
     public void addAction() {
@@ -60,9 +80,16 @@ public class UserActionAddController {
             errorMessages.append("User is required!\n");
         }
 
+        Session session = actionComboBoxSession.getValue();
+        Optional<Session> optSession = Optional.ofNullable(session);
+        if (optSession.isPresent()) {
+            session = optSession.get();
+        } else {
+            errorMessages.append("Session is required!\n");
+        }
 
-        BehaviorType action = actionComboBoxAction.getValue();
-        Optional<BehaviorType> optAction = Optional.ofNullable(action);
+        BehaviourType action = actionComboBoxAction.getValue();
+        Optional<BehaviourType> optAction = Optional.ofNullable(action);
         if (optAction.isPresent()) {
             action = optAction.get();
         } else {
@@ -77,8 +104,7 @@ public class UserActionAddController {
             errorMessages.append("Website is required!\n");
         }
 
-        LocalDate timestamp = actionDatePickerTimestamp.getValue();
-        LocalDateTime actionTimestamp = LocalDateTime.of(timestamp, LocalTime.now());
+        LocalDateTime actionTimestamp = dateTimeBinding.get();
         Optional<LocalDateTime> optTimestamp = Optional.ofNullable(actionTimestamp);
         if (optTimestamp.isPresent()) {
             actionTimestamp = optTimestamp.get();
@@ -99,7 +125,8 @@ public class UserActionAddController {
                     .setUser(user)
                     .setAction(action)
                     .setPage(website)
-                    .setActionTimestamp(actionDatePickerTimestamp.getValue().atStartOfDay())
+                    .setSession(session)
+                    .setActionTimestamp(actionTimestamp)
                     .setDetails(details)
                     .build();
 
@@ -123,14 +150,15 @@ public class UserActionAddController {
                     .append("\nWebsite: ")
                     .append(website)
                     .append("\nTimestamp: ")
-                    .append(actionDatePickerTimestamp.getValue().atStartOfDay())
+                    .append(formatLocalDateTime(actionTimestamp))
                     .append("\nDetails: ")
                     .append(details);
 
             actionComboBoxUser.getSelectionModel().clearSelection();
             actionComboBoxAction.getSelectionModel().clearSelection();
             actionComboBoxWebsite.getSelectionModel().clearSelection();
-            actionDatePickerTimestamp.getEditor().clear();
+            actionDatePickerDateOfAction.getEditor().clear();
+            actionTextFieldTimeOfAction.clear();
             actionTextFieldDetails.clear();
 
         }

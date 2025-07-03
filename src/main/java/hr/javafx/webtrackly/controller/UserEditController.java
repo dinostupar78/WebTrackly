@@ -33,6 +33,9 @@ public class UserEditController {
     private TextField userEditTextFieldUsername;
 
     @FXML
+    private TextField userEditTextFieldEmail;
+
+    @FXML
     private TextField userEditTextFieldPassword;
 
     @FXML
@@ -52,7 +55,8 @@ public class UserEditController {
         userEditTextFieldNationality.setText(user.getPersonalData().nationality());
         userEditComboBoxGender.setValue(user.getPersonalData().gender());
         userEditTextFieldUsername.setText(user.getUsername());
-        userEditTextFieldPassword.setText(user.getHashedPassword());
+        userEditTextFieldEmail.setText(user.getEmail());
+        userEditTextFieldPassword.setText(user.getPassword());
         userEditComboBoxWebsite.setValue(websiteRepository.findById(user.getWebsiteId()));
     }
 
@@ -103,6 +107,11 @@ public class UserEditController {
                 errorMessages.append("Username is required!\n");
             }
 
+            String email = userEditTextFieldEmail.getText();
+            if(email.isEmpty()){
+                errorMessages.append("Email is required!\n");
+            }
+
             String password = userEditTextFieldPassword.getText();
             if(password.isEmpty()){
                 errorMessages.append("Password is required!\n");
@@ -133,10 +142,10 @@ public class UserEditController {
                         .setSurname(lastName)
                         .setPersonalData(new PersonalData(dateOfBirth, nationality, gender))
                         .setUsername(username)
-                        .setHashedPassword(password)
+                        .setEmail(email)
+                        .setPassword(password)
                         .setRole(role)
                         .setWebsiteId(websiteId)
-                        .setRegistrationDate(LocalDateTime.now())
                         .build();
 
                 userRepository.update(newUser);
@@ -165,6 +174,7 @@ public class UserEditController {
         userEditTextFieldNationality.clear();
         userEditComboBoxGender.getSelectionModel().clearSelection();
         userEditTextFieldUsername.clear();
+        userEditTextFieldEmail.clear();
         userEditTextFieldPassword.clear();
         userEditComboBoxWebsite.getSelectionModel().clearSelection();
     }

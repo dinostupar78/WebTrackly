@@ -73,10 +73,7 @@ public class WebsiteAddController {
         } else {
             Website newWebsite = new Website.Builder()
                     .setWebsiteName(name)
-                    .setWebsiteClicks(clicks)
                     .setWebsiteUrl(url)
-                    .setWebsiteUserCount(users)
-                    .setBounceRate(bounceRate)
                     .setUsers(new HashSet<>())
                     .build();
 

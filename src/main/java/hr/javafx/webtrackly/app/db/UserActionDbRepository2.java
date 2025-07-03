@@ -16,17 +16,18 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 public class UserActionDbRepository2<T extends UserAction> {
     public void update(T entity){
         String query = "UPDATE USER_ACTION " +
-                "SET USER_ID = ?, ACTION  = ?, WEBSITE_ID = ?, ACTION_TIMESTAMP = ?, " +
+                "SET USER_ID = ?, SESSION_ID = ?, ACTION  = ?, WEBSITE_ID = ?, ACTION_TIMESTAMP = ?, " +
                 "DETAILS  = ? WHERE ID = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setLong(1, entity.getUser().getId());
-            stmt.setString(2, entity.getAction().name());
-            stmt.setLong(3, entity.getPage().getId());
-            stmt.setTimestamp(4, Timestamp.valueOf(entity.getTimestamp()));
-            stmt.setString(5, entity.getDetails());
-            stmt.setLong(6, entity.getId());
+            stmt.setLong(2, entity.getSession().getId());
+            stmt.setString(3, entity.getAction().name());
+            stmt.setLong(4, entity.getPage().getId());
+            stmt.setTimestamp(5, Timestamp.valueOf(entity.getTimestamp()));
+            stmt.setString(6, entity.getDetails());
+            stmt.setLong(7, entity.getId());
             stmt.executeUpdate();
 
         } catch (IOException | SQLException | DbConnectionException e) {

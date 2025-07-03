@@ -2,25 +2,20 @@ package hr.javafx.webtrackly.app.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class TrafficRecord extends Entity{
     private Website website;
     private LocalDateTime timeOfVisit;
-    private Integer userCount;
     private Integer pageViews;
     private BigDecimal bounceRate;
-    private List<Session> sessions;
 
-    public TrafficRecord(Long id, Website website, LocalDateTime timeOfVisit, Integer userCount, Integer pageViews,
-                         BigDecimal bounceRate, List<Session> sessions) {
+    public TrafficRecord(Long id, Website website, LocalDateTime timeOfVisit, Integer pageViews,
+                         BigDecimal bounceRate) {
         super(id);
         this.website = website;
         this.timeOfVisit = timeOfVisit;
-        this.userCount = userCount;
         this.pageViews = pageViews;
         this.bounceRate = bounceRate;
-        this.sessions = sessions;
     }
 
     public Website getWebsite() {
@@ -39,14 +34,6 @@ public class TrafficRecord extends Entity{
         this.timeOfVisit = timeOfVisit;
     }
 
-    public Integer getUserCount() {
-        return userCount;
-    }
-
-    public void setUserCount(Integer userCount) {
-        this.userCount = userCount;
-    }
-
     public Integer getPageViews() {
         return pageViews;
     }
@@ -63,22 +50,13 @@ public class TrafficRecord extends Entity{
         this.bounceRate = bounceRate;
     }
 
-    public List<Session> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<Session> sessions) {
-        this.sessions = sessions;
-    }
 
     public static class Builder{
         private Long id;
         private Website website;
         private LocalDateTime timeOfVisit;
-        private Integer userCount;
         private Integer pageViews;
         private BigDecimal bounceRate;
-        private List<Session> sessions;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -95,11 +73,6 @@ public class TrafficRecord extends Entity{
             return this;
         }
 
-        public Builder setUserCount(Integer userCount) {
-            this.userCount = userCount;
-            return this;
-        }
-
         public Builder setPageViews(Integer pageViews) {
             this.pageViews = pageViews;
             return this;
@@ -110,24 +83,18 @@ public class TrafficRecord extends Entity{
             return this;
         }
 
-        public Builder setSessions(List<Session> sessions) {
-            this.sessions = sessions;
-            return this;
-        }
-
         public TrafficRecord build(){
-            return new TrafficRecord(id, website, timeOfVisit, userCount, pageViews, bounceRate, sessions);
+            return new TrafficRecord(id, website, timeOfVisit,pageViews, bounceRate);
         }
     }
 
     @Override
     public String toString() {
         return String.format(
-                "TrafficRecord[id=%d, Website='%s', TimeOfVisit='%s', Users=%d, PageViews=%d, BounceRate=%.2f%%]",
+                "TrafficRecord[id=%d, Website='%s', TimeOfVisit='%s', PageViews=%d, BounceRate=%.2f%%]",
                 getId(),
                 website.getWebsiteName(),
                 timeOfVisit.toString(),
-                userCount,
                 pageViews,
                 bounceRate
 

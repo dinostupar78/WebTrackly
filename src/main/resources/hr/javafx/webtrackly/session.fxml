@@ -36,7 +36,7 @@
                 </HBox>
                 <VBox alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
                     <children>
-                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Session Activity Over Time" />
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Session Activity By Hour" />
                         <LineChart fx:id="sessionActivityLineChart" animated="false">
                             <xAxis>
                                 <CategoryAxis side="BOTTOM" />
@@ -58,8 +58,8 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                     <columns>
-                        <TableColumn fx:id="sessionColumnID" prefWidth="99.0" text="Session ID" />
-                        <TableColumn fx:id="sessionColumnWebsite" prefWidth="114.0" text="Website" />
+                        <TableColumn fx:id="sessionColumnID" prefWidth="66.0" text="ID" />
+                        <TableColumn fx:id="sessionColumnWebsite" prefWidth="145.0" text="Website" />
                         <TableColumn fx:id="sessionColumnUser" minWidth="0.0" prefWidth="108.0" text="User" />
                         <TableColumn fx:id="sessionColumnStartTime" prefWidth="106.0" text="Start Time" />
                         <TableColumn fx:id="sessionColumnEndTime" prefWidth="125.0" text="End Time" />

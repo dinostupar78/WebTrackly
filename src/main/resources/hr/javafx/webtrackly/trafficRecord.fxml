@@ -36,21 +36,8 @@
                 </HBox>
                 <VBox alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
                     <children>
-                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Traffic Comparison" />
-                        <BarChart fx:id="trafficUserCountChart" animated="false">
-                            <xAxis>
-                                <CategoryAxis side="BOTTOM" />
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis side="LEFT" />
-                            </yAxis>
-                        </BarChart>
-                    </children>
-                </VBox>
-                <VBox alignment="CENTER" layoutX="412.0" layoutY="144.0" prefHeight="270.0" prefWidth="361.0" spacing="5" styleClass="chart-panel">
-                    <children>
-                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="Traffic Distribution by Source" />
-                        <LineChart fx:id="trafficTrendsChart" animated="false">
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Last 24h Page-View Trends" />
+                        <LineChart fx:id="pageViewsChart" animated="false">
                             <xAxis>
                                 <CategoryAxis side="BOTTOM" />
                             </xAxis>
@@ -60,17 +47,29 @@
                         </LineChart>
                     </children>
                 </VBox>
+                <VBox alignment="CENTER" layoutX="412.0" layoutY="144.0" prefHeight="270.0" prefWidth="361.0" spacing="5" styleClass="chart-panel">
+                    <children>
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="Total Page Views Over 24h" />
+                        <BarChart fx:id="totalPageViewsChart" animated="false">
+                            <xAxis>
+                                <CategoryAxis side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" />
+                            </yAxis>
+                        </BarChart>
+                    </children>
+                </VBox>
                 <TableView fx:id="trafficRecordTableView" layoutX="10.0" layoutY="490.0" prefHeight="270.0" prefWidth="777.0" style="f: red;" styleClass="dashboard-table">
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                     <columns>
-                        <TableColumn fx:id="trafficColumnID" prefWidth="85.0" text="Traffic ID" />
+                        <TableColumn fx:id="trafficColumnID" prefWidth="85.0" text="ID" />
                         <TableColumn fx:id="trafficColumnWebsite" prefWidth="129.0" text="Website" />
                         <TableColumn fx:id="trafficColumnTime" minWidth="0.0" prefWidth="117.0" text="Time of Visit" />
                         <TableColumn fx:id="trafficColumnViews" prefWidth="109.0" text="Views" />
                         <TableColumn fx:id="trafficColumnBounceRate" prefWidth="105.0" text="Bounce Rate" />
-                        <TableColumn fx:id="trafficColumnSessions" prefWidth="222.0" text="Sessions" />
                     </columns>
                 </TableView>
             </children></AnchorPane>

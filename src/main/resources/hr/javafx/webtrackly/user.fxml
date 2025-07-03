@@ -26,24 +26,24 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                     <columns>
-                        <TableColumn fx:id="userColumnID" prefWidth="75.0" text="User ID" />
-                        <TableColumn fx:id="userColumnUsername" prefWidth="102.0" text="Username" />
-                        <TableColumn fx:id="userColumnFirstName" minWidth="0.0" prefWidth="117.0" text="First Name" />
+                        <TableColumn fx:id="userColumnID" prefWidth="64.0" text="ID" />
+                        <TableColumn fx:id="userColumnUsername" prefWidth="108.0" text="Username" />
+                  <TableColumn fx:id="userColumnEmail" prefWidth="194.0" text="Email" />
+                        <TableColumn fx:id="userColumnFirstName" minWidth="0.0" prefWidth="95.0" text="First Name" />
                         <TableColumn fx:id="userColumnLastName" prefWidth="115.0" text="Last Name" />
                         <TableColumn fx:id="userColumnNationality" prefWidth="120.0" text="Nationality" />
-                        <TableColumn fx:id="userColumnRole" prefWidth="116.0" text="Unknown" />
-                        <TableColumn fx:id="userColumnRegistrationDate" prefWidth="147.0" text="Registration Date" />
                     </columns>
                 </TableView>
-                <TextField fx:id="userTextFieldID" layoutX="277.0" layoutY="93.0" prefHeight="35.0" prefWidth="112.0" promptText="User ID" styleClass="search-input" />
-                <TextField fx:id="userTextFieldUsername" layoutX="277.0" layoutY="143.0" prefHeight="25.0" prefWidth="112.0" promptText="Username" styleClass="search-input" />
-                <TextField fx:id="userTextFieldFirstName" layoutX="279.0" layoutY="190.0" prefHeight="35.0" prefWidth="112.0" promptText="First Name" styleClass="search-input" />
-                <TextField fx:id="userTextFieldLastName" layoutX="277.0" layoutY="240.0" prefHeight="35.0" prefWidth="112.0" promptText="Last Name" styleClass="search-input" />
-                <TextField fx:id="userTextFieldNationality" layoutX="277.0" layoutY="290.0" prefHeight="35.0" prefWidth="112.0" promptText="Nationality" styleClass="search-input" />
-                <Button layoutX="307.0" layoutY="399.0" onAction="#filterUsers" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Search" />
-                <Button fx:id="deleteUser" layoutX="407.0" layoutY="399.0" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Delete" />
-                <Label layoutX="325.0" layoutY="19.0" styleClass="panel-header" text="Search User" />
-                <ComboBox fx:id="userComboBoxRole" layoutX="277.0" layoutY="339.0" prefHeight="35.0" prefWidth="150.0" promptText="Unkown Yet" styleClass="search-combo" />
+                <TextField fx:id="userTextFieldID" layoutX="279.0" layoutY="102.0" prefHeight="35.0" prefWidth="112.0" promptText="User ID" styleClass="search-input" />
+                <TextField fx:id="userTextFieldUsername" layoutX="277.0" layoutY="149.0" prefHeight="25.0" prefWidth="112.0" promptText="Username" styleClass="search-input" />
+                <TextField fx:id="userTextFieldFirstName" layoutX="279.0" layoutY="239.0" prefHeight="35.0" prefWidth="112.0" promptText="First Name" styleClass="search-input" />
+                <TextField fx:id="userTextFieldLastName" layoutX="279.0" layoutY="284.0" prefHeight="35.0" prefWidth="112.0" promptText="Last Name" styleClass="search-input" />
+                <TextField fx:id="userTextFieldNationality" layoutX="279.0" layoutY="331.0" prefHeight="35.0" prefWidth="112.0" promptText="Nationality" styleClass="search-input" />
+                <Button layoutX="307.0" layoutY="431.0" onAction="#filterUsers" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Search" />
+                <Button fx:id="deleteUser" layoutX="406.0" layoutY="431.0" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Delete" />
+                <Label layoutX="325.0" layoutY="29.0" styleClass="panel-header" text="Search User" />
+                <ComboBox fx:id="userComboBoxRole" layoutX="277.0" layoutY="379.0" prefHeight="35.0" prefWidth="150.0" promptText="Unkown Yet" styleClass="search-combo" />
+            <TextField fx:id="userTextFieldEmail" layoutX="277.0" layoutY="194.0" prefHeight="25.0" prefWidth="112.0" promptText="Email" styleClass="search-input" />
             </children></AnchorPane>
     </children>
 </AnchorPane>

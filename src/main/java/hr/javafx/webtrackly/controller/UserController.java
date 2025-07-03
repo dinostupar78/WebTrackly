@@ -3,7 +3,6 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.*;
-import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
@@ -23,6 +22,9 @@ public class UserController {
 
     @FXML
     private TextField userTextFieldUsername;
+
+    @FXML
+    private TextField userTextFieldEmail;
 
     @FXML
     private TextField userTextFieldFirstName;
@@ -46,6 +48,9 @@ public class UserController {
     private TableColumn<User, String> userColumnUsername;
 
     @FXML
+    private TableColumn<User, String> userColumnEmail;
+
+    @FXML
     private TableColumn<User, String> userColumnFirstName;
 
     @FXML
@@ -53,12 +58,6 @@ public class UserController {
 
     @FXML
     private TableColumn<User, String> userColumnNationality;
-
-    @FXML
-    private TableColumn<User, String> userColumnRole;
-
-    @FXML
-    private TableColumn<User, String> userColumnRegistrationDate;
 
     @FXML
     private Button deleteUser;
@@ -74,6 +73,10 @@ public class UserController {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getUsername()))
         );
 
+        userColumnEmail.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getEmail()))
+        );
+
         userColumnFirstName.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getFirstName()))
         );
@@ -85,13 +88,6 @@ public class UserController {
         userColumnNationality.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getPersonalData().nationality()))
         );
-
-
-        userColumnRole.setCellValueFactory(cellData -> {
-            Role role = cellData.getValue().getRole();
-            String roleText = (role != null) ? role.toString() : "No Role";
-            return new SimpleStringProperty(roleText);
-        });
 
         userComboBoxRole.getItems().clear();
         userComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole(), new UserRole());
@@ -106,10 +102,6 @@ public class UserController {
                 return null;
             }
         });
-
-        userColumnRegistrationDate.setCellValueFactory(cellData ->
-                new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getRegistrationDate()))
-        );
 
         RowDeletion1Util.addUserRowDeletionHandler(userTableView);
 
@@ -140,6 +132,13 @@ public class UserController {
                     .toList();
         }
 
+        String email = userTextFieldEmail.getText();
+        if(!(email.isEmpty())){
+            initialUserList = initialUserList.stream()
+                    .filter(user -> user.getEmail().equals(email))
+                    .toList();
+        }
+
         String firstName = userTextFieldFirstName.getText();
         if(!(firstName.isEmpty())){
             initialUserList = initialUserList.stream()
@@ -158,17 +157,6 @@ public class UserController {
         if(!(nationality.isEmpty())){
             initialUserList = initialUserList.stream()
                     .filter(user -> user.getPersonalData().nationality().equals(nationality))
-                    .toList();
-        }
-
-        Role selectedRole = userComboBoxRole.getValue();
-        if(selectedRole != null) {
-            String selectedPermission = selectedRole.toString();
-            initialUserList = initialUserList.stream()
-                    .filter(user -> {
-                        Role userRole = user.getRole();
-                        return userRole != null && userRole.toString().equals(selectedPermission);
-                    })
                     .toList();
         }
 

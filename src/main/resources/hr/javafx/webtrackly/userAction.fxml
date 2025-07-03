@@ -36,7 +36,7 @@
                 </HBox>
                 <VBox alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
                     <children>
-                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="User Actions Over Time" />
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="User Actions Per Hour" />
                         <AreaChart fx:id="userActionAreaChart" animated="false">
                             <xAxis>
                                 <CategoryAxis side="BOTTOM" />
@@ -49,7 +49,7 @@
                 </VBox>
                 <VBox alignment="CENTER" layoutX="412.0" layoutY="144.0" prefHeight="270.0" prefWidth="361.0" spacing="5" styleClass="chart-panel">
                     <children>
-                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="Bounce Rate per Website" />
+                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="card-title" text="User Behaviour Over Time" />
                         <PieChart fx:id="userActionBehaviourTypeChart" animated="false" />
                     </children>
                 </VBox>
@@ -58,11 +58,12 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                     <columns>
-                        <TableColumn fx:id="userActionTableColumnID" prefWidth="85.0" text="Action ID" />
+                        <TableColumn fx:id="userActionTableColumnID" prefWidth="85.0" text="ID" />
                         <TableColumn fx:id="userActionTableColumnUser" prefWidth="118.0" text="User" />
+                  <TableColumn fx:id="userActionTableColumnSession" prefWidth="118.0" text="Session" />
                         <TableColumn fx:id="userActionTableColumnAction" prefWidth="122.0" text="Action" />
-                        <TableColumn fx:id="userActionTableColumnTimestamp" prefWidth="106.0" text="Timestamp" />
-                        <TableColumn fx:id="userActionTableColumnDetails" prefWidth="344.0" text="Details" />
+                        <TableColumn fx:id="userActionTableColumnTimestamp" prefWidth="119.0" text="Timestamp" />
+                        <TableColumn fx:id="userActionTableColumnDetails" prefWidth="271.0" text="Details" />
                     </columns>
                 </TableView>
             </children></AnchorPane>

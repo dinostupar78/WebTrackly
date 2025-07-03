@@ -3,8 +3,10 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
+import hr.javafx.webtrackly.app.exception.EMailValidatorException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
+import hr.javafx.webtrackly.utils.PasswordUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -15,6 +17,8 @@ import javafx.scene.control.TextField;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserAddController {
     @FXML
@@ -34,6 +38,9 @@ public class UserAddController {
 
     @FXML
     private TextField userTextFieldUsername;
+
+    @FXML
+    private TextField userTextFieldEmail;
 
     @FXML
     private TextField userTextFieldPassword;
@@ -88,10 +95,21 @@ public class UserAddController {
             errorMessages.append("Username is required!\n");
         }
 
+        String email = userTextFieldEmail.getText();
+        try {
+            validateEmail(email);
+            if(email.isEmpty()){
+                errorMessages.append("Username is required!\n");
+            }
+        } catch (EMailValidatorException e) {
+            errorMessages.append(e.getMessage()).append("\n");
+        }
+
         String password = userTextFieldPassword.getText();
         if(password.isEmpty()){
             errorMessages.append("Password is required!\n");
         }
+        String hashedPassword = PasswordUtil.hashPassword(password);
 
         Role role = new UserRole();
 
@@ -105,7 +123,7 @@ public class UserAddController {
 
         Long websiteId = Optional.ofNullable(selectedWebsite)
                 .map(Website::getId)
-                .orElse(null);
+                .orElse(0L);
 
 
         if(errorMessages.length() > 0){
@@ -116,10 +134,10 @@ public class UserAddController {
                     .setSurname(lastName)
                     .setPersonalData(new PersonalData(dateOfBirth, nationality, gender))
                     .setUsername(username)
-                    .setHashedPassword(password)
+                    .setEmail(email)
+                    .setPassword(hashedPassword)
                     .setRole(role)
                     .setWebsiteId(websiteId)
-                    .setRegistrationDate(LocalDateTime.now())
                     .build();
 
             userRepository.save(newUser);
@@ -139,6 +157,21 @@ public class UserAddController {
 
     }
 
+    public static Boolean validateEmail(String email) throws EMailValidatorException {
+
+        Pattern emailRegex =
+                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+        Matcher matcher = emailRegex.matcher(email);
+
+        if (!matcher.matches()) {
+            throw new EMailValidatorException("Email " + email + " is not valid");
+        }
+        else {
+            return true;
+        }
+    }
+
     private void clearForm(){
         userTextFieldFirstName.clear();
         userTextFieldLastName.clear();
@@ -146,6 +179,7 @@ public class UserAddController {
         userTextFieldNationality.clear();
         userComboBoxGender.getSelectionModel().clearSelection();
         userTextFieldUsername.clear();
+        userTextFieldEmail.clear();
         userTextFieldPassword.clear();
         userComboBoxWebsite.getSelectionModel().clearSelection();
     }

@@ -38,10 +38,10 @@ public class WebsiteEditController {
         this.website = website;
 
         websiteEditTextFieldName.setText(website.getWebsiteName());
-        websiteEditTextFieldClicks.setText(String.valueOf(website.getWebsiteClicks()));
+        //websiteEditTextFieldClicks.setText(String.valueOf(website.getWebsiteClicks()));
         websiteEditTextFieldUrl.setText(website.getWebsiteUrl());
-        websiteEditTextFieldUsers.setText(String.valueOf(website.getWebsiteUserCount()));
-        websiteEditTextFieldBounceRate.setText(String.valueOf(website.getBounceRate()));
+        //websiteEditTextFieldUsers.setText(String.valueOf(website.getWebsiteUserCount()));
+        //websiteEditTextFieldBounceRate.setText(String.valueOf(website.getBounceRate()));
     }
 
     public void editWebsite(){
@@ -82,10 +82,10 @@ public class WebsiteEditController {
                 Website newWebsite = new Website.Builder()
                         .setId(website.getId())
                         .setWebsiteName(websiteEditTextFieldName.getText())
-                        .setWebsiteClicks(Integer.parseInt(websiteEditTextFieldClicks.getText()))
+                        //.setWebsiteClicks(Integer.parseInt(websiteEditTextFieldClicks.getText()))
                         .setWebsiteUrl(websiteEditTextFieldUrl.getText())
-                        .setWebsiteUserCount(Integer.parseInt(websiteEditTextFieldUsers.getText()))
-                        .setBounceRate(bounceRate)
+                        //.setWebsiteUserCount(Integer.parseInt(websiteEditTextFieldUsers.getText()))
+                        //.setBounceRate(bounceRate)
                         .setUsers(new HashSet<>())
                         .build();
 

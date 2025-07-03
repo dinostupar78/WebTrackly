@@ -1,9 +1,10 @@
 package hr.javafx.webtrackly.app.db;
 
-import hr.javafx.webtrackly.app.enums.BehaviorType;
+import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.DbDataException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
+import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.app.model.Website;
@@ -19,10 +20,10 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
-            "SELECT ID, USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION WHERE ID = ?";
+            "SELECT ID, USER_ID, SESSION_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION WHERE ID = ?";
 
     private static final String FIND_ALL_QUERY =
-            "SELECT ID, USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION";
+            "SELECT ID, USER_ID, SESSION_ID, ACTION, WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION";
 
     @Override
     public T findById(Long id) {
@@ -69,17 +70,18 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     @Override
     public void save(List<T> entities){
-        String sql = "INSERT INTO USER_ACTION (USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USER_ACTION (USER_ID, SESSION_ID, ACTION, WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             for (T entity : entities) {
                 stmt.setLong(1, entity.getUser().getId());
-                stmt.setString(2, entity.getAction().name());
-                stmt.setLong(3, entity.getPage().getId());
-                stmt.setTimestamp(4, Timestamp.valueOf(entity.getTimestamp()));
-                stmt.setString(5, entity.getDetails());
+                stmt.setLong(2, entity.getSession().getId());
+                stmt.setString(3, entity.getAction().name());
+                stmt.setLong(4, entity.getPage().getId());
+                stmt.setTimestamp(5, Timestamp.valueOf(entity.getTimestamp()));
+                stmt.setString(6, entity.getDetails());
 
                 stmt.addBatch();
             }
@@ -93,16 +95,17 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     @Override
     public void save(T entity){
-        String sql = "INSERT INTO USER_ACTION (USER_ID, ACTION , WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USER_ACTION (USER_ID, SESSION_ID, ACTION, WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, entity.getUser().getId());
-            stmt.setString(2, entity.getAction().name());
-            stmt.setLong(3, entity.getPage().getId());
-            stmt.setTimestamp(4, Timestamp.valueOf(entity.getTimestamp()));
-            stmt.setString(5, entity.getDetails());
+            stmt.setLong(2, entity.getSession().getId());
+            stmt.setString(3, entity.getAction().name());
+            stmt.setLong(4, entity.getPage().getId());
+            stmt.setTimestamp(5, Timestamp.valueOf(entity.getTimestamp()));
+            stmt.setString(6, entity.getDetails());
             stmt.executeUpdate();
 
         } catch (SQLException | IOException | DbConnectionException e) {
@@ -119,10 +122,14 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         UserDbRepository1<User> userRepository = new UserDbRepository1<>();
         User user = userRepository.findById(userId);
 
+        Long sessionId = resultSet.getLong("SESSION_ID");
+        SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
+        Session session = sessionRepository.findById(sessionId);
+
         String action = resultSet.getString("ACTION");
-        BehaviorType behaviorType;
+        BehaviourType behaviourType;
         try{
-            behaviorType = BehaviorType.valueOf(action.toUpperCase());
+            behaviourType = BehaviourType.valueOf(action.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new DbDataException("Unknown behaviour type: " + action);
         }
@@ -138,7 +145,8 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         return new UserAction.Builder()
                 .setId(id)
                 .setUser(user)
-                .setAction(behaviorType)
+                .setSession(session)
+                .setAction(behaviourType)
                 .setPage(website)
                 .setActionTimestamp(startTime)
                 .setDetails(details)

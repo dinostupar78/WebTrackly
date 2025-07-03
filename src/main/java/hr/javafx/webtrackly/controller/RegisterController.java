@@ -97,7 +97,7 @@ public class RegisterController {
                 .setSurname(lastName)
                 .setPersonalData(new PersonalData(dateOfBirth, nationality, gender))
                 .setUsername(username)
-                .setHashedPassword(hashedPassword)
+                .setPassword(hashedPassword)
                 .setRole(role)
                 .build();
 

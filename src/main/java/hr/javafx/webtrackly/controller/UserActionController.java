@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
-import hr.javafx.webtrackly.app.enums.BehaviorType;
+import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
@@ -20,7 +20,9 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,6 +52,9 @@ public class UserActionController {
     private TableColumn<UserAction, String> userActionTableColumnAction;
 
     @FXML
+    private TableColumn<UserAction, String> userActionTableColumnSession;
+
+    @FXML
     private TableColumn<UserAction, String> userActionTableColumnTimestamp;
 
     @FXML
@@ -75,6 +80,10 @@ public class UserActionController {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getUser().getUsername()))
         );
 
+        userActionTableColumnSession.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getSession().getId()))
+        );
+
         userActionTableColumnAction.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getAction()))
         );
@@ -98,6 +107,7 @@ public class UserActionController {
             EditData<UserAction> container = new EditData<>(selectedAction);
             ScreenChangeButtonUtil.openUserActionEditScreen(container.getData());
         });
+
     }
 
 
@@ -107,8 +117,6 @@ public class UserActionController {
     }
 
     public void filterUserActions(){
-        showUserActionBehaviourTypeChart();
-        showUserActionAreaChart();
 
         List<UserAction> initialUserActionList = userActionRepository.findAll();
 
@@ -141,63 +149,49 @@ public class UserActionController {
         sortedList.comparatorProperty().bind(userActionTableView.comparatorProperty());
 
         userActionTableView.setItems(sortedList);
+
+        showUserActionAreaChart(initialUserActionList);
+        showUserActionBehaviourTypeChart(initialUserActionList);
+
     }
 
-    private void showUserActionBehaviourTypeChart() {
+    private void showUserActionAreaChart(List<UserAction> actions) {
+        userActionAreaChart.getData().clear();
+        userActionAreaChart.setLegendVisible(false);
+
+        Map<LocalDateTime, Long> countsByHour = actions.stream()
+                .map(ua -> ua.getTimestamp().truncatedTo(ChronoUnit.HOURS))
+                .collect(Collectors.groupingBy(h -> h, Collectors.counting()));
+
+        XYChart.Series<String,Number> series = new XYChart.Series<>();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM-dd HH:mm");
+
+        CategoryAxis xAxis = (CategoryAxis) userActionAreaChart.getXAxis();
+        xAxis.setTickLabelRotation(-45);
+
+        countsByHour.keySet().stream().sorted()
+                .forEach(hour -> {
+                    series.getData().add(
+                            new XYChart.Data<>( hour.format(fmt), countsByHour.get(hour) )
+                    );
+                });
+
+        userActionAreaChart.getData().add(series);
+    }
+
+    private void showUserActionBehaviourTypeChart(List<UserAction> actions) {
         userActionBehaviourTypeChart.getData().clear();
 
-        List<UserAction> actions = userActionRepository.findAll();
-
-        Map<BehaviorType, Long> actionCounts = actions.stream()
+        Map<BehaviourType, Long> byType = actions.stream()
                 .collect(Collectors.groupingBy(UserAction::getAction, Collectors.counting()));
 
-        actionCounts.forEach((action, count) ->
-                userActionBehaviourTypeChart.getData().add(new PieChart.Data(action.toString(), count))
+        byType.forEach((type,count) ->
+                userActionBehaviourTypeChart.getData()
+                        .add(new PieChart.Data(type.name(), count))
         );
 
         userActionBehaviourTypeChart.setLegendSide(Side.BOTTOM);
         userActionBehaviourTypeChart.setLabelsVisible(true);
-        userActionBehaviourTypeChart.layout();
     }
-
-    private void showUserActionAreaChart() {
-        // Clear old data before adding new search results
-        userActionAreaChart.getData().clear();
-        userActionAreaChart.layout(); // Force chart to refresh
-
-        List<UserAction> actions = userActionRepository.findAll();
-
-        // Group actions by date (YYYY-MM-DD) instead of full timestamp
-        Map<String, Long> actionsByDate = actions.stream()
-                .collect(Collectors.groupingBy(
-                        action -> action.getTimestamp().toLocalDate().toString(), // Converts to date only
-                        Collectors.counting()
-                ));
-
-        // Create new series
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("User Actions Over Time");
-
-        // Sort and add data points
-        actionsByDate.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey()) // Ensures chronological order
-                .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue())));
-
-        userActionAreaChart.getData().add(series);
-
-        // Fix X-Axis formatting issues
-        CategoryAxis xAxis = (CategoryAxis) userActionAreaChart.getXAxis();
-        xAxis.getCategories().clear(); // Remove old labels
-        xAxis.setAutoRanging(true); // Ensure the X-axis adjusts to new data
-        xAxis.setTickLabelRotation(45); // Rotate for readability
-    }
-
-
-
-
-
-
-
-
 
 }

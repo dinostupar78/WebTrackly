@@ -16,17 +16,13 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 public class TrafficRecordDbRepository2<T extends TrafficRecord> {
     public void update(T entity){
         String query = "UPDATE TRAFFIC_RECORD " +
-                "SET WEBSITE_ID = ?, TIME_OF_VISIT = ?, USER_COUNT = ?, PAGE_VIEWS = ?, " +
-                "BOUNCE_RATE = ? WHERE ID = ?";
+                "SET WEBSITE_ID = ?, TIME_OF_VISIT = ? WHERE ID = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setLong(1, entity.getWebsite().getId());
             stmt.setTimestamp(2, Timestamp.valueOf(entity.getTimeOfVisit()));
-            stmt.setInt(3, entity.getUserCount());
-            stmt.setInt(4, entity.getPageViews());
-            stmt.setBigDecimal(5, entity.getBounceRate());
-            stmt.setLong(6, entity.getId());
+            stmt.setLong(3, entity.getId());
 
             stmt.executeUpdate();
         } catch (IOException | SQLException | DbConnectionException e) {

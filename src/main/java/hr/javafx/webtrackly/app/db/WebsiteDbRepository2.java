@@ -69,18 +69,17 @@ public class WebsiteDbRepository2<T extends Website> {
     }
 
     public void update(T entity) throws RepositoryException {
-        String query = "UPDATE WEBSITE SET WEBSITE_NAME = ?, WEBSITE_CLICKS = ?, WEBSITE_URL = ?, WEBSITE_USER_COUNT = ?, " +
-                "BOUNCE_RATE = ? WHERE ID = ?";
+        String query = "UPDATE WEBSITE SET WEBSITE_NAME = ?, WEBSITE_URL = ?, WEBSITE_CATEGORY = ?, " +
+                "WEBSITE_DESCRIPTION = ? WHERE ID = ?";
 
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setString(1, entity.getWebsiteName());
-            stmt.setInt(2, entity.getWebsiteClicks());
-            stmt.setString(3, entity.getWebsiteUrl());
-            stmt.setInt(4, entity.getWebsiteUserCount());
-            stmt.setBigDecimal(5, entity.getBounceRate());
-            stmt.setLong(6, entity.getId());
+            stmt.setString(2, entity.getWebsiteUrl());
+            stmt.setString(3, entity.getWebsiteCategory().name());
+            stmt.setString(4, entity.getWebsiteDescription());
+            stmt.setLong(5, entity.getId());
             stmt.executeUpdate();
 
         } catch (IOException | SQLException | DbConnectionException e) {

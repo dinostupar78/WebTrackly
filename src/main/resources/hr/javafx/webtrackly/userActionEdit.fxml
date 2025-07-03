@@ -47,15 +47,19 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
         </rowConstraints>
 
         <children>
             <ComboBox fx:id="actionEditComboBoxUser" prefHeight="35.0" prefWidth="244.0" promptText="User" styleClass="search-combo" GridPane.halignment="CENTER" />
-            <DatePicker fx:id="actionEditDatePickerTimestamp" prefHeight="31.0" prefWidth="239.0" promptText="Timestamp" styleClass="search-date-picker" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-            <Button onAction="#editUserAction" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Edit" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-            <TextField fx:id="actionEditTextFieldDetails" prefHeight="34.0" prefWidth="202.0" promptText="Details" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <DatePicker fx:id="actionEditDatePickerDateOfAction" prefHeight="117.0" prefWidth="239.0" promptText="Date" styleClass="search-datePicker" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <Button onAction="#editUserAction" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Edit" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+            <TextField fx:id="actionEditTextFieldDetails" prefHeight="34.0" prefWidth="202.0" promptText="Details" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
             <ComboBox fx:id="actionEditComboBoxAction" prefHeight="35.0" prefWidth="244.0" promptText="Action Type" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <ComboBox fx:id="actionEditComboBoxWebsite" prefHeight="35.0" prefWidth="244.0" promptText="Website" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+         <TextField fx:id="actionEditTextFieldTimeOfAction" promptText="Time" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+         <ComboBox fx:id="actionEditComboBoxSession" prefHeight="35.0" prefWidth="244.0" promptText="Session" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
         </children>
     </GridPane>
 

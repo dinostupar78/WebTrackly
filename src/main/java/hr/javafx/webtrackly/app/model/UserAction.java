@@ -1,20 +1,22 @@
 package hr.javafx.webtrackly.app.model;
 
-import hr.javafx.webtrackly.app.enums.BehaviorType;
+import hr.javafx.webtrackly.app.enums.BehaviourType;
 
 import java.time.LocalDateTime;
 
 public class UserAction extends Entity{
     private User user;
-    private BehaviorType action;
+    private BehaviourType action;
+    private Session session;
     private Website page;
     private LocalDateTime actionTimestamp;
     private String details;
 
-    public UserAction(Long id, User user, BehaviorType action, Website page, LocalDateTime actionTimestamp, String details) {
+    public UserAction(Long id, User user, BehaviourType action, Session session, Website page, LocalDateTime actionTimestamp, String details) {
         super(id);
         this.user = user;
         this.action = action;
+        this.session = session;
         this.page = page;
         this.actionTimestamp = actionTimestamp;
         this.details = details;
@@ -28,12 +30,20 @@ public class UserAction extends Entity{
         this.user = user;
     }
 
-    public BehaviorType getAction() {
+    public BehaviourType getAction() {
         return action;
     }
 
-    public void setAction(BehaviorType action) {
+    public void setAction(BehaviourType action) {
         this.action = action;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     public Website getPage() {
@@ -60,18 +70,24 @@ public class UserAction extends Entity{
         this.details = details;
     }
 
+
     @Override
     public String toString() {
-        return String.format(
-                "UserAction[id=%d, User='%s', Action='%s', Page='%s', Timestamp='%s', Details='%s']",
-                getId(), user.getUsername(), action.toString(), page.getWebsiteName(), actionTimestamp.toString(), details
-        );
+        return "UserAction{" +
+                "user=" + user +
+                ", action=" + action +
+                ", session=" + session +
+                ", page=" + page +
+                ", actionTimestamp=" + actionTimestamp +
+                ", details='" + details + '\'' +
+                '}';
     }
 
     public static class Builder{
         private Long id;
         private User user;
-        private BehaviorType action;
+        private BehaviourType action;
+        private Session session;
         private Website page;
         private LocalDateTime actionTimestamp;
         private String details;
@@ -86,8 +102,13 @@ public class UserAction extends Entity{
             return this;
         }
 
-        public Builder setAction(BehaviorType action) {
+        public Builder setAction(BehaviourType action) {
             this.action = action;
+            return this;
+        }
+
+        public Builder setSession(Session session) {
+            this.session = session;
             return this;
         }
 
@@ -107,7 +128,7 @@ public class UserAction extends Entity{
         }
 
         public UserAction build(){
-            return new UserAction(id, user, action, page, actionTimestamp, details);
+            return new UserAction(id, user, action, session, page, actionTimestamp, details);
         }
     }
 }

@@ -8,16 +8,16 @@ import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.util.converter.LocalTimeStringConverter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
@@ -35,19 +35,26 @@ public class SessionAddController {
     private ComboBox<DeviceType> sessionComboBoxDeviceType;
 
     @FXML
-    private TextField sessionTextFieldDuration;
+    private DatePicker sessionDatePickerStartDate;
 
     @FXML
-    private DatePicker sessionDatePickerStartTime;
+    private TextField sessionTextFieldStartTime;
 
     @FXML
-    private DatePicker sessionDatePickerEndTime;
+    private DatePicker sessionDatePickerEndDate;
+
+    @FXML
+    private TextField sessionTextFieldEndTime;
 
     @FXML
     private ComboBox<Boolean> sessionComboBoxActivity;
 
     @FXML
     private ComboBox<TrafficRecord> sessionComboBoxTrafficRecord;
+
+    private ObjectBinding<LocalDateTime> startDateTimeBinding;
+
+    private ObjectBinding<LocalDateTime> endDateTimeBinding;
 
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
@@ -60,6 +67,28 @@ public class SessionAddController {
         sessionComboBoxDeviceType.getItems().setAll(DeviceType.values());
         sessionComboBoxActivity.getItems().setAll(TRUE, FALSE);
         sessionComboBoxTrafficRecord.getItems().setAll(trafficRecordRepository.findAll());
+
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
+
+        TextFormatter<LocalTime> startFormatter = new TextFormatter<>(converter, null);
+        sessionTextFieldStartTime.setTextFormatter(startFormatter);
+
+        startDateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate date = sessionDatePickerStartDate.getValue();
+            LocalTime time = startFormatter.getValue();
+            return (date != null && time != null) ? LocalDateTime.of(date, time) : null;
+        }, sessionDatePickerStartDate.valueProperty(), startFormatter.valueProperty());
+
+        TextFormatter<LocalTime> endFormatter = new TextFormatter<>(converter, null);
+        sessionTextFieldEndTime.setTextFormatter(endFormatter);
+
+        endDateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate date = sessionDatePickerEndDate.getValue();
+            LocalTime time = endFormatter.getValue();
+            return (date != null && time != null) ? LocalDateTime.of(date, time) : null;
+        }, sessionDatePickerEndDate.valueProperty(), endFormatter.valueProperty());
+
     }
 
     public void addSession() {
@@ -89,18 +118,7 @@ public class SessionAddController {
             errorMessages.append("Device type is required!\n");
         }
 
-        BigDecimal duration = BigDecimal.ZERO;
-        try {
-            duration = new BigDecimal(sessionTextFieldDuration.getText());
-            if (duration.compareTo(BigDecimal.ZERO) <= 0) {
-                errorMessages.append("Duration must be greater than zero!\n");
-            }
-        } catch (NumberFormatException e) {
-            errorMessages.append("Invalid duration format!\n");
-        }
-
-        LocalDate startDate = sessionDatePickerStartTime.getValue();
-        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.now());
+        LocalDateTime startDateTime = startDateTimeBinding.get();
         Optional<LocalDateTime> optStartDate = Optional.ofNullable(startDateTime);
         if(optStartDate.isPresent()){
             startDateTime = optStartDate.get();
@@ -110,8 +128,7 @@ public class SessionAddController {
         }
 
 
-        LocalDate endDate = sessionDatePickerStartTime.getValue();
-        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.now());
+        LocalDateTime endDateTime = endDateTimeBinding.get();
         Optional<LocalDateTime> optEndDate = Optional.ofNullable(endDateTime);
         if(optEndDate.isPresent()){
             endDateTime = optEndDate.get();
@@ -139,7 +156,6 @@ public class SessionAddController {
                 .map(TrafficRecord::getId)
                 .orElse(null);
 
-
         if (errorMessages.length() > 0) {
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
         } else {
@@ -147,7 +163,6 @@ public class SessionAddController {
                     .setWebsite(website)
                     .setUser(user)
                     .setDeviceType(deviceType)
-                    .setSessionDuration(duration)
                     .setStartTime(startDateTime)
                     .setEndTime(endDateTime)
                     .setActive(activity)
@@ -171,9 +186,10 @@ public class SessionAddController {
             sessionComboBoxWebsite.getSelectionModel().clearSelection();
             sessionComboBoxUser.getSelectionModel().clearSelection();
             sessionComboBoxDeviceType.getSelectionModel().clearSelection();
-            sessionTextFieldDuration.clear();
-            sessionDatePickerStartTime.getEditor().clear();
-            sessionDatePickerEndTime.getEditor().clear();
+            sessionDatePickerStartDate.getEditor().clear();
+            sessionTextFieldStartTime.clear();
+            sessionDatePickerEndDate.getEditor().clear();
+            sessionTextFieldEndTime.clear();
             sessionComboBoxActivity.getSelectionModel().clearSelection();
             sessionComboBoxTrafficRecord.getSelectionModel().clearSelection();
 

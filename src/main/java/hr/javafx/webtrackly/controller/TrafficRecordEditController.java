@@ -1,4 +1,5 @@
 package hr.javafx.webtrackly.controller;
+
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.DataSerialization;
@@ -6,10 +7,16 @@ import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import java.math.BigDecimal;
+import javafx.util.converter.LocalTimeStringConverter;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class TrafficRecordEditController {
@@ -17,16 +24,14 @@ public class TrafficRecordEditController {
     private ComboBox<Website> trafficRecordEditComboBoxWebsite;
 
     @FXML
-    private DatePicker trafficRecordEditDatePickerTimeOfVisit;
+    private DatePicker trafficRecordEditDatePickerDateOfVisit;
 
     @FXML
-    private TextField trafficRecordEditTextFieldUserCount;
+    private TextField trafficRecordEditDatePickerTimeOfVisit;
 
-    @FXML
-    private TextField trafficRecordEditTextFieldPageViews;
+    private ObjectBinding<LocalDateTime> dateTimeBinding;
 
-    @FXML
-    private TextField trafficRecordEditTextFieldBounceRate;
+
 
     private TrafficRecord trafficRecord;
 
@@ -35,16 +40,25 @@ public class TrafficRecordEditController {
 
     public void setTrafficRecordData(TrafficRecord trafficRecord) {
         this.trafficRecord = trafficRecord;
-
         trafficRecordEditComboBoxWebsite.setValue(trafficRecord.getWebsite());
-        trafficRecordEditDatePickerTimeOfVisit.setValue(trafficRecord.getTimeOfVisit().toLocalDate());
-        trafficRecordEditTextFieldUserCount.setText(trafficRecord.getUserCount().toString());
-        trafficRecordEditTextFieldPageViews.setText(trafficRecord.getPageViews().toString());
-        trafficRecordEditTextFieldBounceRate.setText(trafficRecord.getBounceRate().toString());
+        trafficRecordEditDatePickerDateOfVisit.setValue(trafficRecord.getTimeOfVisit().toLocalDate());
+        trafficRecordEditDatePickerTimeOfVisit.setText(trafficRecord.getTimeOfVisit().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+
     }
 
     public void initialize(){
         trafficRecordEditComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
+
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
+        TextFormatter<LocalTime> tf = new TextFormatter<>(converter, null);
+        trafficRecordEditDatePickerTimeOfVisit.setTextFormatter(tf);
+
+        dateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate ld = trafficRecordEditDatePickerDateOfVisit.getValue();
+            LocalTime lt = tf.getValue();
+            return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
+        }, trafficRecordEditDatePickerDateOfVisit.valueProperty(), tf.valueProperty());
     }
 
     public void editTrafficRecord(){
@@ -64,29 +78,13 @@ public class TrafficRecordEditController {
                     .map(Website::getWebsiteName)
                     .orElse("Unknown Website");
 
-            LocalDateTime timeOfVisit = trafficRecordEditDatePickerTimeOfVisit.getValue().atStartOfDay();
+            LocalDateTime timeOfVisit = dateTimeBinding.get();
             Optional<LocalDateTime> optDate = Optional.ofNullable(timeOfVisit);
             if (optDate.isPresent()) {
                 timeOfVisit = optDate.get();
             } else {
                 errorMessages.append("Time of visit is required!\n");
             }
-
-            Integer userCount = Integer.parseInt(trafficRecordEditTextFieldUserCount.getText());
-            if(userCount < 0 || trafficRecordEditTextFieldUserCount.getText().isEmpty()){
-                errorMessages.append("User count is required and must be a positive number!\n");
-            }
-
-            Integer pageViews = Integer.parseInt(trafficRecordEditTextFieldPageViews.getText());
-            if(pageViews < 0 || trafficRecordEditTextFieldPageViews.getText().isEmpty()){
-                errorMessages.append("Page views are required and must be a positive number!\n");
-            }
-
-            BigDecimal bounceRate = new BigDecimal(trafficRecordEditTextFieldBounceRate.getText());
-            if(bounceRate.compareTo(BigDecimal.ZERO) < 0 || bounceRate.compareTo(BigDecimal.valueOf(100)) > 0){
-                errorMessages.append("Bounce rate must be a positive number less than 100!\n");
-            }
-
 
             if (errorMessages.length() > 0) {
                 ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
@@ -97,9 +95,6 @@ public class TrafficRecordEditController {
                         .setId(trafficRecord.getId())
                         .setWebsite(website)
                         .setTimeOfVisit(timeOfVisit)
-                        .setUserCount(userCount)
-                        .setPageViews(pageViews)
-                        .setBounceRate(bounceRate)
                         .build();
 
                 trafficRecordRepository.update(newTrafficRecord);
@@ -124,9 +119,8 @@ public class TrafficRecordEditController {
 
     public void clearForm() {
         trafficRecordEditComboBoxWebsite.getSelectionModel().clearSelection();
-        trafficRecordEditDatePickerTimeOfVisit.getEditor().clear();
-        trafficRecordEditTextFieldUserCount.clear();
-        trafficRecordEditTextFieldPageViews.clear();
-        trafficRecordEditTextFieldBounceRate.clear();
+        trafficRecordEditDatePickerDateOfVisit.getEditor().clear();
+        trafficRecordEditDatePickerTimeOfVisit.clear();
+
     }
 }

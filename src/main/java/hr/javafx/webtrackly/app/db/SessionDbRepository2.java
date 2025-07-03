@@ -16,7 +16,7 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 public class SessionDbRepository2<T extends Session> {
     public void update(T entity){
         String query = "UPDATE SESSION " +
-                "SET WEBSITE_ID = ?, USER_ID = ?, DEVICE_TYPE = ?, SESSION_DURATION = ?, " +
+                "SET WEBSITE_ID = ?, USER_ID = ?, DEVICE_TYPE = ?, " +
                 "START_TIME = ?, END_TIME = ?, IS_ACTIVE = ?, TRAFFIC_RECORD_ID = ? " +
                 "WHERE ID = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -25,12 +25,11 @@ public class SessionDbRepository2<T extends Session> {
             stmt.setLong(1, entity.getWebsite().getId());
             stmt.setLong(2, entity.getUser().getId());
             stmt.setString(3, entity.getDeviceType().name());
-            stmt.setBigDecimal(4, entity.getSessionDuration());
-            stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
-            stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
-            stmt.setBoolean(7, entity.getActive());
-            stmt.setLong(8, entity.getTrafficRecordId());
-            stmt.setLong(9, entity.getId());
+            stmt.setTimestamp(4, Timestamp.valueOf(entity.getStartTime()));
+            stmt.setTimestamp(5, Timestamp.valueOf(entity.getEndTime()));
+            stmt.setBoolean(6, entity.getActive());
+            stmt.setLong(7, entity.getTrafficRecordId());
+            stmt.setLong(8, entity.getId());
 
             stmt.executeUpdate();
         } catch (IOException | SQLException | DbConnectionException e) {

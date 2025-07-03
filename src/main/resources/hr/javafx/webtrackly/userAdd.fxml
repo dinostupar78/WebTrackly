@@ -24,12 +24,13 @@
                 <TextField fx:id="userTextFieldLastName" layoutX="277.0" layoutY="143.0" prefHeight="25.0" prefWidth="112.0" promptText="Last Name" styleClass="search-input" />
                 <TextField fx:id="userTextFieldNationality" layoutX="277.0" layoutY="236.0" prefHeight="35.0" prefWidth="112.0" promptText="Nationality" styleClass="search-input" />
                 <TextField fx:id="userTextFieldUsername" layoutX="277.0" layoutY="323.0" prefHeight="35.0" prefWidth="112.0" promptText="Username" styleClass="search-input" />
-                <TextField fx:id="userTextFieldPassword" layoutX="279.0" layoutY="368.0" prefHeight="35.0" prefWidth="112.0" promptText="Password" styleClass="search-input" />
-                <Button layoutX="349.0" layoutY="469.0" onAction="#addUser" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Add" />
+                <TextField fx:id="userTextFieldPassword" layoutX="279.0" layoutY="411.0" prefHeight="35.0" prefWidth="112.0" promptText="Password" styleClass="search-input" />
+                <Button layoutX="349.0" layoutY="508.0" onAction="#addUser" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Add" />
                 <Label layoutX="339.0" layoutY="19.0" styleClass="panel-header" text="Add User" />
-                <ComboBox fx:id="userComboBoxWebsite" layoutX="277.0" layoutY="413.0" prefHeight="35.0" prefWidth="150.0" promptText="Website" styleClass="search-combo" />
+                <ComboBox fx:id="userComboBoxWebsite" layoutX="279.0" layoutY="459.0" prefHeight="35.0" prefWidth="150.0" promptText="Website" styleClass="search-combo" />
                 <ComboBox fx:id="userComboBoxGender" layoutX="279.0" layoutY="280.0" prefHeight="35.0" prefWidth="150.0" promptText="Gender" styleClass="search-combo" />
                 <DatePicker fx:id="userDatePickerBirth" layoutX="279.0" layoutY="192.0" prefHeight="35.0" prefWidth="240.0" promptText="Date of Birth" styleClass="search-date-picker" />
+            <TextField fx:id="userTextFieldEmail" layoutX="279.0" layoutY="368.0" prefHeight="35.0" prefWidth="112.0" promptText="Email" styleClass="search-input" />
             </children></AnchorPane>
     </children>
 </AnchorPane>

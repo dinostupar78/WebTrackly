@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
@@ -47,15 +48,24 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
         </rowConstraints>
 
         <children>
-            <ComboBox fx:id="actionComboBoxUser" prefHeight="35.0" prefWidth="244.0" promptText="User" styleClass="search-combo" GridPane.halignment="CENTER" />
-            <DatePicker fx:id="actionDatePickerTimestamp" prefHeight="31.0" prefWidth="239.0" promptText="Timestamp" styleClass="search-date-picker" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-            <Button onAction="#addAction" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Add" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-            <TextField fx:id="actionTextFieldDetails" prefHeight="0.0" prefWidth="300.0" promptText="Details" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-            <ComboBox fx:id="actionComboBoxAction" prefHeight="35.0" prefWidth="244.0" promptText="Action Type" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <DatePicker fx:id="actionDatePickerDateOfAction" prefHeight="200.0" prefWidth="244.0" promptText="Date" styleClass="search-datePicker" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <Button onAction="#addAction" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Add" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+            <TextField fx:id="actionTextFieldDetails" prefHeight="0.0" prefWidth="300.0" promptText="Details" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
             <ComboBox fx:id="actionComboBoxWebsite" prefHeight="35.0" prefWidth="244.0" promptText="Website" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <HBox alignment="CENTER" spacing="10" GridPane.rowIndex="1">
+                <ComboBox fx:id="actionComboBoxAction" prefHeight="35" prefWidth="150" promptText="Action Type" styleClass="search-combo" />
+            </HBox>
+         <ComboBox fx:id="actionComboBoxUser" prefHeight="35.0" prefWidth="244.0" promptText="User" styleClass="search-combo" GridPane.halignment="CENTER" />
+         <TextField fx:id="actionTextFieldTimeOfAction" prefHeight="34.0" prefWidth="20.0" promptText="Time" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+         <ComboBox fx:id="actionComboBoxSession" prefHeight="35.0" prefWidth="244.0" promptText="Session" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+
         </children>
     </GridPane>
 

@@ -47,7 +47,7 @@ public class LoginController {
 
         Optional<User> matchingUser = users.stream()
                 .filter(u -> u.getUsername().equals(username)
-                        && u.getHashedPassword().equals(hashedInputPassword)
+                        && u.getPassword().equals(hashedInputPassword)
                         && role.getClass().isAssignableFrom(u.getRole().getClass()))
                 .findFirst();
 

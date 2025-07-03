@@ -1,6 +1,8 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
+import hr.javafx.webtrackly.app.enums.DeviceType;
+import hr.javafx.webtrackly.app.generics.ChartData;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
@@ -13,14 +15,19 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -97,7 +104,11 @@ public class SessionController {
         );
 
         sessionColumnDuration.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getSessionDuration()))
+                new SimpleStringProperty(
+                        cellData.getValue().getSessionDurationMinutes()
+                                .map(duration -> duration + " minutes")
+                                .orElse("N/A")
+                )
         );
 
         sessionColumnDevice.setCellValueFactory(cellData ->
@@ -117,8 +128,8 @@ public class SessionController {
     }
 
     public void filterSessions(){
-        showAverageSessionDurationLineChart();
-        showDeviceDistributionPieChart();
+
+
 
         List<Session> initialSessionList = sessionRepository.findAll();
 
@@ -151,27 +162,34 @@ public class SessionController {
 
         sessionTableView.setItems(sortedList);
 
+        showDeviceDistributionPieChart();
+        showSessionActivityLineChart(initialSessionList);
+
     }
 
-    private void showAverageSessionDurationLineChart() {
+    private void showSessionActivityLineChart(List<Session> sessions) {
         sessionActivityLineChart.getData().clear();
+        sessionActivityLineChart.setLegendVisible(false);
 
-        List<Session> sessions = sessionRepository.findAll();
+        Map<LocalDateTime, Long> countsByHour = sessions.stream()
+                .map(s -> s.getStartTime().truncatedTo(ChronoUnit.HOURS))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        Map<String, Double> avgDurationByDate = sessions.stream()
-                .collect(Collectors.groupingBy(
-                        s -> s.getStartTime().toLocalDate().toString(),
-                        Collectors.averagingDouble(s -> s.getSessionDuration().doubleValue())
-                ));
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM-dd HH:mm");
+        List<ChartData<String, Long>> chartData = countsByHour.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(e -> new ChartData<>(e.getKey().format(fmt), e.getValue()))
+                .toList();
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Average Session Duration");
-
-        avgDurationByDate.forEach((date, avgDuration) ->
-                series.getData().add(new XYChart.Data<>(date, avgDuration))
-        );
+        for (ChartData<String, Long> data : chartData) {
+            series.getData().add(new XYChart.Data<>(data.getX(), data.getY()));
+        }
 
         sessionActivityLineChart.getData().add(series);
+
+        CategoryAxis xAxis = (CategoryAxis)sessionActivityLineChart.getXAxis();
+        xAxis.setTickLabelRotation(-45);
     }
 
     private void showDeviceDistributionPieChart() {
@@ -179,14 +197,11 @@ public class SessionController {
 
         List<Session> sessions = sessionRepository.findAll();
 
-        Map<String, Long> deviceCounts = sessions.stream()
-                .collect(Collectors.groupingBy(
-                        s -> s.getDeviceType().toString(),
-                        Collectors.counting()
-                ));
+        Map<DeviceType, Long> countDevices = sessions.stream()
+                .collect(Collectors.groupingBy(Session::getDeviceType, Collectors.counting()));
 
-        deviceCounts.forEach((device, count) ->
-                sessionDeviceDistributionPieChart.getData().add(new PieChart.Data(device, count))
+        countDevices.forEach((device, count) ->
+                sessionDeviceDistributionPieChart.getData().add(new PieChart.Data(device.name(), count))
         );
 
         sessionDeviceDistributionPieChart.setLegendSide(Side.BOTTOM);

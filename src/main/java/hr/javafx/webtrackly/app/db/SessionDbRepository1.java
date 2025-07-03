@@ -11,7 +11,6 @@ import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,10 +20,10 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
-            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION WHERE ID = ?";
+            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION WHERE ID = ?";
 
     private static final String FIND_ALL_QUERY =
-            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION";
+            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION";
 
 
     @Override
@@ -74,7 +73,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public void save(List<T> entities) {
-        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
+        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -83,11 +82,10 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 stmt.setLong(1, entity.getWebsite().getId());
                 stmt.setLong(2, entity.getUser().getId());
                 stmt.setString(3, entity.getDeviceType().name());
-                stmt.setBigDecimal(4, entity.getSessionDuration());
-                stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
-                stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
-                stmt.setBoolean(7, entity.getActive());
-                stmt.setLong(8, entity.getTrafficRecordId());
+                stmt.setTimestamp(4, Timestamp.valueOf(entity.getStartTime()));
+                stmt.setTimestamp(5, Timestamp.valueOf(entity.getEndTime()));
+                stmt.setBoolean(6, entity.getActive());
+                stmt.setLong(7, entity.getTrafficRecordId());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -100,19 +98,18 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public void save(T entity) {
-        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, SESSION_DURATION, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setLong(1, entity.getWebsite().getId());
             stmt.setLong(2, entity.getUser().getId());
             stmt.setString(3, entity.getDeviceType().name());
-            stmt.setBigDecimal(4, entity.getSessionDuration());
-            stmt.setTimestamp(5, Timestamp.valueOf(entity.getStartTime()));
-            stmt.setTimestamp(6, Timestamp.valueOf(entity.getEndTime()));
-            stmt.setBoolean(7, entity.getActive());
-            stmt.setLong(8, entity.getTrafficRecordId());
+            stmt.setTimestamp(4, Timestamp.valueOf(entity.getStartTime()));
+            stmt.setTimestamp(5, Timestamp.valueOf(entity.getEndTime()));
+            stmt.setBoolean(6, entity.getActive());
+            stmt.setLong(7, entity.getTrafficRecordId());
             stmt.executeUpdate();
 
         } catch (SQLException | IOException | DbConnectionException e) {
@@ -143,7 +140,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             throw new DbDataException("Device type not found!" + deviceTypeStr);
         }
 
-        BigDecimal sessionDuration = resultSet.getBigDecimal("SESSION_DURATION");
         LocalDateTime startTime = resultSet.getTimestamp("START_TIME").toLocalDateTime();
         LocalDateTime endTime = resultSet.getTimestamp("END_TIME").toLocalDateTime();
         Boolean active = resultSet.getObject("IS_ACTIVE") != null ? resultSet.getBoolean("IS_ACTIVE") : null;
@@ -155,7 +151,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 .setUser(user)
                 .setWebsite(website)
                 .setDeviceType(deviceType)
-                .setSessionDuration(sessionDuration)
                 .setStartTime(startTime)
                 .setEndTime(endTime)
                 .setActive(active)

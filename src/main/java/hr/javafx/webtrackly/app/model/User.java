@@ -1,23 +1,22 @@
 package hr.javafx.webtrackly.app.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 public class User extends Person implements Serializable {
     private String username;
-    private String hashedPassword;
+    private String email;
+    private String password;
     private Role role;
     private Long websiteId;
-    private LocalDateTime registrationDate;
 
     public User(Long id, String name, String surname, PersonalData personalData,
-                String username, String hashedPassword, Role role, Long websiteId, LocalDateTime registrationDate) {
+                String username, String email, String password, Role role, Long websiteId) {
         super(id, name, surname, personalData);
         this.username = username;
-        this.hashedPassword = hashedPassword;
+        this.email = email;
+        this.password = password;
         this.role = role;
         this.websiteId = websiteId;
-        this.registrationDate = registrationDate;
     }
 
     public String getUsername() {
@@ -28,12 +27,20 @@ public class User extends Person implements Serializable {
         this.username = username;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getEmail() {
+        return email;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Role getRole() {
@@ -52,26 +59,15 @@ public class User extends Person implements Serializable {
         this.websiteId = websiteId;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
     @Override
     public String toString() {
-        return String.format(
-                "User[id=%d, Name='%s %s', Username='%s', Role='%s', WebsiteId=%s, Registered='%s']",
-                getId(),
-                getFirstName(),
-                getLastName(),
-                username,
-                (role != null ? role.toString() : "N/A"),
-                (websiteId != null ? websiteId.toString() : "N/A"),
-                (registrationDate != null ? registrationDate.toString() : "N/A")
-        );
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", websiteId=" + websiteId +
+                '}';
     }
 
     public static class Builder {
@@ -80,23 +76,26 @@ public class User extends Person implements Serializable {
         private String surname;
         private PersonalData personalData;
         private String username;
-        private String hashedPassword;
+        private String email;
+        private String password;
         private Role role;
         private Long websiteId;
-        private LocalDateTime registrationDate;
 
         public Builder setId(Long id) {
             this.id = id;
             return this;
         }
+
         public Builder setName(String name) {
             this.name = name;
             return this;
         }
+
         public Builder setSurname(String surname) {
             this.surname = surname;
             return this;
         }
+
         public Builder setPersonalData(PersonalData personalData) {
             this.personalData = personalData;
             return this;
@@ -105,10 +104,17 @@ public class User extends Person implements Serializable {
             this.username = username;
             return this;
         }
-        public Builder setHashedPassword(String hashedPassword) {
-            this.hashedPassword = hashedPassword;
+
+        public Builder setEmail(String email) {
+            this.email = email;
             return this;
         }
+
+        public Builder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
         public Builder setRole(Role role) {
             this.role = role;
             return this;
@@ -119,13 +125,8 @@ public class User extends Person implements Serializable {
             return this;
         }
 
-        public Builder setRegistrationDate(LocalDateTime registrationDate) {
-            this.registrationDate = registrationDate;
-            return this;
-        }
-
         public User build() {
-            return new User(id, name, surname, personalData, username, hashedPassword, role, websiteId, registrationDate);
+            return new User(id, name, surname, personalData, username, email, password, role, websiteId);
         }
     }
 }

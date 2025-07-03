@@ -63,9 +63,9 @@
                                     <Insets bottom="0" left="10" right="0" top="0" />
                                  </padding>
                                  <children>
+                                    <Button onAction="#onClickShowTrafficRecordPanel" styleClass="sidebar-subbutton" text="Traffic Record" />
                                     <Button onAction="#onClickShowUserActionPanel" styleClass="sidebar-subbutton" text="User Action" />
                                     <Button onAction="#onClickShowSessionPanel" styleClass="sidebar-subbutton" text="Session" />
-                                    <Button onAction="#onClickShowTrafficRecordPanel" styleClass="sidebar-subbutton" text="Traffic Record" />
                                  </children>
                               </VBox>
                            </content>

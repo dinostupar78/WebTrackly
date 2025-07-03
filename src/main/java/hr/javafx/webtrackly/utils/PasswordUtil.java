@@ -14,7 +14,7 @@ public class PasswordUtil {
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8)); // Ensure UTF-8 encoding
+            byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();
             for (byte b : hashBytes) {
                 hexString.append(String.format("%02x", b));

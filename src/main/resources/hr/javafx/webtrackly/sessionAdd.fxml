@@ -39,20 +39,23 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
+         <RowConstraints />
             <RowConstraints />
             <RowConstraints />
+         <RowConstraints />
         </rowConstraints>
 
         <children>
             <ComboBox fx:id="sessionComboBoxWebsite" prefHeight="35.0" prefWidth="310.0" promptText="Website" styleClass="search-combo" GridPane.halignment="CENTER" />
             <ComboBox fx:id="sessionComboBoxUser" prefHeight="25.0" prefWidth="312.0" promptText="User" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <ComboBox fx:id="sessionComboBoxDeviceType" prefHeight="25.0" prefWidth="312.0" promptText="Device Type" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <DatePicker fx:id="sessionDatePickerStartTime" prefHeight="31.0" prefWidth="244.0" promptText="Start Time" styleClass="search-date-picker" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-            <ComboBox fx:id="sessionComboBoxActivity" prefHeight="25.0" prefWidth="312.0" promptText="Activity" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-            <ComboBox fx:id="sessionComboBoxTrafficRecord" prefHeight="25.0" prefWidth="310.0" promptText="Traffic Record" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-            <DatePicker fx:id="sessionDatePickerEndTime" prefHeight="31.0" prefWidth="244.0" promptText="End Time" styleClass="search-date-picker" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-            <TextField fx:id="sessionTextFieldDuration" prefHeight="0.0" prefWidth="300.0" promptText="Duration in Minutes" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <DatePicker fx:id="sessionDatePickerStartDate" prefHeight="31.0" prefWidth="244.0" promptText="Start Date" styleClass="search-datePicker" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <ComboBox fx:id="sessionComboBoxActivity" prefHeight="25.0" prefWidth="312.0" promptText="Activity" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+            <ComboBox fx:id="sessionComboBoxTrafficRecord" prefHeight="25.0" prefWidth="310.0" promptText="Traffic Record" styleClass="search-combo" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+            <DatePicker fx:id="sessionDatePickerEndDate" prefHeight="31.0" prefWidth="244.0" promptText="End Date" styleClass="search-datePicker" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
             <Button onAction="#addSession" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Add" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+         <TextField fx:id="sessionTextFieldStartTime" promptText="Start Time" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+         <TextField fx:id="sessionTextFieldEndTime" promptText="End Time" styleClass="search-ud-field" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
         </children>
     </GridPane>
 

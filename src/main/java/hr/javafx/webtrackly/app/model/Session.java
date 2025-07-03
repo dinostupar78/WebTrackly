@@ -2,25 +2,24 @@ package hr.javafx.webtrackly.app.model;
 
 import hr.javafx.webtrackly.app.enums.DeviceType;
 
-import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Session extends Entity{
     private Website website;
     private User user;
     private DeviceType deviceType;
-    private BigDecimal sessionDuration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Boolean isActive;
     private Long trafficRecordId;
 
-    public Session(Long id, Website website, User user, DeviceType deviceType, BigDecimal sessionDuration, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive, Long trafficRecord) {
+    public Session(Long id, Website website, User user, DeviceType deviceType, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive, Long trafficRecord) {
         super(id);
         this.website = website;
         this.user = user;
         this.deviceType = deviceType;
-        this.sessionDuration = sessionDuration;
         this.startTime = startTime;
         this.endTime = endTime;
         this.isActive = isActive;
@@ -51,14 +50,6 @@ public class Session extends Entity{
         this.deviceType = deviceType;
     }
 
-    public BigDecimal getSessionDuration() {
-        return sessionDuration;
-    }
-
-    public void setSessionDuration(BigDecimal sessionDuration) {
-        this.sessionDuration = sessionDuration;
-    }
-
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -69,6 +60,12 @@ public class Session extends Entity{
 
     public LocalDateTime getEndTime() {
         return endTime;
+    }
+
+    public Optional<Long> getSessionDurationMinutes(){
+        return Optional.ofNullable(startTime)
+                .flatMap(start -> Optional.ofNullable(endTime)
+                        .map(end -> Duration.between(start, end).toMinutes()));
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -95,7 +92,7 @@ public class Session extends Entity{
     public String toString() {
         return String.format(
                 "Session[id=%d, Website='%s', User='%s', DeviceType='%s', Duration=%s, Start='%s', End='%s', Active=%s, TrafficRecordId=%s]",
-                getId(), website.getWebsiteName(), user.getUsername(), deviceType.toString(), sessionDuration.toString(),
+                getId(), website.getWebsiteName(), user.getUsername(), deviceType.toString(), getSessionDurationMinutes().toString(),
                 startTime.toString(), endTime.toString(), isActive.toString(), trafficRecordId.toString()
         );
     }
@@ -105,7 +102,6 @@ public class Session extends Entity{
         private Website website;
         private User user;
         private DeviceType deviceType;
-        private BigDecimal sessionDuration;
         private LocalDateTime startTime;
         private LocalDateTime endTime;
         private Boolean isActive;
@@ -131,11 +127,6 @@ public class Session extends Entity{
             return this;
         }
 
-        public Builder setSessionDuration(BigDecimal sessionDuration) {
-            this.sessionDuration = sessionDuration;
-            return this;
-        }
-
         public Builder setStartTime(LocalDateTime startTime) {
             this.startTime = startTime;
             return this;
@@ -157,7 +148,7 @@ public class Session extends Entity{
         }
 
         public Session build(){
-            return new Session(id, website, user, deviceType, sessionDuration, startTime, endTime, isActive, trafficRecordId);
+            return new Session(id, website, user, deviceType, startTime, endTime, isActive, trafficRecordId);
         }
     }
 }

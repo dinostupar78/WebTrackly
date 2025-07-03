@@ -1,26 +1,25 @@
 package hr.javafx.webtrackly.app.model;
 
-import java.math.BigDecimal;
+import hr.javafx.webtrackly.app.enums.WebsiteType;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
 public class Website extends Entity {
     private String websiteName;
-    private Integer websiteClicks;
     private String websiteUrl;
-    private Integer websiteUserCount;
-    private BigDecimal bounceRate;
+    private WebsiteType websiteCategory;
+    private String websiteDescription;
     private Set<User> users;
     private LocalDateTime createdAt;
 
-    public Website(Long id, String websiteName, Integer websiteClicks, String websiteUrl, Integer websiteUserCount,
-                   BigDecimal bounceRate, Set<User> users, LocalDateTime createdAt) {
+    public Website(Long id, String websiteName, String websiteUrl, WebsiteType websiteCategory,
+                   String websiteDescription, Set<User> users, LocalDateTime createdAt) {
         super(id);
         this.websiteName = websiteName;
-        this.websiteClicks = websiteClicks;
         this.websiteUrl = websiteUrl;
-        this.websiteUserCount = websiteUserCount;
-        this.bounceRate = bounceRate;
+        this.websiteCategory = websiteCategory;
+        this.websiteDescription = websiteDescription;
         this.users = users;
         this.createdAt = createdAt;
     }
@@ -33,36 +32,28 @@ public class Website extends Entity {
         this.websiteName = websiteName;
     }
 
-    public Integer getWebsiteClicks() {
-        return websiteClicks;
-    }
-
-    public void setWebsiteClicks(Integer websiteClicks) {
-        this.websiteClicks = websiteClicks;
-    }
-
     public String getWebsiteUrl() {
         return websiteUrl;
     }
 
+    public WebsiteType getWebsiteCategory() {
+        return websiteCategory;
+    }
+
+    public void setWebsiteCategory(WebsiteType websiteCategory) {
+        this.websiteCategory = websiteCategory;
+    }
+
+    public String getWebsiteDescription() {
+        return websiteDescription;
+    }
+
+    public void setWebsiteDescription(String websiteDescription) {
+        this.websiteDescription = websiteDescription;
+    }
+
     public void setWebsiteUrl(String websiteUrl) {
         this.websiteUrl = websiteUrl;
-    }
-
-    public Integer getWebsiteUserCount() {
-        return websiteUserCount;
-    }
-
-    public void setWebsiteUserCount(Integer websiteUserCount) {
-        this.websiteUserCount = websiteUserCount;
-    }
-
-    public BigDecimal getBounceRate() {
-        return bounceRate;
-    }
-
-    public void setBounceRate(BigDecimal bounceRate) {
-        this.bounceRate = bounceRate;
     }
 
     public Set<User> getUsers() {
@@ -84,10 +75,9 @@ public class Website extends Entity {
     public static class Builder{
         private Long id;
         private String websiteName;
-        private Integer websiteClicks;
         private String websiteUrl;
-        private Integer websiteUserCount;
-        private BigDecimal bounceRate;
+        private WebsiteType websiteCategory;
+        private String websiteDescription;
         private Set<User> users;
         private LocalDateTime createdAt;
 
@@ -101,23 +91,18 @@ public class Website extends Entity {
             return this;
         }
 
-        public Builder setWebsiteClicks(Integer websiteClicks) {
-            this.websiteClicks = websiteClicks;
-            return this;
-        }
-
         public Builder setWebsiteUrl(String websiteUrl) {
             this.websiteUrl = websiteUrl;
             return this;
         }
 
-        public Builder setWebsiteUserCount(Integer websiteUserCount) {
-            this.websiteUserCount = websiteUserCount;
+        public Builder setWebsiteCategory(WebsiteType websiteCategory) {
+            this.websiteCategory = websiteCategory;
             return this;
         }
 
-        public Builder setBounceRate(BigDecimal bounceRate) {
-            this.bounceRate = bounceRate;
+        public Builder setWebsiteDescription(String websiteDescription) {
+            this.websiteDescription = websiteDescription;
             return this;
         }
 
@@ -132,16 +117,20 @@ public class Website extends Entity {
         }
 
         public Website build(){
-            return new Website(id, websiteName, websiteClicks, websiteUrl, websiteUserCount, bounceRate, users, createdAt);
+            return new Website(id, websiteName, websiteUrl, websiteCategory, websiteDescription, users, createdAt);
         }
     }
 
+
     @Override
     public String toString() {
-        return String.format(
-                "Website[id=%d, Name='%s', Clicks=%d, URL='%s', Users=%d, Bounce Rate=%.2f%%, Registered Users=%d]",
-                getId(), websiteName, websiteClicks, websiteUrl, websiteUserCount,
-                bounceRate, users.size()
-        );
+        return "Website{" +
+                "websiteName='" + websiteName + '\'' +
+                ", websiteUrl='" + websiteUrl + '\'' +
+                ", websiteCategory=" + websiteCategory +
+                ", websiteDescription='" + websiteDescription + '\'' +
+                ", users=" + users +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

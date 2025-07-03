@@ -2,25 +2,24 @@ package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
+import hr.javafx.webtrackly.app.exception.DbDataException;
 import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
-import hr.javafx.webtrackly.app.exception.DbDataException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
-    private static final String FIND_BY_ID_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER WHERE ID = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID FROM APP_USER WHERE ID = ?";
 
-    private static final String FIND_ALL_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT FROM APP_USER";
+    private static final String FIND_ALL_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID FROM APP_USER";
 
     private static final String ROLE_ADMIN = "AdminRole";
 
@@ -74,7 +73,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
 
     @Override
     public void save(List<T> entities) {
-        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT) " +
+        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -86,7 +85,10 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
                 stmt.setString(4, entity.getPersonalData().nationality());
                 stmt.setString(5, entity.getPersonalData().gender().toString());
                 stmt.setString(6, entity.getUsername());
-                stmt.setString(7, entity.getHashedPassword());
+                stmt.setString(7, entity.getEmail());
+                stmt.setString(8, entity.getPassword());
+                stmt.setString(9, entity.getRole().toString());
+                stmt.setLong(10, entity.getWebsiteId());
 
                 String roleString;
                 if (entity.getRole() instanceof AdminRole) {
@@ -100,7 +102,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
                 }
                 stmt.setString(8, roleString);
                 stmt.setLong(9, entity.getWebsiteId());
-                stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
+
 
                 stmt.addBatch();
             }
@@ -113,7 +115,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
 
     @Override
     public void save(T entity) {
-        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, HASHED_PASSWORD, ROLE, WEBSITE_ID, CREATED_AT) " +
+        String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -123,7 +125,8 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
             stmt.setString(4, entity.getPersonalData().nationality());
             stmt.setString(5, entity.getPersonalData().gender().toString());
             stmt.setString(6, entity.getUsername());
-            stmt.setString(7, entity.getHashedPassword());
+            stmt.setString(7, entity.getEmail());
+            stmt.setString(8, entity.getPassword());
 
             String roleString;
             if (entity.getRole() instanceof AdminRole) {
@@ -135,9 +138,8 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
             } else {
                 roleString = entity.getRole().getClass().getSimpleName().toUpperCase();
             }
-            stmt.setString(8, roleString);
-            stmt.setLong(9, entity.getWebsiteId());
-            stmt.setTimestamp(10, Timestamp.valueOf(entity.getRegistrationDate()));
+            stmt.setString(9, roleString);
+            stmt.setLong(10, entity.getWebsiteId());
             stmt.executeUpdate();
         } catch (SQLException | IOException | DbConnectionException e) {
             log.error("Error while saving user to database: {}", e.getMessage());
@@ -162,7 +164,8 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         }
 
         String username = resultSet.getString("USERNAME");
-        String hashedPassword = resultSet.getString("HASHED_PASSWORD");
+        String email = resultSet.getString("EMAIL");
+        String password = resultSet.getString("PASSWORD");
 
         String roleString = resultSet.getString("ROLE");
         Role role;
@@ -178,7 +181,6 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         }
 
         Long websiteId = resultSet.getLong("WEBSITE_ID");
-        LocalDateTime registrationDate = resultSet.getTimestamp("CREATED_AT").toLocalDateTime();
 
         PersonalData personalData = new PersonalData(dateOfBirth, nationality, gender);
 
@@ -188,10 +190,10 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
                 .setSurname(lastName)
                 .setPersonalData(personalData)
                 .setUsername(username)
-                .setHashedPassword(hashedPassword)
+                .setEmail(email)
+                .setPassword(password)
                 .setRole(role)
                 .setWebsiteId(websiteId)
-                .setRegistrationDate(registrationDate)
                 .build();
 
     }

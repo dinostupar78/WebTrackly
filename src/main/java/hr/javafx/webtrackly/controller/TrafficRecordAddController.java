@@ -7,14 +7,16 @@ import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.util.converter.LocalTimeStringConverter;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class TrafficRecordAddController {
@@ -22,22 +24,31 @@ public class TrafficRecordAddController {
     private ComboBox<Website> trafficRecordComboBoxWebsite;
 
     @FXML
-    private DatePicker trafficRecordDatePickerTimeOfVisit;
+    private DatePicker trafficRecordDatePickerDateOfVisit;
 
     @FXML
-    private TextField trafficRecordTextFieldUserCount;
+    private TextField trafficRecordDatePickerTimeOfVisit;
 
-    @FXML
-    private TextField trafficRecordTextFieldPageViews;
 
-    @FXML
-    private TextField trafficRecordTextFieldBounceRate;
+    private ObjectBinding<LocalDateTime> dateTimeBinding;
+
 
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     public void initialize() {
         trafficRecordComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
+
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
+        TextFormatter<LocalTime> tf = new TextFormatter<>(converter, null);
+        trafficRecordDatePickerTimeOfVisit.setTextFormatter(tf);
+
+        dateTimeBinding = Bindings.createObjectBinding(() -> {
+            LocalDate ld = trafficRecordDatePickerDateOfVisit.getValue();
+            LocalTime lt = tf.getValue();
+            return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
+        }, trafficRecordDatePickerDateOfVisit.valueProperty(), tf.valueProperty());
     }
 
     public void addTrafficRecord(){
@@ -54,7 +65,8 @@ public class TrafficRecordAddController {
                 .map(Website::getWebsiteName)
                 .orElse("Unknown Website");
 
-        LocalDateTime timeOfVisit = trafficRecordDatePickerTimeOfVisit.getValue().atStartOfDay();
+
+        LocalDateTime timeOfVisit = dateTimeBinding.get();
         Optional<LocalDateTime> optDate = Optional.ofNullable(timeOfVisit);
         if (optDate.isPresent()) {
             timeOfVisit = optDate.get();
@@ -62,31 +74,12 @@ public class TrafficRecordAddController {
             errorMessages.append("Time of visit is required!\n");
         }
 
-        Integer userCount = Integer.parseInt(trafficRecordTextFieldUserCount.getText());
-        if(userCount < 0 || trafficRecordTextFieldUserCount.getText().isEmpty()){
-            errorMessages.append("User count is required and must be a positive number!\n");
-        }
-
-        Integer pageViews = Integer.parseInt(trafficRecordTextFieldPageViews.getText());
-        if(pageViews < 0 || trafficRecordTextFieldPageViews.getText().isEmpty()){
-            errorMessages.append("Page views are required and must be a positive number!\n");
-        }
-
-        BigDecimal bounceRate = new BigDecimal(trafficRecordTextFieldBounceRate.getText());
-        if(bounceRate.compareTo(BigDecimal.ZERO) < 0 || bounceRate.compareTo(BigDecimal.valueOf(100)) > 0){
-            errorMessages.append("Bounce rate must be a positive number less than 100!\n");
-        }
-
         if (errorMessages.length() > 0) {
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
         } else {
-
             TrafficRecord newTrafficRecord = new TrafficRecord.Builder()
                     .setWebsite(website)
                     .setTimeOfVisit(timeOfVisit)
-                    .setUserCount(userCount)
-                    .setPageViews(pageViews)
-                    .setBounceRate(bounceRate)
                     .build();
 
             trafficRecordRepository.save(newTrafficRecord);
@@ -108,9 +101,7 @@ public class TrafficRecordAddController {
 
     private void clearForm() {
         trafficRecordComboBoxWebsite.getSelectionModel().clearSelection();
-        trafficRecordDatePickerTimeOfVisit.getEditor().clear();
-        trafficRecordTextFieldUserCount.clear();
-        trafficRecordTextFieldPageViews.clear();
-        trafficRecordTextFieldBounceRate.clear();
+        trafficRecordDatePickerDateOfVisit.getEditor().clear();
+        trafficRecordDatePickerTimeOfVisit.clear();
     }
 }

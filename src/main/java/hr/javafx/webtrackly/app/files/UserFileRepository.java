@@ -63,7 +63,7 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
                         .setSurname(lastName)
                         .setPersonalData(personalData)
                         .setUsername(username)
-                        .setHashedPassword(hashedPassword)
+                        .setPassword(hashedPassword)
                         .setRole(role)
                         .build();
 
@@ -87,7 +87,7 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
                 writer.println(entity.getPersonalData().nationality());
                 writer.println(entity.getPersonalData().gender());
                 writer.println(entity.getUsername());
-                writer.println(entity.getHashedPassword());
+                writer.println(entity.getPassword());
                 writer.println(entity.getRole().getClass().getSimpleName());
             }
             writer.flush();

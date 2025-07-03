@@ -1,26 +1,29 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
-import hr.javafx.webtrackly.app.generics.ChartData;
+import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Website;
-import hr.javafx.webtrackly.threads.*;
 import hr.javafx.webtrackly.utils.RowDeletion2Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
+import hr.javafx.webtrackly.utils.WebsiteLabelUtil;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -41,16 +44,16 @@ public class WebsiteController {
     private TableColumn<Website, String> websiteTableColumnName;
 
     @FXML
-    private TableColumn<Website, String> websiteTableColumnClicks;
-
-    @FXML
     private TableColumn<Website, String> websiteTableColumnUrl;
 
     @FXML
-    private TableColumn<Website, String> websiteTableColumnCount;
+    private TableColumn<Website, Integer> websiteTableColumnUsers;
 
     @FXML
-    private TableColumn<Website, String> websiteTableColumnBounceRate;
+    private TableColumn<Website, String> websiteTableColumnCategory;
+
+    @FXML
+    private TableColumn<Website, String> websiteTableColumnDescription;
 
     @FXML
     private Label totalUsersLabel;
@@ -80,12 +83,14 @@ public class WebsiteController {
     private Button deleteWebsite;
 
     @FXML
-    private LineChart<String, Number> totalClicksChart;
+    private BarChart<String, Number> pageViewsByCategoryChart;
 
     @FXML
-    private BarChart<String, Number> bounceRateChart;
+    private PieChart categoryBreakdownChart;
 
     WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+
+    private WebsiteLabelUtil cardsUtil;
 
     @FXML
     private void openAddWebsiteScreen(ActionEvent event) {
@@ -101,20 +106,20 @@ public class WebsiteController {
                 new SimpleStringProperty(cellData.getValue().getWebsiteName())
         );
 
-        websiteTableColumnClicks.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getWebsiteClicks()))
-        );
-
         websiteTableColumnUrl.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getWebsiteUrl())
         );
 
-        websiteTableColumnCount.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getWebsiteUserCount()))
+        websiteTableColumnUsers.setCellValueFactory(cellData ->
+                new SimpleIntegerProperty(cellData.getValue().getUsers().size()).asObject()
         );
 
-        websiteTableColumnBounceRate.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getBounceRate()))
+        websiteTableColumnCategory.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getWebsiteCategory().name())
+        );
+
+        websiteTableColumnDescription.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getWebsiteDescription())
         );
 
         RowDeletion2Util.addWebsiteRowDeletionHandler(websiteTableView);
@@ -127,39 +132,13 @@ public class WebsiteController {
             ScreenChangeButtonUtil.openWebsiteEditScreen(container.getData());
         });
 
+
+
+
+
     }
 
     public void filterWebsites() {
-        showTotalClicksChart();
-        showBounceRateChart();
-
-        TotalUsersThread totalUsersThread = new TotalUsersThread(new WebsiteDbRepository1<>(), totalUsersLabel);
-        Thread usersThread = new Thread(totalUsersThread);
-        usersThread.start();
-
-        NewUsersThread newUsersThread = new NewUsersThread(new UserDbRepository1<>(), newUsersLabel);
-        Thread nUsersThread = new Thread(newUsersThread);
-        nUsersThread.start();
-
-        TotalClicksThread totalClicksThread = new TotalClicksThread(new WebsiteDbRepository1<>(), totalClicksLabel);
-        Thread clicksThread = new Thread(totalClicksThread);
-        clicksThread.start();
-
-        HighestClicksThread highestClicksThread = new HighestClicksThread(new WebsiteDbRepository1<>(), highestClicksLabel);
-        Thread hClicksThread = new Thread(highestClicksThread);
-        hClicksThread.start();
-
-        AvgBounceRateThread avgBounceRateThread = new AvgBounceRateThread(new WebsiteDbRepository1<>(), avgBounceRateLabel);
-        Thread bounceRateThread = new Thread(avgBounceRateThread);
-        bounceRateThread.start();
-
-        HighestBounceRateThread highestBounceRateThread = new HighestBounceRateThread(new WebsiteDbRepository1<>(), highestBounceRateLabel);
-        Thread hBounceRateThread = new Thread(highestBounceRateThread);
-        hBounceRateThread.start();
-
-        FrequentDomainsThread frequentDomainsThread = new FrequentDomainsThread(new WebsiteDbRepository1<>(), mostFrequentDomainLabel, mostFrequentDomainCountLabel);
-        Thread frequentThread = new Thread(frequentDomainsThread);
-        frequentThread.start();
 
         List<Website> initialWebsiteList = websiteRepository.findAll();
 
@@ -182,45 +161,48 @@ public class WebsiteController {
         sortedList.comparatorProperty().bind(websiteTableView.comparatorProperty());
         websiteTableView.setItems(sortedList);
 
+        pageViewsByCategoryChart(initialWebsiteList);
+        showCategoryBreakdownPieChart(initialWebsiteList);
+
+        cardsUtil = new WebsiteLabelUtil(
+                mostFrequentDomainLabel,
+                mostFrequentDomainCountLabel
+        );
+
+        cardsUtil.frequentDomainLabel();
+
     }
 
-    private void showTotalClicksChart() {
-        List<Website> websites = websiteRepository.findAll();
-        List<ChartData<String, Number>> dataPoints = new ArrayList<>();
+    private void showCategoryBreakdownPieChart(List<Website> websites) {
+        categoryBreakdownChart.getData().clear();
 
-        for (Website website : websites) {
-            dataPoints.add(new ChartData<>(website.getWebsiteName(), website.getWebsiteClicks()));
-        }
+        Map<WebsiteType, Long> byCategory = websites.stream()
+                .collect(Collectors.groupingBy(Website::getWebsiteCategory, Collectors.counting()));
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Website Clicks");
-        for (ChartData<String, Number> data : dataPoints) {
-            XYChart.Data<String, Number> chartData = new XYChart.Data<>(data.getX(), data.getY());
-            series.getData().add(chartData);
-        }
+        byCategory.forEach((category, count) ->
+                categoryBreakdownChart.getData().add(new PieChart.Data(category.name(), count)));
 
-        totalClicksChart.getData().clear();
-        totalClicksChart.getData().add(series);
+        categoryBreakdownChart.setLegendSide(Side.BOTTOM);
+        categoryBreakdownChart.setLabelsVisible(true);
     }
 
-    private void showBounceRateChart() {
-        List<Website> websites = websiteRepository.findAll();
-        List<ChartData<String, Number>> dataPoints = new ArrayList<>();
+    private void pageViewsByCategoryChart(List<Website> websites) {
+        pageViewsByCategoryChart.getData().clear();
 
-        for (Website website : websites) {
-            dataPoints.add(new ChartData<>(website.getWebsiteName(), website.getBounceRate()));
-        }
+        Map<WebsiteType, Long> countByCategory = websites.stream()
+                .collect(Collectors.groupingBy(Website::getWebsiteCategory, Collectors.counting()));
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Bounce Rate");
+        XYChart.Series<String,Number> series = new XYChart.Series<>();
 
-        for (ChartData<String, Number> data : dataPoints) {
-            XYChart.Data<String, Number> chartData = new XYChart.Data<>(data.getX(), data.getY());
-            series.getData().add(chartData);
-        }
+        countByCategory.forEach((category,count) ->
+                series.getData().add(new XYChart.Data<>(category.name(), count)));
 
-        bounceRateChart.getData().clear();
-        bounceRateChart.getData().add(series);
+        pageViewsByCategoryChart.getData().add(series);
+
+        CategoryAxis xAxis = (CategoryAxis)pageViewsByCategoryChart.getXAxis();
+        xAxis.setTickLabelRotation(-45);
+        pageViewsByCategoryChart.setLegendVisible(false);
+
     }
 
 }

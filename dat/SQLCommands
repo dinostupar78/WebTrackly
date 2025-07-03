@@ -1,4 +1,4 @@
-CREATE TABLE USER(
+CREATE TABLE APP_USER(
     ID LONG GENERATED ALWAYS AS IDENTITY,
     FIRST_NAME VARCHAR(30) NOT NULL,
     LAST_NAME VARCHAR(30) NOT NULL,
@@ -6,32 +6,43 @@ CREATE TABLE USER(
     NATIONALITY VARCHAR(30) NOT NULL,
     GENDER_TYPE VARCHAR(15) NOT NULL,
     USERNAME VARCHAR(50) NOT NULL,
-    HASHED_PASSWORD VARCHAR(255) NOT NULL,
+    EMAIL VARCHAR(100) NOT NULL,
+    PASSWORD VARCHAR(255) NOT NULL,
     ROLE VARCHAR(30) NOT NULL,
+    WEBSITE_ID LONG NOT NULL,
     PRIMARY KEY (ID)
 
 );
+
+INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID) VALUES
+('Alice', 'Johnson', '1992-05-14 15:00:00', 'USA', 'FEMALE', 'alicej92',  'alicej92@gmail.com ', 'hashed_pw_123', 'AdminRole', 1),
+('Bob', 'Smith', '1985-08-22 05:00:00', 'Canada', 'MALE', 'bobsmith85', 'bobsmith85@gmail.com ', 'hashed_pw_456', 'AdminRole', 2),
+('Charlie', 'Brown', '1998-02-10 01:00:00', 'UK', 'MALE', 'charlieb98', 'charlieb98@gmail.com ', 'hashed_pw_789', 'MarketingRole', 3),
+('David', 'Lee', '1990-11-30 00:03:00', 'Australia', 'MALE', 'davidl90', 'davidl90@gmail.com ', 'hashed_pw_234', 'MarketingRole', 4),
+('Eva', 'Martinez', '1995-07-19 22:00:00', 'Spain', 'FEMALE', 'evam95', 'evam95@gmail.com ', 'hashed_pw_567', 'MarketingRole', 5);
 
 CREATE TABLE WEBSITE(
     ID LONG GENERATED ALWAYS AS IDENTITY,
-    WEBSITE_NAME VARCHAR(25) NOT NULL,
-    WEBSITE_CLICKS INTEGER NOT NULL,
+    WEBSITE_NAME VARCHAR(80) NOT NULL,
     WEBSITE_URL VARCHAR(255) NOT NULL,
-    WEBSITE_USER_COUNT INTEGER NOT NULL,
-    BOUNCE_RATE DECIMAL(6,2) NOT NULL,
+    WEBSITE_CATEGORY VARCHAR(60) NOT NULL,
+    WEBSITE_DESCRIPTION VARCHAR(255) NOT NULL,
     PRIMARY KEY (ID)
 
 );
 
-CREATE TABLE WEBSITE_USER(
-    ID LONG GENERATED ALWAYS AS IDENTITY,
-    USER_ID LONG NOT NULL,
-    WEBSITE_ID LONG NOT NULL,
-    FOREIGN KEY(USER_ID) REFERENCES USER(ID),
-    FOREIGN KEY(WEBSITE_ID) REFERENCES WEBSITE(ID)
-    PRIMARY KEY (ID)
+INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_URL, WEBSITE_CATEGORY, WEBSITE_DESCRIPTION) VALUES
+('TechWorld',     'https://www.techworld.com',     'BUSINESS',    'Blog o najnovijim tehnološkim trendovima.'),
+('HealthPlus',    'https://www.healthplus.com',    'HEALTH',        'Savjeti i članci o zdravlju i wellnessu.'),
+('EduLearn',      'https://www.edulearn.com',      'EDUCATIONAL',     'Online tečajevi i obrazovni materijali.'),
+('ShopEase',      'https://www.shopease.com',      'ECOMMERCE',    'Praktična e-commerce platforma za male trgovce.'),
+('FoodieHub',     'https://www.foodiehub.com',     'FOOD',  'Recepti, recenzije restorana i kulinarski savjeti.'),
+('TravelSphere',  'https://www.travelsphere.com',  'SOCIAL_MEDIA',        'Vodiči za putovanja i najbolji travel hacks.'),
+('FinanceGuru',   'https://www.financeguru.com',   'EDUCATIONAL',       'Novosti i savjeti za osobne i poslovne financije.'),
+('MovieMania',    'https://www.moviemania.com',    'SOCIAL_MEDIA', 'Recenzije filmova, najave i kulturne vijesti.'),
+('SportZone',     'https://www.sportzone.com',     'SPORTS',        'Najnovije sportske vijesti i analize utakmica.'),
+('MusicVibes',    'https://www.musicvibes.com',    'MUSIC',         'Streaming glazbe i intervjui s izvođačima.');
 
-);
 
 CREATE TABLE SESSION(
     ID LONG GENERATED ALWAYS AS IDENTITY,
@@ -47,15 +58,15 @@ CREATE TABLE SESSION(
 );
 
 CREATE TABLE USER_ACTION(
-    ID LONG GENERATED ALWAYS AS IDENTITY,
+    ID LONG GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     USER_ID LONG NOT NULL,
-    ACTION VARCHAR(30) NOT NULL,
+    SESSION_ID LONG NOT NULL,
+    ACTION VARCHAR(255) NOT NULL,
     WEBSITE_ID LONG NOT NULL,
     ACTION_TIMESTAMP TIMESTAMP NOT NULL,
     DETAILS VARCHAR(255) NOT NULL,
-    FOREIGN KEY(USER_ID) REFERENCES USER(ID),
-    FOREIGN KEY(WEBSITE_ID) REFERENCES WEBSITE(ID),
-    PRIMARY KEY (ID)
+    FOREIGN KEY(USER_ID) REFERENCES APP_USER(ID),
+    FOREIGN KEY(WEBSITE_ID) REFERENCES WEBSITE(ID)
 
 );
 
@@ -63,19 +74,12 @@ CREATE TABLE TRAFFIC_RECORD(
     ID LONG GENERATED ALWAYS AS IDENTITY,
     WEBSITE_ID LONG NOT NULL,
     TIME_OF_VISIT TIMESTAMP NOT NULL,
-    SESSION_ID LONG NOT NULL,
+    INTEGER USER_COUNT NOT NULL,
+    INTEGER PAGE_VIEWS NOT NULL,
+    DECIMAL(6,2) BOUNCE_RATE NOT NULL,
     FOREIGN KEY(WEBSITE_ID) REFERENCES WEBSITE(ID),
     FOREIGN KEY(SESSION_ID) REFERENCES SESSION(ID),
     PRIMARY KEY (ID)
 
 );
 
-CREATE TABLE NOTIFICATION(
-    ID LONG GENERATED ALWAYS AS IDENTITY,
-    WEBSITE_ID LONG NOT NULL,
-    NOTIFICATION_TIMESTAMP TIMESTAMP NOT NULL,
-    NOTIFICATION_TYPE VARCHAR(30) NOT NULL,
-    FOREIGN KEY(WEBSITE_ID) REFERENCES WEBSITE(ID),
-    PRIMARY KEY (ID)
-
-);
