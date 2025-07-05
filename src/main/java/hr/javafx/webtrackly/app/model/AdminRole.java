@@ -9,6 +9,6 @@ public final class AdminRole implements Role{
 
     @Override
     public String toString() {
-        return "AdminRole";
+        return "Admin";
     }
 }

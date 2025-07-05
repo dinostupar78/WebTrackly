@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository2;
+import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
@@ -8,9 +9,9 @@ import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
@@ -20,16 +21,13 @@ public class WebsiteEditController {
     private TextField websiteEditTextFieldName;
 
     @FXML
-    private TextField websiteEditTextFieldClicks;
-
-    @FXML
     private TextField websiteEditTextFieldUrl;
 
     @FXML
-    private TextField websiteEditTextFieldUsers;
+    private ComboBox<WebsiteType> websiteEditComboBoxCategory;
 
     @FXML
-    private TextField websiteEditTextFieldBounceRate;
+    private TextField websiteEditTextFieldDescription;
 
     private WebsiteDbRepository2<Website> websiteRepository = new WebsiteDbRepository2<>();
     private Website website;
@@ -38,10 +36,16 @@ public class WebsiteEditController {
         this.website = website;
 
         websiteEditTextFieldName.setText(website.getWebsiteName());
-        //websiteEditTextFieldClicks.setText(String.valueOf(website.getWebsiteClicks()));
         websiteEditTextFieldUrl.setText(website.getWebsiteUrl());
-        //websiteEditTextFieldUsers.setText(String.valueOf(website.getWebsiteUserCount()));
-        //websiteEditTextFieldBounceRate.setText(String.valueOf(website.getBounceRate()));
+        websiteEditComboBoxCategory.getItems().setAll(WebsiteType.values());
+        websiteEditTextFieldDescription.setText(website.getWebsiteDescription());
+    }
+
+    public void initialize() {
+        websiteEditTextFieldName.setText("");
+        websiteEditTextFieldUrl.setText("");
+        websiteEditComboBoxCategory.getItems().setAll(WebsiteType.values());
+        websiteEditTextFieldDescription.setText("");
     }
 
     public void editWebsite(){
@@ -54,24 +58,22 @@ public class WebsiteEditController {
                 errorMessages.append("Name is required!\n");
             }
 
-            Integer clicks = Integer.parseInt(websiteEditTextFieldClicks.getText());
-            if (clicks < 0 || websiteEditTextFieldClicks.getText().isEmpty()) {
-                errorMessages.append("Clicks are required and needs to be a positive number!\n");
-            }
-
             String url = websiteEditTextFieldUrl.getText();
             if (url.isEmpty()) {
                 errorMessages.append("Url is required!\n");
             }
 
-            Integer users = Integer.parseInt(websiteEditTextFieldUsers.getText());
-            if (users < 0 || websiteEditTextFieldUsers.getText().isEmpty()) {
-                errorMessages.append("Users are required and needs to be positive number!\n");
+            WebsiteType websiteType = websiteEditComboBoxCategory.getValue();
+            Optional<WebsiteType> selectedType = Optional.ofNullable(websiteType);
+            if (selectedType.isPresent()) {
+                websiteType = selectedType.get();
+            } else {
+                errorMessages.append("Category is required!\n");
             }
 
-            BigDecimal bounceRate = new BigDecimal(websiteEditTextFieldBounceRate.getText());
-            if(bounceRate.compareTo(BigDecimal.ZERO) < 0 || bounceRate.compareTo(BigDecimal.valueOf(100)) > 0){
-                errorMessages.append("Bounce rate must be a positive number less than 100!\n");
+            String description = websiteEditTextFieldDescription.getText();
+            if (description.isEmpty()) {
+                errorMessages.append("Description is required!\n");
             }
 
             if (errorMessages.length() > 0){
@@ -81,11 +83,10 @@ public class WebsiteEditController {
 
                 Website newWebsite = new Website.Builder()
                         .setId(website.getId())
-                        .setWebsiteName(websiteEditTextFieldName.getText())
-                        //.setWebsiteClicks(Integer.parseInt(websiteEditTextFieldClicks.getText()))
-                        .setWebsiteUrl(websiteEditTextFieldUrl.getText())
-                        //.setWebsiteUserCount(Integer.parseInt(websiteEditTextFieldUsers.getText()))
-                        //.setBounceRate(bounceRate)
+                        .setWebsiteName(name)
+                        .setWebsiteUrl(url)
+                        .setWebsiteCategory(websiteType)
+                        .setWebsiteDescription(description)
                         .setUsers(new HashSet<>())
                         .build();
 
@@ -111,10 +112,10 @@ public class WebsiteEditController {
 
     private void clearForm(){
         websiteEditTextFieldName.clear();
-        websiteEditTextFieldClicks.clear();
         websiteEditTextFieldUrl.clear();
-        websiteEditTextFieldUsers.clear();
-        websiteEditTextFieldBounceRate.clear();
+        websiteEditComboBoxCategory.getSelectionModel().select(WebsiteType.OTHER);
+        websiteEditTextFieldDescription.clear();
+
     }
 
 }

@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.DbDataException;
@@ -8,14 +7,12 @@ import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepository<T> {
@@ -98,6 +95,16 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
 
     @Override
     public synchronized void save(List<T> entities){
+        while (dbLock) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.error("Error while saving websites to database: {}", e.getMessage());
+                throw new RepositoryException("Error while saving websites to database");
+            }
+        }
+        dbLock = true;
         String sql = "INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_URL, WEBSITE_CATEGORY, WEBSITE_DESCRIPTION) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -114,11 +121,23 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         } catch (SQLException | IOException | DbConnectionException e) {
             log.error("Error while saving websites to database: {}", e.getMessage());
             throw new RepositoryException("Error while saving websites to database");
+        } finally {
+            dbLock = false;
+            notifyAll();
         }
     }
 
     @Override
     public synchronized void save(T entity){
+        while (dbLock) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RepositoryException(e);
+            }
+        }
+        dbLock = true;
         String sql = "INSERT INTO WEBSITE (WEBSITE_NAME, WEBSITE_URL, WEBSITE_CATEGORY, WEBSITE_DESCRIPTION) " +
                 "VALUES (?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -132,11 +151,14 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         } catch (SQLException | IOException | DbConnectionException e) {
             log.error("Error while saving website to database: {}", e.getMessage());
             throw new RepositoryException("Error while saving website to database");
+        } finally {
+            dbLock = false;
+            notifyAll();
         }
     }
 
 
-    private static Website extractWebsiteFromResultSet(ResultSet resultSet) throws SQLException, DbDataException {
+    public static Website extractWebsiteFromResultSet(ResultSet resultSet) throws SQLException, DbDataException {
         Long id = resultSet.getLong("ID");
         String websiteName = resultSet.getString("WEBSITE_NAME");
         String websiteUrl = resultSet.getString("WEBSITE_URL");

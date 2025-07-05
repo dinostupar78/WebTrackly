@@ -11,7 +11,10 @@ public class DataSerializeUtil {
 
     private static final String FILE_PATH = "user.dat";
 
+    private static Boolean dbLock = false;
+
     public static void serializeData(DataSerialization object) {
+
         List<DataSerialization> changes = deserializeData();
         changes.add(object);
 

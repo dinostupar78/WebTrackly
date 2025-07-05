@@ -25,16 +25,16 @@
                   <Insets bottom="10" left="10" right="10" top="10" />
                </padding>
             </HBox>
-            <TextField fx:id="loginTextFieldUsername" layoutX="162.0" layoutY="191.0" prefHeight="35.0" prefWidth="112.0" promptText="Username" styleClass="search-input" />
+            <TextField fx:id="registerTextFieldUsername" layoutX="162.0" layoutY="191.0" prefHeight="35.0" prefWidth="112.0" promptText="Username" styleClass="search-input" />
             <Button layoutX="241.0" layoutY="589.0" onAction="#onClickRegister" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Register" />
             <Label layoutX="215.0" layoutY="98.0" styleClass="login-header" text="Register" />
             <ComboBox fx:id="registerComboBoxRole" layoutX="162.0" layoutY="530.0" prefHeight="35.0" prefWidth="150.0" promptText="Role" styleClass="search-combo" />
             <TextField fx:id="registerTextFieldFirstName" layoutX="162.0" layoutY="241.0" prefHeight="35.0" prefWidth="112.0" promptText="First Name" styleClass="search-input" />
             <TextField fx:id="registerTextFieldLastName" layoutX="162.0" layoutY="287.0" prefHeight="35.0" prefWidth="112.0" promptText="Last Name" styleClass="search-input" />
             <DatePicker fx:id="registerDatePickerBirth" layoutX="162.0" layoutY="334.0" prefHeight="35.0" prefWidth="240.0" promptText="Date of Birth" styleClass="search-datePicker" />
-            <PasswordField fx:id="registerTextFieldNationality" layoutX="162.0" layoutY="384.0" promptText="Nationality" styleClass="passwordField-input" />
             <PasswordField fx:id="registerTextFieldPassword" layoutX="162.0" layoutY="433.0" promptText="Password" styleClass="passwordField-input" />
             <ComboBox fx:id="registerComboBoxGender" layoutX="162.0" layoutY="482.0" prefHeight="35.0" prefWidth="150.0" promptText="Gender" styleClass="search-combo" />
+            <TextField fx:id="registerTextFieldNationality" layoutX="162.0" layoutY="382.0" prefHeight="35.0" prefWidth="112.0" promptText="Nationality" styleClass="search-input" />
          </children></AnchorPane>
       <AnchorPane prefHeight="781.0" prefWidth="572.0">
          <children>

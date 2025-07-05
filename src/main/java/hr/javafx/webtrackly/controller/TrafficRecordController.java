@@ -37,9 +37,6 @@ public class TrafficRecordController {
     private TextField trafficTextFieldWebsite;
 
     @FXML
-    private DatePicker trafficDatePickerTime;
-
-    @FXML
     private TableView<TrafficRecord> trafficRecordTableView;
 
     @FXML
@@ -158,14 +155,6 @@ public class TrafficRecordController {
         if(!(trafficRecordWebsite.isEmpty())){
             initialTrafficRecordList = initialTrafficRecordList.stream()
                     .filter(traffic -> traffic.getWebsite().getWebsiteName().contains(trafficRecordWebsite))
-                    .toList();
-        }
-
-        if (trafficDatePickerTime.getValue() != null) {
-            String trafficRecordVisit = trafficDatePickerTime.getValue()
-                    .format(DateTimeFormatter.ISO_LOCAL_DATE);
-            initialTrafficRecordList = initialTrafficRecordList.stream()
-                    .filter(traffic -> traffic.getTimeOfVisit().toString().contains(trafficRecordVisit))
                     .toList();
         }
 

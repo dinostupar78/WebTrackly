@@ -1,13 +1,20 @@
 package hr.javafx.webtrackly.controller;
-
+import hr.javafx.webtrackly.app.db.SessionDbRepository3;
+import hr.javafx.webtrackly.app.db.UserActionDbRepository3;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository3;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.threads.DisplayMostFrequentActionThread;
+import hr.javafx.webtrackly.threads.DisplayMostFrequentCategoryThread;
+import hr.javafx.webtrackly.threads.DisplayMostFrequentDeviceThread;
+import hr.javafx.webtrackly.threads.DisplayMostFrequentUrlThread;
 import hr.javafx.webtrackly.utils.RowDeletion2Util;
 import hr.javafx.webtrackly.utils.RowEditUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeButtonUtil;
-import hr.javafx.webtrackly.utils.WebsiteLabelUtil;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -20,11 +27,11 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-
+import javafx.util.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import static javafx.animation.Animation.INDEFINITE;
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class WebsiteController {
@@ -56,22 +63,22 @@ public class WebsiteController {
     private TableColumn<Website, String> websiteTableColumnDescription;
 
     @FXML
-    private Label totalUsersLabel;
+    private Label mostFrequentDeviceLabel;
 
     @FXML
-    private Label newUsersLabel;
+    private Label mostFrequentDeviceCountLabel;
 
     @FXML
-    private Label totalClicksLabel;
+    private Label mostFrequentActionCountLabel;
 
     @FXML
-    private Label highestClicksLabel;
+    private Label mostFrequentActionLabel;
 
     @FXML
-    private Label avgBounceRateLabel;
+    private Label mostFrequentCategoryCountLabel;
 
     @FXML
-    private Label highestBounceRateLabel;
+    private Label mostFrequentCategoryLabel;
 
     @FXML
     private Label mostFrequentDomainLabel;
@@ -89,8 +96,9 @@ public class WebsiteController {
     private PieChart categoryBreakdownChart;
 
     WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
-
-    private WebsiteLabelUtil cardsUtil;
+    WebsiteDbRepository3 websiteRepository3 = new WebsiteDbRepository3();
+    UserActionDbRepository3 userActionRepository3 = new UserActionDbRepository3();
+    SessionDbRepository3 sessionRepository3 = new SessionDbRepository3();
 
     @FXML
     private void openAddWebsiteScreen(ActionEvent event) {
@@ -132,10 +140,6 @@ public class WebsiteController {
             ScreenChangeButtonUtil.openWebsiteEditScreen(container.getData());
         });
 
-
-
-
-
     }
 
     public void filterWebsites() {
@@ -164,13 +168,45 @@ public class WebsiteController {
         pageViewsByCategoryChart(initialWebsiteList);
         showCategoryBreakdownPieChart(initialWebsiteList);
 
-        cardsUtil = new WebsiteLabelUtil(
-                mostFrequentDomainLabel,
-                mostFrequentDomainCountLabel
+        DisplayMostFrequentDeviceThread deviceThread =
+                new DisplayMostFrequentDeviceThread(
+                        sessionRepository3,
+                        mostFrequentDeviceLabel,
+                        mostFrequentDeviceCountLabel
+                );
+
+        DisplayMostFrequentActionThread actionThread =
+                new DisplayMostFrequentActionThread(
+                        userActionRepository3,
+                        mostFrequentActionLabel,
+                        mostFrequentActionCountLabel
+                );
+
+        DisplayMostFrequentUrlThread urlThread =
+                new DisplayMostFrequentUrlThread(
+                        websiteRepository3,
+                        mostFrequentDomainLabel,
+                        mostFrequentDomainCountLabel
+                );
+
+        DisplayMostFrequentCategoryThread categoryThread =
+                new DisplayMostFrequentCategoryThread(
+                        websiteRepository3,
+                        mostFrequentCategoryLabel,
+                        mostFrequentCategoryCountLabel
+                );
+
+        Timeline tl = new Timeline(
+                new KeyFrame(Duration.ZERO, e -> {
+                    new Thread(deviceThread).start();
+                    new Thread(actionThread).start();
+                    new Thread(categoryThread).start();
+                    new Thread(urlThread).start();
+                }),
+                new KeyFrame(Duration.seconds(30))
         );
-
-        cardsUtil.frequentDomainLabel();
-
+        tl.setCycleCount(INDEFINITE);
+        tl.play();
     }
 
     private void showCategoryBreakdownPieChart(List<Website> websites) {

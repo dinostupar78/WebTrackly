@@ -27,8 +27,9 @@
                     </columnResizePolicy>
                     <columns>
                         <TableColumn fx:id="userColumnID" prefWidth="64.0" text="ID" />
-                        <TableColumn fx:id="userColumnUsername" prefWidth="108.0" text="Username" />
-                  <TableColumn fx:id="userColumnEmail" prefWidth="194.0" text="Email" />
+                        <TableColumn fx:id="userColumnUsername" prefWidth="103.0" text="Username" />
+                  <TableColumn fx:id="userColumnWebsite" prefWidth="117.0" text="Website" />
+                  <TableColumn fx:id="userColumnEmail" prefWidth="172.0" text="Email" />
                         <TableColumn fx:id="userColumnFirstName" minWidth="0.0" prefWidth="95.0" text="First Name" />
                         <TableColumn fx:id="userColumnLastName" prefWidth="115.0" text="Last Name" />
                         <TableColumn fx:id="userColumnNationality" prefWidth="120.0" text="Nationality" />

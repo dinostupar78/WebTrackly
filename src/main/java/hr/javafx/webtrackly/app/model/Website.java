@@ -2,7 +2,6 @@ package hr.javafx.webtrackly.app.model;
 
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public class Website extends Entity {
@@ -11,17 +10,15 @@ public class Website extends Entity {
     private WebsiteType websiteCategory;
     private String websiteDescription;
     private Set<User> users;
-    private LocalDateTime createdAt;
 
     public Website(Long id, String websiteName, String websiteUrl, WebsiteType websiteCategory,
-                   String websiteDescription, Set<User> users, LocalDateTime createdAt) {
+                   String websiteDescription, Set<User> users) {
         super(id);
         this.websiteName = websiteName;
         this.websiteUrl = websiteUrl;
         this.websiteCategory = websiteCategory;
         this.websiteDescription = websiteDescription;
         this.users = users;
-        this.createdAt = createdAt;
     }
 
     public String getWebsiteName() {
@@ -64,14 +61,6 @@ public class Website extends Entity {
         this.users = users;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public static class Builder{
         private Long id;
         private String websiteName;
@@ -79,7 +68,6 @@ public class Website extends Entity {
         private WebsiteType websiteCategory;
         private String websiteDescription;
         private Set<User> users;
-        private LocalDateTime createdAt;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -111,13 +99,8 @@ public class Website extends Entity {
             return this;
         }
 
-        public Builder setCreatedAt(LocalDateTime createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
         public Website build(){
-            return new Website(id, websiteName, websiteUrl, websiteCategory, websiteDescription, users, createdAt);
+            return new Website(id, websiteName, websiteUrl, websiteCategory, websiteDescription, users);
         }
     }
 
@@ -130,7 +113,6 @@ public class Website extends Entity {
                 ", websiteCategory=" + websiteCategory +
                 ", websiteDescription='" + websiteDescription + '\'' +
                 ", users=" + users +
-                ", createdAt=" + createdAt +
                 '}';
     }
 }

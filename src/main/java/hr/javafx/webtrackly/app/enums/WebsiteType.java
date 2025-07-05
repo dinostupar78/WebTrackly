@@ -14,7 +14,8 @@ public enum WebsiteType {
     SOCIAL_MEDIA,
     EDUCATIONAL,
     GOVERNMENT,
-    NON_PROFIT
+    NON_PROFIT,
+    OTHER
 
 
 }

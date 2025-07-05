@@ -8,6 +8,6 @@ public final class MarketingRole implements Role {
 
     @Override
     public String toString() {
-        return "MarketingRole";
+        return "Marketing";
     }
 }

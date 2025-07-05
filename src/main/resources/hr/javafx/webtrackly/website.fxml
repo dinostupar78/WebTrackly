@@ -20,32 +20,32 @@
     <fx:include source="sidebar.fxml" />
       <AnchorPane styleClass="content-root" stylesheets="@css/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" layoutX="22.0" layoutY="105.0" prefHeight="116.0" prefWidth="162.0" spacing="5" styleClass="stat-card">
+            <VBox alignment="CENTER" layoutX="10.0" layoutY="105.0" prefHeight="116.0" prefWidth="180.0" spacing="5" styleClass="stat-card">
                <children>
-                  <Label styleClass="card-title" text="Total Users" />
-                  <Label fx:id="totalUsersLabel" styleClass="card-value" text="N/A" />
-                  <Label fx:id="newUsersLabel" styleClass="card-subvalue" text="New Users Today: N/A" />
+                  <Label fx:id="totalUsersLabel" styleClass="card-title" text="Most Frequent Device" />
+                  <Label fx:id="mostFrequentDeviceLabel" styleClass="card-value" text="N/A" />
+                  <Label fx:id="mostFrequentDeviceCountLabel" styleClass="card-subvalue" text="Number of Devices: N/A" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" layoutX="198.0" layoutY="105.0" prefHeight="116.0" prefWidth="133.0" spacing="5" styleClass="stat-card">
+            <VBox alignment="CENTER" layoutX="197.0" layoutY="105.0" prefHeight="116.0" prefWidth="181.0" spacing="5" styleClass="stat-card">
                <children>
-                  <Label styleClass="card-title" text="Total Clicks" />
-                  <Label fx:id="totalClicksLabel" styleClass="card-value" text="N/A" />
-                  <Label fx:id="highestClicksLabel" styleClass="card-subvalue" text="Highest Clicks: N/A" />
+                  <Label fx:id="totalClicksLabel" styleClass="card-title" text="Most Frequent Action" />
+                  <Label fx:id="mostFrequentActionLabel" styleClass="card-value" text="N/A" />
+                  <Label fx:id="mostFrequentActionCountLabel" styleClass="card-subvalue" text="Number of Actions: N/A" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" layoutX="346.0" layoutY="105.0" prefHeight="116.0" prefWidth="231.0" spacing="5" styleClass="stat-card">
+            <VBox alignment="CENTER" layoutX="386.0" layoutY="105.0" prefHeight="116.0" prefWidth="193.0" spacing="5" styleClass="stat-card">
                <children>
                   <Label styleClass="card-title" text="Most Frequent Domain" />
                   <Label fx:id="mostFrequentDomainCountLabel" styleClass="card-value" text="N/A" />
                   <Label fx:id="mostFrequentDomainLabel" styleClass="card-subvalue" text="Number of Domains: N/A" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" layoutX="590.0" layoutY="105.0" prefHeight="116.0" prefWidth="188.0" spacing="5" styleClass="stat-card">
+            <VBox alignment="CENTER" layoutX="587.0" layoutY="105.0" prefHeight="116.0" prefWidth="193.0" spacing="5" styleClass="stat-card">
                <children>
-                  <Label styleClass="card-title" text="Avg. Bounce Rate" />
-                  <Label fx:id="avgBounceRateLabel" styleClass="card-value" text="N/A" />
-                  <Label fx:id="highestBounceRateLabel" styleClass="card-subvalue" text="Highest Bouce Rate: N/A" />
+                  <Label prefHeight="20.0" prefWidth="182.0" styleClass="card-title" text="Most Frequent Category" />
+                  <Label fx:id="mostFrequentCategoryCountLabel" styleClass="card-value" text="N/A" />
+                  <Label fx:id="mostFrequentCategoryLabel" styleClass="card-subvalue" text="Number of Categories: N/A" />
                </children>
             </VBox>
             <HBox alignment="CENTER" layoutX="116.0" layoutY="40.0" spacing="10" styleClass="toolbar">

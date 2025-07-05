@@ -70,7 +70,7 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane animated="false" text=" User">
+                        <TitledPane fx:id="menuUser" animated="false" text=" User">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="USER_CIRCLE" size="30" />
                            </graphic>
@@ -86,7 +86,7 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane animated="false" text=" Logs">
+                        <TitledPane fx:id="menuLog" animated="false" text=" Logs">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="HISTORY" size="30" />
                            </graphic>
@@ -98,21 +98,6 @@
                                  <children>
                                     <Button onAction="#onClickShowLogPanel" styleClass="sidebar-subbutton" text="Show Logs" />
                                     <Button onAction="#onClickShowDataSerializationPanel" styleClass="sidebar-subbutton" text="Data Serialization" />
-                                 </children>
-                              </VBox>
-                           </content>
-                        </TitledPane>
-                        <TitledPane animated="false" text=" About">
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="QUESTION_CIRCLE" size="30" />
-                           </graphic>
-                           <content>
-                              <VBox spacing="5">
-                                 <padding>
-                                    <Insets bottom="0" left="10" right="0" top="0" />
-                                 </padding>
-                                 <children>
-                                    <Button styleClass="sidebar-subbutton" text="Credits" />
                                  </children>
                               </VBox>
                            </content>

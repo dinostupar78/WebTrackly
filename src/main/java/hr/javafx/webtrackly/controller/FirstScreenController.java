@@ -14,7 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Menu;
+import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,10 +22,10 @@ import java.util.Optional;
 
 public class FirstScreenController {
     @FXML
-    private Menu menuUser;
+    private TitledPane menuUser;
 
     @FXML
-    private Menu menuLog;
+    private TitledPane menuLog;
 
     public void initialize() {
         User currentUser = UserSession.getInstance().getCurrentUser();

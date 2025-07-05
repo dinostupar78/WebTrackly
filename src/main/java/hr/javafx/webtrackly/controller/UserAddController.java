@@ -99,7 +99,7 @@ public class UserAddController {
         try {
             validateEmail(email);
             if(email.isEmpty()){
-                errorMessages.append("Username is required!\n");
+                errorMessages.append("Email is required!\n");
             }
         } catch (EMailValidatorException e) {
             errorMessages.append(e.getMessage()).append("\n");

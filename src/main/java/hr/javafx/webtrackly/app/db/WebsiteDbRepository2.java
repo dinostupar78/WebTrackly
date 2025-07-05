@@ -14,13 +14,27 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class WebsiteDbRepository2<T extends Website> {
 
-    public  void delete(Long id){
+    private static boolean dbLock = false;
+
+    public synchronized void delete(Long id){
+        while (dbLock) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RepositoryException(e);
+            }
+        }
+        dbLock = true;
         try (Connection connection = DbActiveUtil.connectToDatabase()) {
             connection.setAutoCommit(false);
             performDeleteOperation(connection, id);
         } catch (IOException | SQLException | DbConnectionException e) {
-            log.error("Error while deleting website from database: {}", e.getMessage());
-            throw new RepositoryException("Error while deleting website from database");
+            log.error("Error while deleting website from database: {}", e);
+            throw new RepositoryException("Error while deleting website from database", e);
+        } finally {
+            dbLock = false;
+            notifyAll();
         }
     }
 
@@ -68,7 +82,16 @@ public class WebsiteDbRepository2<T extends Website> {
         }
     }
 
-    public void update(T entity) throws RepositoryException {
+    public synchronized void update(T entity) throws RepositoryException {
+        while (dbLock) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RepositoryException(e);
+            }
+        }
+        dbLock = true;
         String query = "UPDATE WEBSITE SET WEBSITE_NAME = ?, WEBSITE_URL = ?, WEBSITE_CATEGORY = ?, " +
                 "WEBSITE_DESCRIPTION = ? WHERE ID = ?";
 
@@ -85,6 +108,15 @@ public class WebsiteDbRepository2<T extends Website> {
         } catch (IOException | SQLException | DbConnectionException e) {
             log.error("Error while updating website in database: {}", e.getMessage());
             throw new RepositoryException("Error while updating website in database");
+        } finally {
+            dbLock = false;
+            notifyAll();
         }
     }
+
+
 }
+
+
+
+

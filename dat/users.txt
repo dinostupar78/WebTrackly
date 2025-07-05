@@ -43,4 +43,12 @@ MALE
 perokvrzic34
 c67b911ba59080abce820aa470cab9b1ffd5d2df644cb796228a47ff7fabf92e
 MarketingRole
-
+6
+Ivo
+Ivic
+2025-06-30
+Srbin
+MALE
+ivoivic34
+c67b911ba59080abce820aa470cab9b1ffd5d2df644cb796228a47ff7fabf92e
+MarketingRole

@@ -3,6 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.UserDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
+import hr.javafx.webtrackly.app.exception.EMailValidatorException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
@@ -12,6 +13,8 @@ import javafx.scene.control.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static hr.javafx.webtrackly.controller.UserAddController.validateEmail;
 
 public class UserEditController {
     @FXML
@@ -108,8 +111,13 @@ public class UserEditController {
             }
 
             String email = userEditTextFieldEmail.getText();
-            if(email.isEmpty()){
-                errorMessages.append("Email is required!\n");
+            try {
+                validateEmail(email);
+                if(email.isEmpty()){
+                    errorMessages.append("Email is required!\n");
+                }
+            } catch (EMailValidatorException e) {
+                errorMessages.append(e.getMessage()).append("\n");
             }
 
             String password = userEditTextFieldPassword.getText();

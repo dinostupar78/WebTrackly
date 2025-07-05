@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
+import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
@@ -48,6 +49,9 @@ public class UserController {
     private TableColumn<User, String> userColumnUsername;
 
     @FXML
+    private TableColumn<User, String> userColumnWebsite;
+
+    @FXML
     private TableColumn<User, String> userColumnEmail;
 
     @FXML
@@ -62,6 +66,7 @@ public class UserController {
     @FXML
     private Button deleteUser;
 
+    private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
 
     public void initialize(){
@@ -72,6 +77,12 @@ public class UserController {
         userColumnUsername.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getUsername()))
         );
+
+        userColumnWebsite.setCellValueFactory(cellData -> {
+            Long websiteId = cellData.getValue().getWebsiteId();
+            Website website = websiteRepository.findById(websiteId);
+            return new SimpleStringProperty(website != null ? website.getWebsiteName() : "No Website");
+        });
 
         userColumnEmail.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getEmail()))

@@ -45,6 +45,11 @@ public class LogController {
         logColumnLevel.setCellValueFactory(new PropertyValueFactory<>("level"));
         logColumnMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
 
+
+
+    }
+
+    public void filterLogs() {
         logComboBoxLogLevel.setItems(observableArrayList("ALL", "INFO", "WARNING", "ERROR", "DEBUG"));
         logComboBoxLogLevel.setValue("ALL");
 
@@ -69,9 +74,6 @@ public class LogController {
 
         logTableView.setItems(logEntries);
 
-    }
-
-    public void filterLogs() {
         String keyword = logTextFieldKeyword.getText().toLowerCase();
         String selectedLevel = logComboBoxLogLevel.getValue();
         LocalDate selectedDate = logDatePickerDate.getValue();
