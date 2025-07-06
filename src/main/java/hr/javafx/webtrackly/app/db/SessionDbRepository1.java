@@ -1,15 +1,11 @@
 package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.DeviceType;
-import hr.javafx.webtrackly.app.exception.DbConnectionException;
-import hr.javafx.webtrackly.app.exception.DbDataException;
-import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
-import hr.javafx.webtrackly.app.exception.RepositoryException;
+import hr.javafx.webtrackly.app.exception.*;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.sql.*;
@@ -18,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static hr.javafx.webtrackly.main.HelloApplication.log;
-import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 
 public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -30,11 +25,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public T findById(Long id) {
-        if (!DbActiveUtil.isDatabaseOnline()) {
-            log.error("Database is inactive. Please check your connection.");
-            showAlert("Database error", "Database is inactive. Please check your connection.", Alert.AlertType.ERROR);
-        }
-
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
@@ -44,10 +34,10 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                     return (T) extractFromSessionResultSet(resultSet);
                 } else {
                     log.error("Session with id {} not found! ", id);
-                    throw new EmptyResultSetException("Session with id not found!");
+                    throw new EntityNotFoundException("Session with id not found!");
                 }
             }
-        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+        } catch (IOException | SQLException | DbConnectionException | InvalidDataException e) {
             log.error("Error while fetching session from database: {}", e.getMessage());
             throw new RepositoryException("Error while fetching session from database");
         }
@@ -55,11 +45,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public List<T> findAll()  {
-        if (!DbActiveUtil.isDatabaseOnline()) {
-            log.error("Database is inactive. Please check your connection.");
-            showAlert("Database error", "Database is inactive. Please check your connection.", Alert.AlertType.ERROR);
-        }
-
         List<T> sessions = new ArrayList<>();
         try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();
@@ -68,7 +53,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             while (resultSet.next()) {
                 sessions.add((T) extractFromSessionResultSet(resultSet));
             }
-        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+        } catch (IOException | SQLException | DbConnectionException | InvalidDataException e) {
             log.error("Error while fetching sessions from database: {}", e.getMessage());
             throw new RepositoryException("Error while fetching sessions from database");
         }
@@ -92,7 +77,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 stmt.addBatch();
             }
             stmt.executeBatch();
-        } catch (SQLException | IOException | DbConnectionException e) {
+        } catch (SQLException | IOException | DbConnectionException  e) {
             log.error("Error while saving sessions to database: {}", e.getMessage());
             throw new RepositoryException("Error while saving sessions to database");
         }
@@ -121,7 +106,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     }
 
-    public static Session extractFromSessionResultSet(ResultSet resultSet) throws SQLException, DbDataException {
+    public static Session extractFromSessionResultSet(ResultSet resultSet) throws SQLException, InvalidDataException {
         Long id = resultSet.getLong("ID");
 
         Long userId = resultSet.getLong("USER_ID");
@@ -139,7 +124,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             deviceType = DeviceType.valueOf(deviceTypeStr.toUpperCase());
         } catch (IllegalArgumentException e){
             log.error("Device type not found! {}", deviceTypeStr);
-            throw new DbDataException("Device type not found!" + deviceTypeStr);
+            throw new InvalidDataException("Device type not found!" + deviceTypeStr);
         }
 
         LocalDateTime startTime = resultSet.getTimestamp("START_TIME").toLocalDateTime();

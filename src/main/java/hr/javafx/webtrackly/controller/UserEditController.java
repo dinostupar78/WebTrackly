@@ -174,6 +174,7 @@ public class UserEditController {
                 DataSerializeUtil.serializeData(change);
                 ShowAlertUtil.showAlert("Success", "User updated successfully!", Alert.AlertType.INFORMATION);
                 clearForm();
+
             }
         } else {
             ShowAlertUtil.showAlert("Error", "Session not updated!", Alert.AlertType.ERROR);

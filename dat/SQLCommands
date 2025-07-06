@@ -20,11 +20,11 @@ CREATE TABLE APP_USER (
 );
 
 INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID) VALUES
-('Alice', 'Johnson', '1992-05-14 15:00:00', 'USA', 'FEMALE', 'alicej92',  'alicej92@gmail.com ', 'hashed_pw_123', 'AdminRole', 1),
-('Bob', 'Smith', '1985-08-22 05:00:00', 'Canada', 'MALE', 'bobsmith85', 'bobsmith85@gmail.com ', 'hashed_pw_456', 'AdminRole', 2),
-('Charlie', 'Brown', '1998-02-10 01:00:00', 'UK', 'MALE', 'charlieb98', 'charlieb98@gmail.com ', 'hashed_pw_789', 'MarketingRole', 3),
-('David', 'Lee', '1990-11-30 00:03:00', 'Australia', 'MALE', 'davidl90', 'davidl90@gmail.com ', 'hashed_pw_234', 'MarketingRole', 4),
-('Eva', 'Martinez', '1995-07-19 22:00:00', 'Spain', 'FEMALE', 'evam95', 'evam95@gmail.com ', 'hashed_pw_567', 'MarketingRole', 5);
+('Alice', 'Johnson', '1992-05-14 15:00:00', 'USA', 'FEMALE', 'alicej92',  'alicej92@gmail.com ', 'hashed_pw_123', 'Admin', 1),
+('Bob', 'Smith', '1985-08-22 05:00:00', 'Canada', 'MALE', 'bobsmith85', 'bobsmith85@gmail.com ', 'hashed_pw_456', 'Admin', 2),
+('Charlie', 'Brown', '1998-02-10 01:00:00', 'UK', 'MALE', 'charlieb98', 'charlieb98@gmail.com ', 'hashed_pw_789', 'Marketing', 3),
+('David', 'Lee', '1990-11-30 00:03:00', 'Australia', 'MALE', 'davidl90', 'davidl90@gmail.com ', 'hashed_pw_234', 'Marketing', 4),
+('Eva', 'Martinez', '1995-07-19 22:00:00', 'Spain', 'FEMALE', 'evam95', 'evam95@gmail.com ', 'hashed_pw_567', 'Marketing', 5);
 
 CREATE TABLE WEBSITE(
     ID LONG GENERATED ALWAYS AS IDENTITY,

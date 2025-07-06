@@ -1,8 +1,9 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.db.UserDbRepository1;
+import hr.javafx.webtrackly.app.db.UserDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
+import hr.javafx.webtrackly.app.exception.DuplicateEntityException;
 import hr.javafx.webtrackly.app.exception.EMailValidatorException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class UserAddController {
     @FXML
@@ -48,8 +51,8 @@ public class UserAddController {
     @FXML
     private ComboBox<Website> userComboBoxWebsite;
 
-    private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+    private UserDbRepository2<User> userRepository = new UserDbRepository2<>();
 
     public void initialize() {
         userComboBoxGender.getItems().setAll(GenderType.values());
@@ -128,38 +131,54 @@ public class UserAddController {
 
         if(errorMessages.length() > 0){
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
-        } else{
-            User newUser = new User.Builder()
-                    .setName(firstName)
-                    .setSurname(lastName)
-                    .setPersonalData(new PersonalData(dateOfBirth, nationality, gender))
-                    .setUsername(username)
-                    .setEmail(email)
-                    .setPassword(hashedPassword)
-                    .setRole(role)
-                    .setWebsiteId(websiteId)
-                    .build();
-
-            userRepository.save(newUser);
-
-            String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
-                    .map(User::getRole)
-                    .map(Role::toString)
-                    .orElse("UNKNOWN");
-
-            DataSerialization change = new DataSerialization(
-                    "User Created",
-                    "N/A",
-                    newUser.toString(),
-                    roleString,
-                    LocalDateTime.now()
-            );
-
-            DataSerializeUtil.serializeData(change);
-            ShowAlertUtil.showAlert("Success", "User is successfully added!", Alert.AlertType.INFORMATION);
-            clearForm();
         }
+        else {
+            try{
+                userRepository.findByUsername(username)
+                        .ifPresent(user -> {
+                            throw new DuplicateEntityException("Username " + username + " already exists.");
+                        });
 
+                userRepository.findByEmail(email)
+                        .ifPresent(user -> {
+                            throw new DuplicateEntityException("Email " + email + " already exists.");
+                        });
+
+                User newUser = new User.Builder()
+                        .setName(firstName)
+                        .setSurname(lastName)
+                        .setPersonalData(new PersonalData(dateOfBirth, nationality, gender))
+                        .setUsername(username)
+                        .setEmail(email)
+                        .setPassword(hashedPassword)
+                        .setRole(role)
+                        .setWebsiteId(websiteId)
+                        .build();
+
+                userRepository.save(newUser);
+
+                String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                        .map(User::getRole)
+                        .map(Role::toString)
+                        .orElse("UNKNOWN");
+
+                DataSerialization change = new DataSerialization(
+                        "User Created",
+                        "N/A",
+                        newUser.toString(),
+                        roleString,
+                        LocalDateTime.now()
+                );
+
+                DataSerializeUtil.serializeData(change);
+                ShowAlertUtil.showAlert("Success", "User is successfully added!", Alert.AlertType.INFORMATION);
+                clearForm();
+
+            } catch (DuplicateEntityException ex) {
+                log.warn("Duplicate field: {}", ex.getMessage());
+                ShowAlertUtil.showAlert("Error", ex.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
     }
 
     public static Boolean validateEmail(String email) throws EMailValidatorException {

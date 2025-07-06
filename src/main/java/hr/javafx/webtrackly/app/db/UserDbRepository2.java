@@ -7,10 +7,11 @@ import hr.javafx.webtrackly.utils.DbActiveUtil;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Optional;
 
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
-public class UserDbRepository2<T extends User> {
+public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
     public void update(T entity){
         String query = "UPDATE APP_USER " +
                 "SET FIRST_NAME = ?, LAST_NAME = ?, DATE_OF_BIRTH = ?, NATIONALITY = ?, " +
@@ -91,6 +92,43 @@ public class UserDbRepository2<T extends User> {
         } catch (SQLException e) {
             log.error("Error while deleting user from database: {}", e.getMessage());
             throw new RepositoryException("Error while deleting user from database");
+        }
+    }
+
+    public Optional<User> findByUsername(String username) {
+        String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID WHERE USERNAME = ?";
+        try (Connection connection = DbActiveUtil.connectToDatabase();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, username);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(extractUserFromResultSet(rs));
+                }
+            }
+            return Optional.empty();
+
+        } catch (Exception e) {
+            throw new RepositoryException("Error checking username", e);
+        }
+    }
+
+    public Optional<User> findByEmail(String email) {
+
+        String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID WHERE EMAIL = ?";
+        try (Connection connection = DbActiveUtil.connectToDatabase();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, email);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(extractUserFromResultSet(rs));
+                }
+            }
+            return Optional.empty();
+
+        } catch (Exception e) {
+            throw new RepositoryException("Error checking email", e);
         }
     }
 

@@ -1,7 +1,7 @@
 package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
-import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
+import hr.javafx.webtrackly.app.exception.EntityNotFoundException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
@@ -31,7 +31,7 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
                     return (T) extractTrafficRecordFromResultSet(resultSet);
                 } else {
                     log.error("Traffic record with id {} not found!", id);
-                    throw new EmptyResultSetException("Traffic record with id " + id + " not found!");
+                    throw new EntityNotFoundException("Traffic record with id " + id + " not found!");
                 }
             }
         } catch (IOException | SQLException | DbConnectionException e) {

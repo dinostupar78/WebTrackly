@@ -2,8 +2,8 @@ package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
-import hr.javafx.webtrackly.app.exception.DbDataException;
-import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
+import hr.javafx.webtrackly.app.exception.InvalidDataException;
+import hr.javafx.webtrackly.app.exception.EntityNotFoundException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
@@ -21,11 +21,11 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
 
     private static final String FIND_ALL_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID FROM APP_USER";
 
-    private static final String ROLE_ADMIN = "AdminRole";
+    private static final String ROLE_ADMIN = "Admin";
 
-    private static final String ROLE_MARKETING = "MarketingRole";
+    private static final String ROLE_MARKETING = "Marketing";
 
-    private static final String ROLE_USER = "UserRole";
+    private static final String ROLE_USER = "User";
 
     @Override
     public T findById(Long id){
@@ -38,10 +38,10 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
                     return (T) extractUserFromResultSet(resultSet);
                 } else {
                     log.error("User with id {} not found! ", id);
-                    throw new EmptyResultSetException("User with id " + id + " not found!");
+                    throw new EntityNotFoundException("User with id " + id + " not found!");
                 }
             }
-        } catch (IOException | SQLException | DbDataException | DbConnectionException e) {
+        } catch (IOException | SQLException | InvalidDataException | DbConnectionException e) {
             log.error("Error while fetching user from database: {}", e.getMessage());
             throw new RepositoryException("Error while fetching user from database");
         }
@@ -57,7 +57,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
             while (resultSet.next()) {
                 users.add((T) extractUserFromResultSet(resultSet));
             }
-        } catch (IOException | SQLException | DbDataException | DbConnectionException e) {
+        } catch (IOException | SQLException | InvalidDataException | DbConnectionException e) {
             log.error("Error while fetching users from database: {}", e.getMessage());
             throw new RepositoryException("Error while fetching users from database");
         }
@@ -140,7 +140,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         }
     }
 
-    public static User extractUserFromResultSet(ResultSet resultSet) throws DbDataException, SQLException {
+    public static User extractUserFromResultSet(ResultSet resultSet) throws InvalidDataException, SQLException {
         Long id = resultSet.getLong("ID");
         String firstName = resultSet.getString("FIRST_NAME");
         String lastName = resultSet.getString("LAST_NAME");
@@ -153,7 +153,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         try{
             gender = GenderType.valueOf(genderTypeString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new DbDataException("Unknown gender type: " + genderTypeString);
+            throw new InvalidDataException("Unknown gender type: " + genderTypeString);
         }
 
         String username = resultSet.getString("USERNAME");
@@ -170,7 +170,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
             role = new UserRole();
         } else {
             log.error("Unknown role type: {}", roleString);
-            throw new DbDataException("Unknown role type: " + roleString);
+            throw new InvalidDataException("Unknown role type: " + roleString);
         }
 
         Long websiteId = resultSet.getLong("WEBSITE_ID");

@@ -2,7 +2,8 @@ package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
-import hr.javafx.webtrackly.app.exception.DbDataException;
+import hr.javafx.webtrackly.app.exception.InvalidDataException;
+import hr.javafx.webtrackly.app.exception.EntityNotFoundException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.User;
@@ -36,10 +37,10 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
                     return (T) extractFromUserActionResultSet(resultSet);
                 } else {
                     log.error("User Action with id {} not found! ", id);
-                    throw new DbDataException("User Action with id " + id + " not found!");
+                    throw new EntityNotFoundException("User Action with id " + id + " not found!");
                 }
             }
-        } catch (DbDataException | DbConnectionException | SQLException | IOException e) {
+        } catch (InvalidDataException | DbConnectionException | SQLException | IOException e) {
             log.error("Error while trying to find User Action with id {}! ", id, e);
             throw new RepositoryException("Error while trying to find User Action with id !");
         }
@@ -55,7 +56,7 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
             while (resultSet.next()) {
                 actions.add((T) extractFromUserActionResultSet(resultSet));
             }
-        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+        } catch (IOException | SQLException | DbConnectionException | InvalidDataException e) {
             log.error("Error while trying to find all User Actions! ", e);
             throw new RepositoryException("Error while trying to find all User Actions!");
         }
@@ -109,7 +110,7 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     }
 
-    private static UserAction extractFromUserActionResultSet(ResultSet resultSet) throws SQLException, DbDataException {
+    private static UserAction extractFromUserActionResultSet(ResultSet resultSet) throws SQLException, InvalidDataException {
         Long id = resultSet.getLong("ID");
 
         Long userId = resultSet.getLong("USER_ID");
@@ -125,7 +126,7 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         try{
             behaviourType = BehaviourType.valueOf(action.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new DbDataException("Unknown behaviour type: " + action);
+            throw new InvalidDataException("Unknown behaviour type: " + action);
         }
 
         Long websiteId = resultSet.getLong("WEBSITE_ID");

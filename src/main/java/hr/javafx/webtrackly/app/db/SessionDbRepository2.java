@@ -53,8 +53,8 @@ public class SessionDbRepository2<T extends Session> {
         } catch (SQLException e) {
             try {
                 connection.rollback();
-            } catch (SQLException rollbackEx) {
-                log.error("Rollback failed: {}", rollbackEx.getMessage());
+            } catch (SQLException f) {
+                log.error("Rollback failed: {}", f.getMessage());
                 throw new RepositoryException("Rollback failed");
             }
             log.error("Error while deleting session from database: {}", e.getMessage());

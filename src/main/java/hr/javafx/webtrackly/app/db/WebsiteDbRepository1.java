@@ -2,8 +2,8 @@ package hr.javafx.webtrackly.app.db;
 
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
-import hr.javafx.webtrackly.app.exception.DbDataException;
-import hr.javafx.webtrackly.app.exception.EmptyResultSetException;
+import hr.javafx.webtrackly.app.exception.InvalidDataException;
+import hr.javafx.webtrackly.app.exception.EntityNotFoundException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
@@ -45,10 +45,11 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
                 if (resultSet.next()) {
                     return (T) extractWebsiteFromResultSet(resultSet);
                 } else {
-                    throw new EmptyResultSetException("Website with id " + id + " not found!");
+                    log.error("Website with id {} not found! ", id);
+                    throw new EntityNotFoundException("Website with id " + id + " not found!");
                 }
             }
-        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+        } catch (IOException | SQLException | DbConnectionException | InvalidDataException e) {
             log.error("Error while fetching website from database: {}", e.getMessage());
             throw new RepositoryException("Error while fetching website from database");
         } finally {
@@ -78,7 +79,7 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
             while (resultSet.next()) {
                 websites.add((T) extractWebsiteFromResultSet(resultSet));
             }
-        } catch (IOException | SQLException | DbConnectionException | DbDataException e) {
+        } catch (IOException | SQLException | DbConnectionException | InvalidDataException e) {
             log.error("Error while fetching websites from database: {}", e.getMessage());
             throw new RepositoryException("Error while fetching websites from database");
         } finally {
@@ -153,7 +154,7 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
     }
 
 
-    public static Website extractWebsiteFromResultSet(ResultSet resultSet) throws SQLException, DbDataException {
+    public static Website extractWebsiteFromResultSet(ResultSet resultSet) throws SQLException, InvalidDataException {
         Long id = resultSet.getLong("ID");
         String websiteName = resultSet.getString("WEBSITE_NAME");
         String websiteUrl = resultSet.getString("WEBSITE_URL");
@@ -165,7 +166,7 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
             websiteType = WebsiteType.valueOf(websiteCat.toUpperCase());
         } catch (IllegalArgumentException e){
             log.error("Device type not found! {}", websiteCat);
-            throw new DbDataException("Device type not found!" + websiteCat);
+            throw new InvalidDataException("Device type not found!" + websiteCat);
         }
         String websiteDescription = resultSet.getString("WEBSITE_DESCRIPTION");
         Set<User> users = fetchUsersForWebsite(id);
@@ -196,7 +197,7 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
                     users.add(user);
                 }
             }
-        } catch (DbDataException | SQLException | IOException | DbConnectionException e) {
+        } catch (InvalidDataException | SQLException | IOException | DbConnectionException e) {
             log.error("Error fetching users for website ID: {}", websiteId);
             throw new RepositoryException("Error fetching users for website ID: " + websiteId, e);
         }
