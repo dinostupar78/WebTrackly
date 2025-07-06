@@ -5,7 +5,7 @@ public class Person extends Entity {
     private String lastName;
     private PersonalData personalData;
 
-    public Person() {
+    protected Person() {
         super();
     }
 

@@ -7,8 +7,12 @@ public class User extends Person implements Serializable {
     private String username;
     private String email;
     private String password;
-    private Role role;
+    private transient Role role;
     private Long websiteId;
+
+    public User() {
+        super();
+    }
 
     public User(Long id, String name, String surname, PersonalData personalData,
                 String username, String email, String password, Role role, Long websiteId) {

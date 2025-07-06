@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class WebsiteDbRepository3 {
 
-    private static Boolean dbLock = false;
+    private static boolean dbLock = false;
 
     public synchronized Optional<WebsiteType> findMostFrequentCategory() {
         while (dbLock) {

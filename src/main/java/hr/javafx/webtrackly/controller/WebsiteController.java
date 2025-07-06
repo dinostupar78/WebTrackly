@@ -31,7 +31,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -216,7 +216,7 @@ public class WebsiteController {
     private void showCategoryBreakdownPieChart(List<Website> websites) {
         categoryBreakdownChart.getData().clear();
 
-        Map<WebsiteType, Long> countByCategory = new HashMap<>();
+        Map<WebsiteType, Long> countByCategory = new EnumMap<>(WebsiteType.class);
         for(Website w : websites) {
             WebsiteType category = w.getWebsiteCategory();
             Long newCount = countByCategory.getOrDefault(category, 0L) + 1;

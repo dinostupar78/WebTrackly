@@ -14,7 +14,7 @@ public class Session extends Entity{
     private LocalDateTime endTime;
     private boolean isActive;
 
-    public Session(Long id, Website website, User user, DeviceType deviceType, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive) {
+    public Session(Long id, Website website, User user, DeviceType deviceType, LocalDateTime startTime, LocalDateTime endTime, boolean isActive) {
         super(id);
         this.website = website;
         this.user = user;
@@ -147,9 +147,7 @@ public class Session extends Entity{
                 Optional.ofNullable(endTime)
                         .map(DateFormatterUtil::formatLocalDateTime)
                         .orElse("N/A"),
-                Optional.of(isActive)
-                        .map(active -> active ? "Yes" : "No")
-                        .orElse("N/A")
+                isActive ? "Yes" : "No"
 
         );
     }

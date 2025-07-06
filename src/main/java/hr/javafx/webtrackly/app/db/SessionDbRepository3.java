@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class SessionDbRepository3 {
 
-    private Boolean dbLock = false;
+    private boolean dbLock = false;
 
     public synchronized Optional<DeviceType> findMostFrequentDeviceType() {
         while (dbLock) {
