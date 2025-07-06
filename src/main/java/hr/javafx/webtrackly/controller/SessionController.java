@@ -19,16 +19,15 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -37,10 +36,10 @@ public class SessionController {
     private TextField sessionTextFieldID;
 
     @FXML
-    private DatePicker sessionDatePickerStartDate;
+    private TextField sessionTextFieldWebsite;
 
     @FXML
-    private DatePicker sessionDatePickerEndDate;
+    private TextField sessionTextFieldUser;
 
     @FXML
     private TableView<Session> sessionTableView;
@@ -140,17 +139,17 @@ public class SessionController {
                     .toList();
         }
 
-        if (sessionDatePickerStartDate.getValue() != null) {
-            LocalDate filterStartDate = sessionDatePickerStartDate.getValue();
+        String websiteName = sessionTextFieldWebsite.getText();
+        if(!(websiteName.isEmpty())){
             initialSessionList = initialSessionList.stream()
-                    .filter(session -> session.getStartTime().toLocalDate().equals(filterStartDate))
+                    .filter(session -> session.getWebsite().getWebsiteName().contains(websiteName))
                     .toList();
         }
 
-        if (sessionDatePickerEndDate.getValue() != null) {
-            LocalDate filterEndDate = sessionDatePickerEndDate.getValue();
+        String userName = sessionTextFieldUser.getText();
+        if(!(userName.isEmpty())){
             initialSessionList = initialSessionList.stream()
-                    .filter(session -> session.getEndTime().toLocalDate().equals(filterEndDate))
+                    .filter(session -> session.getUser().getUsername().contains(userName))
                     .toList();
         }
 
@@ -162,7 +161,7 @@ public class SessionController {
 
         sessionTableView.setItems(sortedList);
 
-        showDeviceDistributionPieChart();
+        showDeviceDistributionPieChart(initialSessionList);
         showSessionActivityLineChart(initialSessionList);
 
     }
@@ -171,38 +170,52 @@ public class SessionController {
         sessionActivityLineChart.getData().clear();
         sessionActivityLineChart.setLegendVisible(false);
 
-        Map<LocalDateTime, Long> countsByHour = sessions.stream()
-                .map(s -> s.getStartTime().truncatedTo(ChronoUnit.HOURS))
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        Map<LocalDateTime, Integer> countsByHour = new HashMap<>();
+        for (Session s : sessions) {
+            LocalDateTime hour = s.getEndTime().truncatedTo(ChronoUnit.HOURS);
+            Integer newCount = Optional.ofNullable(countsByHour.get(hour))
+                    .map(prev -> prev + 1)
+                    .orElse(1);
 
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM-dd HH:mm");
-        List<ChartData<String, Long>> chartData = countsByHour.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(e -> new ChartData<>(e.getKey().format(fmt), e.getValue()))
-                .toList();
+            countsByHour.put(hour, newCount);
+        }
+
+        List<LocalDateTime> sortedHours = new ArrayList<>(countsByHour.keySet());
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (ChartData<String, Long> data : chartData) {
-            series.getData().add(new XYChart.Data<>(data.getX(), data.getY()));
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM-dd HH:mm");
+
+        for (LocalDateTime hour : sortedHours) {
+            String label = hour.format(fmt);
+            Integer count = countsByHour.get(hour);
+            series.getData().add(new XYChart.Data<>(label, count));
         }
 
         sessionActivityLineChart.getData().add(series);
-
         CategoryAxis xAxis = (CategoryAxis)sessionActivityLineChart.getXAxis();
         xAxis.setTickLabelRotation(-45);
     }
 
-    private void showDeviceDistributionPieChart() {
+    private void showDeviceDistributionPieChart(List<Session> sessions) {
         sessionDeviceDistributionPieChart.getData().clear();
 
-        List<Session> sessions = sessionRepository.findAll();
+        Map<DeviceType, Integer> deviceCounts = new EnumMap<>(DeviceType.class);
+        for (Session s : sessions) {
+            DeviceType dt = s.getDeviceType();
+            Integer newCount = Optional.ofNullable(deviceCounts.get(dt))
+                    .map(prev -> prev + 1)
+                    .orElse(1);
+            deviceCounts.put(dt, newCount);
+        }
 
-        Map<DeviceType, Long> countDevices = sessions.stream()
-                .collect(Collectors.groupingBy(Session::getDeviceType, Collectors.counting()));
+        List<ChartData<String, Integer>> chartData = deviceCounts.entrySet().stream()
+                .map(e -> new ChartData<>(e.getKey().name(), e.getValue()))
+                .toList();
 
-        countDevices.forEach((device, count) ->
-                sessionDeviceDistributionPieChart.getData().add(new PieChart.Data(device.name(), count))
-        );
+        for (ChartData<String, Integer> cd : chartData) {
+            sessionDeviceDistributionPieChart.getData()
+                    .add(new PieChart.Data(cd.getX(), cd.getY()));
+        }
 
         sessionDeviceDistributionPieChart.setLegendSide(Side.BOTTOM);
         sessionDeviceDistributionPieChart.setLabelsVisible(true);

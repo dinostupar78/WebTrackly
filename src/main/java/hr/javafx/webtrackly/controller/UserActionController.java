@@ -18,14 +18,15 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -37,7 +38,7 @@ public class UserActionController {
     private TextField actionTextFieldUser;
 
     @FXML
-    private DatePicker actionDatePickerTimestamp;
+    private TextField actionTextFieldAction;
 
     @FXML
     private TableView<UserAction> userActionTableView;
@@ -134,11 +135,10 @@ public class UserActionController {
                     .toList();
         }
 
-        if (actionDatePickerTimestamp.getValue() != null) {
-            String userActionTimestamp = actionDatePickerTimestamp.getValue()
-                    .format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String userAction = actionTextFieldAction.getText();
+        if(!(userAction.isEmpty())){
             initialUserActionList = initialUserActionList.stream()
-                    .filter(action -> action.getTimestamp().toString().contains(userActionTimestamp))
+                    .filter(action -> action.getAction().name().contains(userAction))
                     .toList();
         }
 
@@ -159,9 +159,15 @@ public class UserActionController {
         userActionAreaChart.getData().clear();
         userActionAreaChart.setLegendVisible(false);
 
-        Map<LocalDateTime, Long> countsByHour = actions.stream()
-                .map(ua -> ua.getTimestamp().truncatedTo(ChronoUnit.HOURS))
-                .collect(Collectors.groupingBy(h -> h, Collectors.counting()));
+        Map<LocalDateTime, Integer> countsByHour = new HashMap<>();
+        for (UserAction ua : actions) {
+            LocalDateTime hour = ua.getTimestamp().truncatedTo(ChronoUnit.HOURS);
+            Integer newCount = Optional.ofNullable(countsByHour.get(hour))
+                    .map(prev -> prev + 1)
+                    .orElse(1);
+
+            countsByHour.put(hour, newCount);
+        }
 
         XYChart.Series<String,Number> series = new XYChart.Series<>();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM-dd HH:mm");
@@ -169,12 +175,10 @@ public class UserActionController {
         CategoryAxis xAxis = (CategoryAxis) userActionAreaChart.getXAxis();
         xAxis.setTickLabelRotation(-45);
 
-        countsByHour.keySet().stream().sorted()
-                .forEach(hour -> {
-                    series.getData().add(
-                            new XYChart.Data<>( hour.format(fmt), countsByHour.get(hour) )
-                    );
-                });
+        countsByHour.keySet().stream()
+                .sorted()
+                .forEach(hour -> series.getData().add(new XYChart.Data<>( hour.format(fmt), countsByHour.get(hour))));
+
 
         userActionAreaChart.getData().add(series);
     }
@@ -182,12 +186,17 @@ public class UserActionController {
     private void showUserActionBehaviourTypeChart(List<UserAction> actions) {
         userActionBehaviourTypeChart.getData().clear();
 
-        Map<BehaviourType, Long> byType = actions.stream()
-                .collect(Collectors.groupingBy(UserAction::getAction, Collectors.counting()));
+        Map<BehaviourType, Integer> counts = new EnumMap<>(BehaviourType.class);
+        for (UserAction ua : actions) {
+            BehaviourType type = ua.getAction();
+            Integer newCount = Optional.ofNullable(counts.get(type))
+                    .map(prev -> prev + 1)
+                    .orElse(1);
+            counts.put(type, newCount);
+        }
 
-        byType.forEach((type,count) ->
-                userActionBehaviourTypeChart.getData()
-                        .add(new PieChart.Data(type.name(), count))
+        counts.forEach((type, count) ->
+                userActionBehaviourTypeChart.getData().add(new PieChart.Data(type.name(), count))
         );
 
         userActionBehaviourTypeChart.setLegendSide(Side.BOTTOM);

@@ -1,9 +1,11 @@
 package hr.javafx.webtrackly.controller;
+
 import hr.javafx.webtrackly.app.db.SessionDbRepository3;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository3;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository3;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
+import hr.javafx.webtrackly.app.generics.ChartData;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.threads.DisplayMostFrequentActionThread;
@@ -28,9 +30,11 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Duration;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 import static javafx.animation.Animation.INDEFINITE;
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -90,7 +94,7 @@ public class WebsiteController {
     private Button deleteWebsite;
 
     @FXML
-    private BarChart<String, Number> pageViewsByCategoryChart;
+    private BarChart<String, Number> usersByWebsiteChart;
 
     @FXML
     private PieChart categoryBreakdownChart;
@@ -165,7 +169,7 @@ public class WebsiteController {
         sortedList.comparatorProperty().bind(websiteTableView.comparatorProperty());
         websiteTableView.setItems(sortedList);
 
-        pageViewsByCategoryChart(initialWebsiteList);
+        usersByWebsiteChart(initialWebsiteList);
         showCategoryBreakdownPieChart(initialWebsiteList);
 
         DisplayMostFrequentDeviceThread deviceThread =
@@ -212,32 +216,37 @@ public class WebsiteController {
     private void showCategoryBreakdownPieChart(List<Website> websites) {
         categoryBreakdownChart.getData().clear();
 
-        Map<WebsiteType, Long> byCategory = websites.stream()
-                .collect(Collectors.groupingBy(Website::getWebsiteCategory, Collectors.counting()));
+        Map<WebsiteType, Long> countByCategory = new HashMap<>();
+        for(Website w : websites) {
+            WebsiteType category = w.getWebsiteCategory();
+            Long newCount = countByCategory.getOrDefault(category, 0L) + 1;
+            countByCategory.put(category, newCount);
+        }
 
-        byCategory.forEach((category, count) ->
+        countByCategory.forEach((category, count) ->
                 categoryBreakdownChart.getData().add(new PieChart.Data(category.name(), count)));
 
         categoryBreakdownChart.setLegendSide(Side.BOTTOM);
         categoryBreakdownChart.setLabelsVisible(true);
     }
 
-    private void pageViewsByCategoryChart(List<Website> websites) {
-        pageViewsByCategoryChart.getData().clear();
+    private void usersByWebsiteChart(List<Website> websites) {
+        usersByWebsiteChart.getData().clear();
 
-        Map<WebsiteType, Long> countByCategory = websites.stream()
-                .collect(Collectors.groupingBy(Website::getWebsiteCategory, Collectors.counting()));
+        List<ChartData<String, Integer>> chartDataList = websites.stream()
+                .map(website -> new ChartData<>(website.getWebsiteName(), website.getUsers().size()))
+                .toList();
 
-        XYChart.Series<String,Number> series = new XYChart.Series<>();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
 
-        countByCategory.forEach((category,count) ->
-                series.getData().add(new XYChart.Data<>(category.name(), count)));
+        for(ChartData<String, Integer> data : chartDataList) {
+            series.getData().add(new XYChart.Data<>(data.getX(), data.getY()));
+        }
 
-        pageViewsByCategoryChart.getData().add(series);
-
-        CategoryAxis xAxis = (CategoryAxis)pageViewsByCategoryChart.getXAxis();
+        usersByWebsiteChart.getData().add(series);
+        CategoryAxis xAxis = (CategoryAxis) usersByWebsiteChart.getXAxis();
         xAxis.setTickLabelRotation(-45);
-        pageViewsByCategoryChart.setLegendVisible(false);
+        usersByWebsiteChart.setLegendVisible(false);
 
     }
 

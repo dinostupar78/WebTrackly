@@ -17,8 +17,7 @@ public class SessionDbRepository2<T extends Session> {
     public void update(T entity){
         String query = "UPDATE SESSION " +
                 "SET WEBSITE_ID = ?, USER_ID = ?, DEVICE_TYPE = ?, " +
-                "START_TIME = ?, END_TIME = ?, IS_ACTIVE = ?, TRAFFIC_RECORD_ID = ? " +
-                "WHERE ID = ?";
+                "START_TIME = ?, END_TIME = ?, IS_ACTIVE = ? WHERE ID = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -28,8 +27,7 @@ public class SessionDbRepository2<T extends Session> {
             stmt.setTimestamp(4, Timestamp.valueOf(entity.getStartTime()));
             stmt.setTimestamp(5, Timestamp.valueOf(entity.getEndTime()));
             stmt.setBoolean(6, entity.getActive());
-            stmt.setLong(7, entity.getTrafficRecordId());
-            stmt.setLong(8, entity.getId());
+            stmt.setLong(7, entity.getId());
 
             stmt.executeUpdate();
         } catch (IOException | SQLException | DbConnectionException e) {

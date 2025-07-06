@@ -49,9 +49,6 @@ public class SessionAddController {
     @FXML
     private ComboBox<Boolean> sessionComboBoxActivity;
 
-    @FXML
-    private ComboBox<TrafficRecord> sessionComboBoxTrafficRecord;
-
     private ObjectBinding<LocalDateTime> startDateTimeBinding;
 
     private ObjectBinding<LocalDateTime> endDateTimeBinding;
@@ -66,7 +63,6 @@ public class SessionAddController {
         sessionComboBoxUser.getItems().setAll(userRepository.findAll());
         sessionComboBoxDeviceType.getItems().setAll(DeviceType.values());
         sessionComboBoxActivity.getItems().setAll(TRUE, FALSE);
-        sessionComboBoxTrafficRecord.getItems().setAll(trafficRecordRepository.findAll());
 
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
         LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
@@ -145,17 +141,6 @@ public class SessionAddController {
             errorMessages.append("Activity is required!\n");
         }
 
-        TrafficRecord selectedTrafficRecord = sessionComboBoxTrafficRecord.getValue();
-        Optional<TrafficRecord> optTrafficRecord = Optional.ofNullable(selectedTrafficRecord);
-        if (optTrafficRecord.isPresent()) {
-            selectedTrafficRecord = optTrafficRecord.get();
-        } else {
-            errorMessages.append("Traffic record is required!\n");
-        }
-        Long trafficRecordId = Optional.ofNullable(selectedTrafficRecord)
-                .map(TrafficRecord::getId)
-                .orElse(null);
-
         if (errorMessages.length() > 0) {
             ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
         } else {
@@ -166,7 +151,6 @@ public class SessionAddController {
                     .setStartTime(startDateTime)
                     .setEndTime(endDateTime)
                     .setActive(activity)
-                    .setTrafficRecordId(trafficRecordId)
                     .build();
 
             sessionRepository.save(newSession);
@@ -191,7 +175,6 @@ public class SessionAddController {
             sessionDatePickerEndDate.getEditor().clear();
             sessionTextFieldEndTime.clear();
             sessionComboBoxActivity.getSelectionModel().clearSelection();
-            sessionComboBoxTrafficRecord.getSelectionModel().clearSelection();
 
         }
     }

@@ -62,8 +62,8 @@
             </HBox>
             <VBox alignment="CENTER" layoutX="21.0" layoutY="241.0" prefHeight="270.0" prefWidth="373.0" spacing="5" styleClass="chart-panel">
                <children>
-                  <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Page Views By Category" />
-                  <BarChart fx:id="pageViewsByCategoryChart" animated="false">
+                  <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="chart-title" text="Users By Website" />
+                  <BarChart fx:id="usersByWebsiteChart" animated="false">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>

@@ -20,10 +20,10 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
-            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION WHERE ID = ?";
+            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE FROM SESSION WHERE ID = ?";
 
     private static final String FIND_ALL_QUERY =
-            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID FROM SESSION";
+            "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE FROM SESSION";
 
 
     @Override
@@ -73,8 +73,8 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public void save(List<T> entities) {
-        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -85,7 +85,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 stmt.setTimestamp(4, Timestamp.valueOf(entity.getStartTime()));
                 stmt.setTimestamp(5, Timestamp.valueOf(entity.getEndTime()));
                 stmt.setBoolean(6, entity.getActive());
-                stmt.setLong(7, entity.getTrafficRecordId());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -98,8 +97,8 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public void save(T entity) {
-        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE, TRAFFIC_RECORD_ID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -109,7 +108,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             stmt.setTimestamp(4, Timestamp.valueOf(entity.getStartTime()));
             stmt.setTimestamp(5, Timestamp.valueOf(entity.getEndTime()));
             stmt.setBoolean(6, entity.getActive());
-            stmt.setLong(7, entity.getTrafficRecordId());
             stmt.executeUpdate();
 
         } catch (SQLException | IOException | DbConnectionException e) {
@@ -144,8 +142,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
         LocalDateTime endTime = resultSet.getTimestamp("END_TIME").toLocalDateTime();
         Boolean active = resultSet.getObject("IS_ACTIVE") != null ? resultSet.getBoolean("IS_ACTIVE") : null;
 
-        Long trafficRecordId = resultSet.getLong("TRAFFIC_RECORD_ID");
-
         return new Session.Builder()
                 .setId(id)
                 .setUser(user)
@@ -154,7 +150,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 .setStartTime(startTime)
                 .setEndTime(endTime)
                 .setActive(active)
-                .setTrafficRecordId(trafficRecordId)
                 .build();
 
     }

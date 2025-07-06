@@ -1,4 +1,5 @@
 package hr.javafx.webtrackly.controller;
+
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviourType;
@@ -18,15 +19,18 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class TrafficRecordController {
@@ -173,37 +177,43 @@ public class TrafficRecordController {
 
         pageViewsChart.setLegendVisible(false);
 
-        LocalDateTime cutoff = LocalDateTime.now().minusHours(200);
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM-dd HH:mm");
+        LocalDateTime last24hours = LocalDateTime.now().minusHours(200);
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("MM-dd HH:mm");
 
+        List<TrafficRecord> recent = new ArrayList<>();
+        for (TrafficRecord r : data) {
+            if (!r.getTimeOfVisit().isBefore(last24hours)) {
+                recent.add(r);
+            }
+        }
+
+        recent.sort(Comparator.comparing(TrafficRecord::getTimeOfVisit));
         XYChart.Series<String,Number> series = new XYChart.Series<>();
 
-        CategoryAxis xAxis = (CategoryAxis) pageViewsChart.getXAxis();
-        xAxis.setTickLabelRotation(-45);
-
-        data.stream()
-                .filter(r -> !r.getTimeOfVisit().isBefore(cutoff))
-                .sorted(Comparator.comparing(TrafficRecord::getTimeOfVisit))
-                .forEach(r -> {
-                    String timeLabel = r.getTimeOfVisit().format(fmt);
-                    series.getData().add(new XYChart.Data<>(timeLabel, r.getPageViews()));
-                });
+        for (TrafficRecord trafficRecord : recent) {
+            String label = trafficRecord.getTimeOfVisit().format(formatDate);
+            series.getData().add(new XYChart.Data<>(label, trafficRecord.getPageViews()));
+        }
 
         pageViewsChart.getData().add(series);
+        CategoryAxis xAxis = (CategoryAxis) pageViewsChart.getXAxis();
+        xAxis.setTickLabelRotation(-45);
     }
 
     private void showPageViewsBySiteChart(List<TrafficRecord> data) {
         totalPageViewsChart.getData().clear();
 
-        LocalDateTime cutoff = LocalDateTime.now().minusHours(200);
+        LocalDateTime last24hours = LocalDateTime.now().minusHours(200);
 
-        Map<String, Integer> viewsBySite = data.stream()
-                .filter(r -> !r.getTimeOfVisit().isBefore(cutoff))
-                .collect(Collectors.toMap(
-                        r -> r.getWebsite().getWebsiteName(),
-                        TrafficRecord::getPageViews,
-                        Integer::sum
-                ));
+        Map<String,Integer> viewsBySite = new HashMap<>();
+        for (TrafficRecord trafficRecord : data) {
+            if (!trafficRecord.getTimeOfVisit().isBefore(last24hours)) {
+                String site = trafficRecord.getWebsite().getWebsiteName();
+                viewsBySite.put(site,
+                        viewsBySite.getOrDefault(site, 0) + trafficRecord.getPageViews()
+                );
+            }
+        }
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Page-Views");

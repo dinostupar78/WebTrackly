@@ -49,9 +49,6 @@ public class SessionEditController {
     @FXML
     private ComboBox<Boolean> sessionEditComboBoxActivity;
 
-    @FXML
-    private ComboBox<TrafficRecord> sessionEditComboBoxTrafficRecord;
-
     private ObjectBinding<LocalDateTime> startDateTimeBinding;
 
     private ObjectBinding<LocalDateTime> endDateTimeBinding;
@@ -74,7 +71,6 @@ public class SessionEditController {
         sessionEditDatePickerEndDate.setValue(session.getEndTime().toLocalDate());
         sessionEditTextFieldEndTime.setText(session.getEndTime().toLocalTime().toString());
         sessionEditComboBoxActivity.setValue(session.getActive());
-        sessionEditComboBoxTrafficRecord.setValue(trafficRecordRepository.findById(session.getTrafficRecordId()));
     }
 
 
@@ -83,7 +79,6 @@ public class SessionEditController {
         sessionEditComboBoxUser.getItems().setAll(userRepository.findAll());
         sessionEditComboBoxDeviceType.getItems().setAll(DeviceType.values());
         sessionEditComboBoxActivity.getItems().setAll(TRUE, FALSE);
-        sessionEditComboBoxTrafficRecord.getItems().setAll(trafficRecordRepository.findAll());
 
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
         LocalTimeStringConverter converter = new LocalTimeStringConverter(timeFmt, timeFmt);
@@ -163,17 +158,6 @@ public class SessionEditController {
                 errorMessages.append("Activity is required!\n");
             }
 
-            TrafficRecord selectedTrafficRecord = sessionEditComboBoxTrafficRecord.getValue();
-            Optional<TrafficRecord> optTrafficRecord = Optional.ofNullable(selectedTrafficRecord);
-            if (optTrafficRecord.isPresent()) {
-                selectedTrafficRecord = optTrafficRecord.get();
-            } else {
-                errorMessages.append("Traffic record is required!\n");
-            }
-            Long trafficRecordId = Optional.ofNullable(selectedTrafficRecord)
-                    .map(TrafficRecord::getId)
-                    .orElse(null);
-
             if (errorMessages.length() > 0) {
                 ShowAlertUtil.showAlert("Error", errorMessages.toString(), Alert.AlertType.ERROR);
             } else {
@@ -187,7 +171,6 @@ public class SessionEditController {
                         .setStartTime(startDateTime)
                         .setEndTime(endDateTime)
                         .setActive(activity)
-                        .setTrafficRecordId(trafficRecordId)
                         .build();
 
                 sessionRepository.update(updatedSession);
@@ -219,6 +202,5 @@ public class SessionEditController {
         sessionEditDatePickerEndDate.getEditor().clear();
         sessionEditTextFieldEndTime.clear();
         sessionEditComboBoxActivity.getSelectionModel().clearSelection();
-        sessionEditComboBoxTrafficRecord.getSelectionModel().clearSelection();
     }
 }

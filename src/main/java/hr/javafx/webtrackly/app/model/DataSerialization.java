@@ -21,6 +21,10 @@ public class DataSerialization implements Serializable {
         this.changeTimestamp = changeTimestamp;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getFieldName() {
         return fieldName;
     }

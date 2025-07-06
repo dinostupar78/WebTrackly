@@ -6,7 +6,6 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -27,8 +26,8 @@
                     </padding>
                     <children>
                         <TextField fx:id="actionTextFieldID" prefHeight="25.0" prefWidth="112.0" promptText="Enter Session ID" styleClass="search-field" />
-                        <TextField fx:id="actionTextFieldUser" prefHeight="32.0" prefWidth="185.0" promptText="Enter Action User" styleClass="search-field" />
-                        <DatePicker fx:id="actionDatePickerTimestamp" prefHeight="32.0" prefWidth="174.0" promptText="Enter Timestamp" styleClass="search-datePicker" />
+                        <TextField fx:id="actionTextFieldUser" prefHeight="32.0" prefWidth="185.0" promptText="Enter User" styleClass="search-field" />
+                  <TextField fx:id="actionTextFieldAction" prefHeight="32.0" prefWidth="185.0" promptText="Enter Action" styleClass="search-field" />
                         <Button onAction="#filterUserActions" styleClass="action-button" text="Search" />
                         <Button onAction="#openAddUserActionScreen" styleClass="action-button" text="Add" />
                         <Button fx:id="deleteUserAction" styleClass="action-button" text="Delete" />

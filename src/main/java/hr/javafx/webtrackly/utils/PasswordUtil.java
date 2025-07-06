@@ -7,9 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class PasswordUtil {
-    private PasswordUtil() {
-        throw new UnsupportedOperationException("Utility class");
-    }
+    private PasswordUtil() {}
 
     public static String hashPassword(String password) {
         try {

@@ -100,20 +100,6 @@ public class UserController {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getPersonalData().nationality()))
         );
 
-        userComboBoxRole.getItems().clear();
-        userComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole(), new UserRole());
-
-        userComboBoxRole.setConverter(new javafx.util.StringConverter<Role>() {
-            @Override
-            public String toString(Role role) {
-                return (role != null) ? role.toString() : "";
-            }
-            @Override
-            public Role fromString(String string) {
-                return null;
-            }
-        });
-
         RowDeletion1Util.addUserRowDeletionHandler(userTableView);
 
         deleteUser.setOnAction(event -> RowDeletion1Util.deleteUserWithConfirmation(userTableView));

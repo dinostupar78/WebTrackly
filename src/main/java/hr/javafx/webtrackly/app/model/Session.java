@@ -13,9 +13,8 @@ public class Session extends Entity{
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Boolean isActive;
-    private Long trafficRecordId;
 
-    public Session(Long id, Website website, User user, DeviceType deviceType, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive, Long trafficRecord) {
+    public Session(Long id, Website website, User user, DeviceType deviceType, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive) {
         super(id);
         this.website = website;
         this.user = user;
@@ -23,7 +22,6 @@ public class Session extends Entity{
         this.startTime = startTime;
         this.endTime = endTime;
         this.isActive = isActive;
-        this.trafficRecordId = trafficRecord;
     }
 
     public Website getWebsite() {
@@ -80,20 +78,12 @@ public class Session extends Entity{
         isActive = active;
     }
 
-    public Long getTrafficRecordId() {
-        return trafficRecordId;
-    }
-
-    public void setTrafficRecordId(Long trafficRecordId) {
-        this.trafficRecordId = trafficRecordId;
-    }
-
     @Override
     public String toString() {
         return String.format(
-                "Session[id=%d, Website='%s', User='%s', DeviceType='%s', Duration=%s, Start='%s', End='%s', Active=%s, TrafficRecordId=%s]",
+                "Session[id=%d, Website='%s', User='%s', DeviceType='%s', Duration=%s, Start='%s', End='%s', Active=%s]",
                 getId(), website.getWebsiteName(), user.getUsername(), deviceType.toString(), getSessionDurationMinutes().toString(),
-                startTime.toString(), endTime.toString(), isActive.toString(), trafficRecordId.toString()
+                startTime.toString(), endTime.toString(), isActive.toString()
         );
     }
 
@@ -105,7 +95,6 @@ public class Session extends Entity{
         private LocalDateTime startTime;
         private LocalDateTime endTime;
         private Boolean isActive;
-        private Long trafficRecordId;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -142,13 +131,8 @@ public class Session extends Entity{
             return this;
         }
 
-        public Builder setTrafficRecordId(Long trafficRecordId) {
-            this.trafficRecordId = trafficRecordId;
-            return this;
-        }
-
         public Session build(){
-            return new Session(id, website, user, deviceType, startTime, endTime, isActive, trafficRecordId);
+            return new Session(id, website, user, deviceType, startTime, endTime, isActive);
         }
     }
 }
