@@ -4,11 +4,14 @@ import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
+import hr.javafx.webtrackly.utils.DbActiveUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 
 import java.time.LocalDate;
@@ -16,6 +19,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 
 public class TrafficRecordAddController {
     @FXML
@@ -34,6 +40,18 @@ public class TrafficRecordAddController {
     private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     public void initialize() {
+        if (!DbActiveUtil.isDatabaseOnline()) {
+            log.error("Database is inactive. Please check your connection.");
+            showAlert("Database error", "Database is inactive. Please check your connection.", Alert.AlertType.ERROR);
+
+            Platform.runLater(() -> {
+                Stage stage = (Stage) trafficRecordComboBoxWebsite.getScene().getWindow();
+                stage.close();
+            });
+
+            return;
+        }
+
         trafficRecordComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
 
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");

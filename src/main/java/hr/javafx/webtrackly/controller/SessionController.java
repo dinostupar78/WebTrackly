@@ -2,6 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.enums.DeviceType;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.generics.ChartData;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Session;
@@ -19,10 +20,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -127,10 +125,14 @@ public class SessionController {
     }
 
     public void filterSessions(){
-
-
-
-        List<Session> initialSessionList = sessionRepository.findAll();
+        List<Session> initialSessionList;
+        try{
+            initialSessionList = sessionRepository.findAll();
+        } catch (RepositoryException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
+            alert.showAndWait();
+            return;
+        }
 
         String sessionID = sessionTextFieldID.getText();
         if(!(sessionID.isEmpty())){

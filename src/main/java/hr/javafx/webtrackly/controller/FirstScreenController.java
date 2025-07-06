@@ -4,6 +4,7 @@ import hr.javafx.webtrackly.app.model.MarketingRole;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserSession;
 import hr.javafx.webtrackly.main.HelloApplication;
+import hr.javafx.webtrackly.utils.DbActiveUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.event.ActionEvent;
@@ -19,6 +20,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 
 public class FirstScreenController {
     @FXML
@@ -96,6 +100,12 @@ public class FirstScreenController {
     }
 
     public void onClickShowUserAddPanel(ActionEvent event) {
+        if (!DbActiveUtil.isDatabaseOnline()) {
+            log.error("Database is inactive. Please check your connection.");
+            showAlert("Database error", "Database is inactive. Please check your connection.", Alert.AlertType.ERROR);
+            return;
+        }
+
         ScreenChangeUtil searchClickUtils = new ScreenChangeUtil();
         searchClickUtils.showUserAddPanel(event);
     }

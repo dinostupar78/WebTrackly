@@ -2,6 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.files.UserFileRepository;
 import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.utils.DbActiveUtil;
 import hr.javafx.webtrackly.utils.PasswordUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeUtil;
 import javafx.event.ActionEvent;
@@ -35,6 +36,15 @@ public class LoginController {
     }
 
     public void onClickLogin() {
+        if(!DbActiveUtil.isDatabaseOnline()) {
+            showAlert("Database is offline. Please check your connection.");
+            loginTextFieldUsername.clear();
+            loginPasswordFieldPass.clear();
+            loginComboBoxRole.getSelectionModel().selectFirst();
+            return;
+
+        }
+
         String username = loginTextFieldUsername.getText();
         String password = loginPasswordFieldPass.getText();
         Role role = loginComboBoxRole.getValue();

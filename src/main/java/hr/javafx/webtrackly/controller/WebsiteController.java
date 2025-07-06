@@ -1,10 +1,10 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository3;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository3;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository3;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.generics.ChartData;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.Website;
@@ -30,11 +30,9 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Duration;
-
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 import static javafx.animation.Animation.INDEFINITE;
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -110,28 +108,22 @@ public class WebsiteController {
     }
 
     public void initialize(){
-        websiteTableColumnID.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
+        websiteTableColumnID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
         );
 
-        websiteTableColumnName.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getWebsiteName())
+        websiteTableColumnName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getWebsiteName())
         );
 
-        websiteTableColumnUrl.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getWebsiteUrl())
+        websiteTableColumnUrl.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getWebsiteUrl())
         );
 
-        websiteTableColumnUsers.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getUsers().size()).asObject()
+        websiteTableColumnUsers.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getUsers().size()).asObject()
         );
 
-        websiteTableColumnCategory.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getWebsiteCategory().name())
+        websiteTableColumnCategory.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getWebsiteCategory().name())
         );
 
-        websiteTableColumnDescription.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getWebsiteDescription())
+        websiteTableColumnDescription.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getWebsiteDescription())
         );
 
         RowDeletion2Util.addWebsiteRowDeletionHandler(websiteTableView);
@@ -147,8 +139,14 @@ public class WebsiteController {
     }
 
     public void filterWebsites() {
-
-        List<Website> initialWebsiteList = websiteRepository.findAll();
+        List<Website> initialWebsiteList;
+        try{
+            initialWebsiteList = websiteRepository.findAll();
+        } catch (RepositoryException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
+            alert.showAndWait();
+            return;
+        }
 
         String websiteID = websiteSearchIDTextField.getText();
         if(!(websiteID.isEmpty())){
@@ -249,5 +247,4 @@ public class WebsiteController {
         usersByWebsiteChart.setLegendVisible(false);
 
     }
-
 }

@@ -2,6 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.RowDeletion1Util;
@@ -113,7 +114,14 @@ public class UserController {
     }
 
     public void filterUsers(){
-        List<User> initialUserList = userRepository.findAll();
+        List<User> initialUserList;
+        try{
+            initialUserList = userRepository.findAll();
+        } catch (RepositoryException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
+            alert.showAndWait();
+            return;
+        }
 
         String userID = userTextFieldID.getText();
         if(!(userID.isEmpty())){

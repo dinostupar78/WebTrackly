@@ -29,10 +29,6 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
 
     @Override
     public T findById(Long id){
-        if (!DbActiveUtil.isDatabaseOnline()) {
-            log.error("Database is inactive. Please check your connection.");
-            throw new RepositoryException("Database is inactive. Please check your connection.");
-        }
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
@@ -53,9 +49,6 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
 
     @Override
     public List<T> findAll(){
-        if (!(DbActiveUtil.isDatabaseOnline())) {
-            return List.of();
-        }
         List<T> users = new ArrayList<>();
         try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();

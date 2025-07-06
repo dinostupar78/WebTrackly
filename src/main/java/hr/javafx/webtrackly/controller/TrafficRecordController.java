@@ -3,6 +3,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviourType;
+import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.generics.EditData;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.UserAction;
@@ -19,10 +20,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -108,7 +106,14 @@ public class TrafficRecordController {
     }
 
     public void filterTrafficRecords(){
-        List<TrafficRecord> initialTrafficRecordList = trafficRecordRepository.findAll();
+        List<TrafficRecord> initialTrafficRecordList;
+        try{
+            initialTrafficRecordList = trafficRecordRepository.findAll();
+        } catch (RepositoryException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
+            alert.showAndWait();
+            return;
+        }
 
         initialTrafficRecordList.forEach(traffic -> {
             LocalDateTime end   = traffic.getTimeOfVisit();

@@ -9,6 +9,7 @@ import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.sql.*;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 
 public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -30,7 +32,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
     public T findById(Long id) {
         if (!DbActiveUtil.isDatabaseOnline()) {
             log.error("Database is inactive. Please check your connection.");
-            throw new RepositoryException("Database is inactive. Please check your connection.");
+            showAlert("Database error", "Database is inactive. Please check your connection.", Alert.AlertType.ERROR);
         }
 
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -53,9 +55,11 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     @Override
     public List<T> findAll()  {
-        if (!(DbActiveUtil.isDatabaseOnline())) {
-            return List.of();
+        if (!DbActiveUtil.isDatabaseOnline()) {
+            log.error("Database is inactive. Please check your connection.");
+            showAlert("Database error", "Database is inactive. Please check your connection.", Alert.AlertType.ERROR);
         }
+
         List<T> sessions = new ArrayList<>();
         try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();

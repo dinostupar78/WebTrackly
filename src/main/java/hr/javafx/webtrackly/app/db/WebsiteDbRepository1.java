@@ -1,4 +1,5 @@
 package hr.javafx.webtrackly.app.db;
+
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.DbDataException;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
 public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepository<T> {
@@ -35,10 +37,6 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         }
         dbLock = true;
 
-        if (!DbActiveUtil.isDatabaseOnline()) {
-            log.error("Database is inactive. Please check your connection.");
-            throw new RepositoryException("Database is inactive. Please check your connection.");
-        }
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
@@ -72,9 +70,6 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         }
         dbLock = true;
 
-        if (!(DbActiveUtil.isDatabaseOnline())) {
-            throw new RepositoryException("Database is inactive. Please check your connection.");
-        }
         List<T> websites = new ArrayList<>();
         try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();

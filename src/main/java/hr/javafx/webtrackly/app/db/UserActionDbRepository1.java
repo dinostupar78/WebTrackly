@@ -27,9 +27,6 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     @Override
     public T findById(Long id) {
-        if (!DbActiveUtil.isDatabaseOnline()) {
-            throw new RepositoryException("Database is inactive. Please check your connection.");
-        }
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
@@ -50,9 +47,6 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     @Override
     public List<T> findAll(){
-        if (!(DbActiveUtil.isDatabaseOnline())) {
-            return List.of();
-        }
         List<T> actions = new ArrayList<>();
         try (Connection connection = DbActiveUtil.connectToDatabase();
              Statement stmt = connection.createStatement();
