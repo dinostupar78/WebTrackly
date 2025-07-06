@@ -8,6 +8,6 @@ public final class UserRole implements Role {
 
     @Override
     public String toString() {
-        return "UserRole";
+        return "User";
     }
 }

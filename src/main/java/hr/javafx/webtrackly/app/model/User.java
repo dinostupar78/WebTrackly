@@ -1,6 +1,7 @@
 package hr.javafx.webtrackly.app.model;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public class User extends Person implements Serializable {
     private String username;
@@ -57,17 +58,6 @@ public class User extends Person implements Serializable {
 
     public void setWebsiteId(Long websiteId) {
         this.websiteId = websiteId;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", websiteId=" + websiteId +
-                '}';
     }
 
     public static class Builder {
@@ -128,5 +118,18 @@ public class User extends Person implements Serializable {
         public User build() {
             return new User(id, name, surname, personalData, username, email, password, role, websiteId);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User: %s | Email: %s | WebsiteId: %d",
+                Optional.ofNullable(username)
+                        .orElse("N/A"),
+                Optional.ofNullable(email)
+                        .orElse("N/A"),
+                Optional.ofNullable(websiteId)
+                        .orElse(-1L)
+        );
     }
 }

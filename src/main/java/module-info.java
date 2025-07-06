@@ -5,6 +5,8 @@ module hr.javafx.webtrackly {
     requires org.kordamp.bootstrapfx.core;
     requires org.slf4j;
     requires java.sql;
+    requires com.h2database;
+    requires java.management;
 
     opens hr.javafx.webtrackly.controller to javafx.fxml;
     opens hr.javafx.webtrackly to javafx.fxml;

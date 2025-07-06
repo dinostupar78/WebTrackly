@@ -1,6 +1,9 @@
 package hr.javafx.webtrackly.controller;
 
-import hr.javafx.webtrackly.app.model.*;
+import hr.javafx.webtrackly.app.model.AdminRole;
+import hr.javafx.webtrackly.app.model.DataSerialization;
+import hr.javafx.webtrackly.app.model.MarketingRole;
+import hr.javafx.webtrackly.app.model.Role;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,18 +12,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
 
 import java.util.List;
+import java.util.Optional;
 
 public class DataSerializationController {
     @FXML
     private TextField dataTextFieldFieldName;
-
-    @FXML
-    private TextField dataTextFieldOldValue;
-
-    @FXML
-    private TextField dataTextFieldNewValue;
 
     @FXML
     private ComboBox<Role> dataComboBoxRole;
@@ -56,13 +55,12 @@ public class DataSerializationController {
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getNewValue()))
         );
 
-        dataColumnChangedByRole.setCellValueFactory(cellData -> {
-            String roleText = (cellData.getValue().getChangedByRole() != null) ? cellData.getValue().getChangedByRole() : "No Role";
-            return new SimpleStringProperty(roleText);
-        });
+        dataColumnChangedByRole.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getChangedByRole()))
+        );
 
-        dataComboBoxRole.getItems().setAll(new AdminRole(), new MarketingRole(), new UserRole());
-        dataComboBoxRole.setConverter(new javafx.util.StringConverter<Role>() {
+        dataComboBoxRole.getItems().setAll(new AdminRole(), new MarketingRole());
+        dataComboBoxRole.setConverter(new StringConverter<Role>() {
             @Override
             public String toString(Role role) {
                 return (role != null) ? role.toString() : "";
@@ -90,22 +88,9 @@ public class DataSerializationController {
                     .toList();
         }
 
-        String dataOldValue = dataTextFieldOldValue.getText();
-        if(!(dataOldValue.isEmpty())){
-            initialSessionList = initialSessionList.stream()
-                    .filter(change -> change.getOldValue().toLowerCase().contains(dataOldValue))
-                    .toList();
-        }
-
-        String dataNewValue = dataTextFieldNewValue.getText();
-        if(!(dataNewValue.isEmpty())){
-            initialSessionList = initialSessionList.stream()
-                    .filter(change -> change.getNewValue().toLowerCase().contains(dataNewValue))
-                    .toList();
-        }
-
         String dataChangedByRole = String.valueOf(dataComboBoxRole.getValue());
-        if(dataChangedByRole == null){
+        Optional<Role> selectedRole = Optional.ofNullable(dataComboBoxRole.getValue());
+        if(selectedRole.isPresent()){
             initialSessionList = initialSessionList.stream()
                     .filter(change -> change.getChangedByRole().toLowerCase().contains(dataChangedByRole.toLowerCase()))
                     .toList();

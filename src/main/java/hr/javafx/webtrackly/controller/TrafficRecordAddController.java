@@ -2,9 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
-import hr.javafx.webtrackly.app.model.DataSerialization;
-import hr.javafx.webtrackly.app.model.TrafficRecord;
-import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.beans.binding.Bindings;
@@ -32,7 +30,6 @@ public class TrafficRecordAddController {
 
     private ObjectBinding<LocalDateTime> dateTimeBinding;
 
-
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
@@ -51,7 +48,7 @@ public class TrafficRecordAddController {
         }, trafficRecordDatePickerDateOfVisit.valueProperty(), tf.valueProperty());
     }
 
-    public void addTrafficRecord(){
+    public void addTrafficRecord() {
         StringBuilder errorMessages = new StringBuilder();
 
         Website website = trafficRecordComboBoxWebsite.getValue();
@@ -61,10 +58,6 @@ public class TrafficRecordAddController {
         } else {
             errorMessages.append("Website is required!\n");
         }
-        String websiteName = Optional.ofNullable(website)
-                .map(Website::getWebsiteName)
-                .orElse("Unknown Website");
-
 
         LocalDateTime timeOfVisit = dateTimeBinding.get();
         Optional<LocalDateTime> optDate = Optional.ofNullable(timeOfVisit);
@@ -84,11 +77,16 @@ public class TrafficRecordAddController {
 
             trafficRecordRepository.save(newTrafficRecord);
 
+            String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                    .map(User::getRole)
+                    .map(Role::toString)
+                    .orElse("UNKNOWN");
+
             DataSerialization change = new DataSerialization(
                     "Traffic Record Added",
                     "N/A",
                     newTrafficRecord.toString(),
-                    websiteName,
+                    roleString,
                     LocalDateTime.now()
             );
 

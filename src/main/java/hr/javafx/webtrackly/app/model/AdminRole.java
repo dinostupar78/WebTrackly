@@ -1,6 +1,9 @@
 package hr.javafx.webtrackly.app.model;
 
-public final class AdminRole implements Role{
+import java.io.Serializable;
+
+public final class AdminRole implements Role, Serializable
+{
 
     @Override
     public String getPermission() {

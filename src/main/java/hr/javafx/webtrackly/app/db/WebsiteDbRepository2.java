@@ -30,8 +30,8 @@ public class WebsiteDbRepository2<T extends Website> {
             connection.setAutoCommit(false);
             performDeleteOperation(connection, id);
         } catch (IOException | SQLException | DbConnectionException e) {
-            log.error("Error while deleting website from database: {}", e);
-            throw new RepositoryException("Error while deleting website from database", e);
+            log.error("Error while deleting website from database: {}", e.getMessage());
+            throw new RepositoryException("Error while deleting website from database");
         } finally {
             dbLock = false;
             notifyAll();
@@ -56,7 +56,7 @@ public class WebsiteDbRepository2<T extends Website> {
 
     private void executeDeleteWebsiteQuery(Connection connection, Long id) throws SQLException {
         try (PreparedStatement deleteUserActionStmt = connection.prepareStatement("DELETE FROM USER_ACTION WHERE WEBSITE_ID = ?");
-             PreparedStatement deleteSessionStmt = connection.prepareStatement("DELETE FROM SESSION WHERE TRAFFIC_RECORD_ID IN (SELECT ID FROM TRAFFIC_RECORD WHERE WEBSITE_ID = ?)");
+             PreparedStatement deleteSessionStmt = connection.prepareStatement("DELETE FROM SESSION WHERE WEBSITE_ID = ?");
              PreparedStatement deleteTrafficRecordStmt = connection.prepareStatement("DELETE FROM TRAFFIC_RECORD WHERE WEBSITE_ID = ?");
              PreparedStatement deleteAppUserStmt = connection.prepareStatement("DELETE FROM APP_USER WHERE WEBSITE_ID = ?");
              PreparedStatement deleteWebsiteStmt = connection.prepareStatement("DELETE FROM WEBSITE WHERE ID = ?")) {

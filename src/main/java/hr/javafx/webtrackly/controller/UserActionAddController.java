@@ -132,11 +132,16 @@ public class UserActionAddController {
 
             userActionRepository.save(newUserAction);
 
+            String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                    .map(User::getRole)
+                    .map(Role::toString)
+                    .orElse("UNKNOWN");
+
             DataSerialization change = new DataSerialization(
-                    "UserAction",
-                    "Add",
+                    "UserAction Added",
+                    "N/A",
                     newUserAction.toString(),
-                    newUserAction.getUser().getRole().toString(),
+                    roleString,
                     newUserAction.getTimestamp());
 
             DataSerializeUtil.serializeData(change);

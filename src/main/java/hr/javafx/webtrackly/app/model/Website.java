@@ -1,7 +1,6 @@
 package hr.javafx.webtrackly.app.model;
-
 import hr.javafx.webtrackly.app.enums.WebsiteType;
-
+import java.util.Optional;
 import java.util.Set;
 
 public class Website extends Entity {
@@ -104,15 +103,20 @@ public class Website extends Entity {
         }
     }
 
-
     @Override
     public String toString() {
-        return "Website{" +
-                "websiteName='" + websiteName + '\'' +
-                ", websiteUrl='" + websiteUrl + '\'' +
-                ", websiteCategory=" + websiteCategory +
-                ", websiteDescription='" + websiteDescription + '\'' +
-                ", users=" + users +
-                '}';
+        return String.format(
+                "Name: %s | URL: %s | Cat: %s | Desc: %s | Users: %d",
+                Optional.ofNullable(websiteName)
+                        .orElse("N/A"),
+                Optional.ofNullable(websiteUrl)
+                        .orElse("N/A"),
+                Optional.ofNullable(websiteCategory)
+                        .map(Enum::name)
+                        .orElse("N/A"),
+                websiteDescription.length() > 20 ? websiteDescription.substring(0, 20) + "…" : websiteDescription,
+                Optional.ofNullable(users)
+                        .map(Set::size)
+                        .orElse(0));
     }
 }

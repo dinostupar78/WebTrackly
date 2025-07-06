@@ -158,11 +158,16 @@ public class UserEditController {
 
                 userRepository.update(newUser);
 
+                String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                        .map(User::getRole)
+                        .map(Role::toString)
+                        .orElse("UNKNOWN");
+
                 DataSerialization change = new DataSerialization(
                         "User Edited",
                         oldUserData,
                         newUser.toString(),
-                        user.getUsername(),
+                        roleString,
                         LocalDateTime.now()
                 );
 

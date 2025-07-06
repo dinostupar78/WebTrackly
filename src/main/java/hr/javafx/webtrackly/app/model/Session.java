@@ -1,6 +1,6 @@
 package hr.javafx.webtrackly.app.model;
-
 import hr.javafx.webtrackly.app.enums.DeviceType;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ public class Session extends Entity{
     private DeviceType deviceType;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Boolean isActive;
+    private boolean isActive;
 
     public Session(Long id, Website website, User user, DeviceType deviceType, LocalDateTime startTime, LocalDateTime endTime, Boolean isActive) {
         super(id);
@@ -70,21 +70,12 @@ public class Session extends Entity{
         this.endTime = endTime;
     }
 
-    public Boolean getActive() {
+    public boolean getActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         isActive = active;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Session[id=%d, Website='%s', User='%s', DeviceType='%s', Duration=%s, Start='%s', End='%s', Active=%s]",
-                getId(), website.getWebsiteName(), user.getUsername(), deviceType.toString(), getSessionDurationMinutes().toString(),
-                startTime.toString(), endTime.toString(), isActive.toString()
-        );
     }
 
     public static class Builder{
@@ -94,7 +85,7 @@ public class Session extends Entity{
         private DeviceType deviceType;
         private LocalDateTime startTime;
         private LocalDateTime endTime;
-        private Boolean isActive;
+        private boolean isActive;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -126,7 +117,7 @@ public class Session extends Entity{
             return this;
         }
 
-        public Builder setActive(Boolean active) {
+        public Builder setActive(boolean active) {
             isActive = active;
             return this;
         }
@@ -134,5 +125,32 @@ public class Session extends Entity{
         public Session build(){
             return new Session(id, website, user, deviceType, startTime, endTime, isActive);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "ID: %d | Site: %s | User: %s | Device: %s | Start: %s | End: %s | Active: %s",
+                getId(),
+                Optional.ofNullable(website)
+                        .map(Website::getWebsiteName)
+                        .orElse("N/A"),
+                Optional.ofNullable(user)
+                        .map(User::getUsername)
+                        .orElse("N/A"),
+                Optional.ofNullable(deviceType)
+                        .map(DeviceType::name)
+                        .orElse("N/A"),
+                Optional.ofNullable(startTime)
+                        .map(DateFormatterUtil::formatLocalDateTime)
+                        .orElse("N/A"),
+                Optional.ofNullable(endTime)
+                        .map(DateFormatterUtil::formatLocalDateTime)
+                        .orElse("N/A"),
+                Optional.of(isActive)
+                        .map(active -> active ? "Yes" : "No")
+                        .orElse("N/A")
+
+        );
     }
 }

@@ -1,7 +1,10 @@
 package hr.javafx.webtrackly.app.model;
 
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class TrafficRecord extends Entity{
     private Website website;
@@ -50,7 +53,6 @@ public class TrafficRecord extends Entity{
         this.bounceRate = bounceRate;
     }
 
-
     public static class Builder{
         private Long id;
         private Website website;
@@ -91,14 +93,18 @@ public class TrafficRecord extends Entity{
     @Override
     public String toString() {
         return String.format(
-                "TrafficRecord[id=%d, Website='%s', TimeOfVisit='%s', PageViews=%d, BounceRate=%.2f%%]",
+                "Id: %d | Website: %s | When: %s | Views: %d | Bounce: %.2f%%",
                 getId(),
-                website.getWebsiteName(),
-                timeOfVisit.toString(),
+                Optional.ofNullable(website)
+                        .map(Website::getWebsiteName)
+                        .orElse("N/A"),
+                Optional.ofNullable(timeOfVisit)
+                        .map(DateFormatterUtil::formatLocalDateTime)
+                        .orElse("N/A"),
                 pageViews,
-                bounceRate
-
+                Optional.ofNullable(bounceRate)
+                        .map(BigDecimal::doubleValue)
+                        .orElse(0.0) * 100
         );
     }
-
 }

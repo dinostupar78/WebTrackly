@@ -1,7 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.DeviceType;
@@ -56,7 +55,6 @@ public class SessionAddController {
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
     private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
-    private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     public void initialize() {
         sessionComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
@@ -155,11 +153,16 @@ public class SessionAddController {
 
             sessionRepository.save(newSession);
 
+            String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                    .map(User::getRole)
+                    .map(Role::toString)
+                    .orElse("UNKNOWN");
+
             DataSerialization change = new DataSerialization(
                     "Session Added",
                     "N/A",
                     newSession.toString(),
-                    user.getRole().toString(),
+                    roleString,
                     LocalDateTime.now()
             );
 

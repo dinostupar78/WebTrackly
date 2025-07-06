@@ -1,8 +1,10 @@
 package hr.javafx.webtrackly.app.model;
 
 import hr.javafx.webtrackly.app.enums.BehaviourType;
+import hr.javafx.webtrackly.utils.DateFormatterUtil;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class UserAction extends Entity{
     private User user;
@@ -70,19 +72,6 @@ public class UserAction extends Entity{
         this.details = details;
     }
 
-
-    @Override
-    public String toString() {
-        return "UserAction{" +
-                "user=" + user +
-                ", action=" + action +
-                ", session=" + session +
-                ", page=" + page +
-                ", actionTimestamp=" + actionTimestamp +
-                ", details='" + details + '\'' +
-                '}';
-    }
-
     public static class Builder{
         private Long id;
         private User user;
@@ -130,5 +119,27 @@ public class UserAction extends Entity{
         public UserAction build(){
             return new UserAction(id, user, action, session, page, actionTimestamp, details);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User: %s | Action: %s | SessionId: %d | Page: %s | Time: %s | Details: %s",
+                Optional.ofNullable(user)
+                        .map(User::getUsername)
+                        .orElse("N/A"),
+                action,
+                Optional.ofNullable(session)
+                        .map(Session::getId)
+                        .orElse(-1L),
+                Optional.ofNullable(page)
+                        .map(Website::getWebsiteName)
+                        .orElse("N/A"),
+                Optional.ofNullable(actionTimestamp)
+                        .map(DateFormatterUtil::formatLocalDateTime)
+                        .orElse("N/A"),
+                Optional.ofNullable(details)
+                        .orElse("N/A")
+        );
     }
 }

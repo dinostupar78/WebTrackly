@@ -1,7 +1,6 @@
 package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.SessionDbRepository2;
-import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.DeviceType;
@@ -56,7 +55,6 @@ public class SessionEditController {
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
     private SessionDbRepository2<Session> sessionRepository = new SessionDbRepository2<>();
-    private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
 
     private Session session;
 
@@ -175,11 +173,16 @@ public class SessionEditController {
 
                 sessionRepository.update(updatedSession);
 
+                String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                        .map(User::getRole)
+                        .map(Role::toString)
+                        .orElse("UNKNOWN");
+
                 DataSerialization change = new DataSerialization(
                         "Session Edited",
                         oldSessionData,
                         updatedSession.toString(),
-                        Optional.ofNullable(updatedSession.getWebsite().getWebsiteName()).orElse("Unknown Website"),
+                        roleString,
                         LocalDateTime.now()
                 );
 

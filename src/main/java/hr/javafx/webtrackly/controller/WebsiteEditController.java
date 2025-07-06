@@ -2,8 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository2;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
-import hr.javafx.webtrackly.app.model.DataSerialization;
-import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
@@ -92,11 +91,16 @@ public class WebsiteEditController {
 
                 websiteRepository.update(newWebsite);
 
+                String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                        .map(User::getRole)
+                        .map(Role::toString)
+                        .orElse("UNKNOWN");
+
                 DataSerialization change = new DataSerialization(
                         "Website Edited",
                         oldWebsiteData,
                         newWebsite.toString(),
-                        Optional.ofNullable(website.getWebsiteName()).orElse("Unknown Website"),
+                        roleString,
                         LocalDateTime.now()
                 );
 

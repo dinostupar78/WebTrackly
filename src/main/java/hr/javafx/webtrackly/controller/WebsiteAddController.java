@@ -2,10 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
-import hr.javafx.webtrackly.app.model.AdminRole;
-import hr.javafx.webtrackly.app.model.DataSerialization;
-import hr.javafx.webtrackly.app.model.User;
-import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
@@ -31,12 +28,6 @@ public class WebsiteAddController {
     private TextField websiteTextFieldDescription;
 
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
-
-    private User getCurrentUser() {
-        return new User.Builder()
-                .setRole(new AdminRole())
-                .build();
-    }
 
     public void initialize(){
         websiteComboBoxCategory.getItems().setAll(WebsiteType.values());
@@ -87,17 +78,16 @@ public class WebsiteAddController {
 
             websiteRepository.save(newWebsite);
 
-            User currentUser = getCurrentUser();
-            String roleInfo = Optional.ofNullable(currentUser)
+            String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
                     .map(User::getRole)
-                    .map(Object::toString)
-                    .orElse("Unknown");
+                    .map(Role::toString)
+                    .orElse("UNKNOWN");
 
             DataSerialization change = new DataSerialization(
                     "Website Added",
                     "N/A",
                     newWebsite.toString(),
-                    roleInfo,
+                    roleString,
                     LocalDateTime.now()
             );
 

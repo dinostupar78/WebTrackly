@@ -155,11 +155,16 @@ public class UserActionEditController {
 
                 userActionRepository.update(newUserAction);
 
+                String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                        .map(User::getRole)
+                        .map(Role::toString)
+                        .orElse("UNKNOWN");
+
                 DataSerialization change = new DataSerialization(
                         "UserAction Edited",
                         oldUserAction,
                         newUserAction.toString(),
-                        Optional.ofNullable(userAction.getUser().getUsername()).orElse("Unknown User"),
+                        roleString,
                         LocalDateTime.now()
                 );
 

@@ -2,9 +2,7 @@ package hr.javafx.webtrackly.controller;
 
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
-import hr.javafx.webtrackly.app.model.DataSerialization;
-import hr.javafx.webtrackly.app.model.TrafficRecord;
-import hr.javafx.webtrackly.app.model.Website;
+import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.beans.binding.Bindings;
@@ -12,7 +10,6 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,8 +27,6 @@ public class TrafficRecordEditController {
     private TextField trafficRecordEditDatePickerTimeOfVisit;
 
     private ObjectBinding<LocalDateTime> dateTimeBinding;
-
-
 
     private TrafficRecord trafficRecord;
 
@@ -74,9 +69,6 @@ public class TrafficRecordEditController {
             } else {
                 errorMessages.append("Website is required!\n");
             }
-            String websiteName = Optional.ofNullable(website)
-                    .map(Website::getWebsiteName)
-                    .orElse("Unknown Website");
 
             LocalDateTime timeOfVisit = dateTimeBinding.get();
             Optional<LocalDateTime> optDate = Optional.ofNullable(timeOfVisit);
@@ -99,11 +91,16 @@ public class TrafficRecordEditController {
 
                 trafficRecordRepository.update(newTrafficRecord);
 
+                String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                        .map(User::getRole)
+                        .map(Role::toString)
+                        .orElse("UNKNOWN");
+
                 DataSerialization change = new DataSerialization(
                         "Traffic Record Edited",
                         oldTrafficRecord,
                         newTrafficRecord.toString(),
-                        websiteName,
+                        roleString,
                         LocalDateTime.now()
                 );
 

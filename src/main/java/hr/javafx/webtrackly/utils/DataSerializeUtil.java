@@ -9,9 +9,11 @@ import java.util.List;
 public class DataSerializeUtil {
     private DataSerializeUtil() {}
 
-    private static final String FILE_PATH = "user.dat";
+    private static final String FILE_PATH = "webtrackly.dat";
 
-    private static Boolean dbLock = false;
+
+
+
 
     public static void serializeData(DataSerialization object) {
 
@@ -27,7 +29,7 @@ public class DataSerializeUtil {
 
     public static List<DataSerialization> deserializeData() {
         File file = new File(FILE_PATH);
-        if (!file.exists()) {
+        if (!file.exists() || file.length() == 0) {
             return new ArrayList<>();
         }
 

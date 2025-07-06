@@ -142,11 +142,16 @@ public class UserAddController {
 
             userRepository.save(newUser);
 
+            String roleString = Optional.ofNullable(UserSession.getInstance().getCurrentUser())
+                    .map(User::getRole)
+                    .map(Role::toString)
+                    .orElse("UNKNOWN");
+
             DataSerialization change = new DataSerialization(
                     "User Created",
                     "N/A",
-                    newUser.getUsername(),
-                    newUser.getRole().toString(),
+                    newUser.toString(),
+                    roleString,
                     LocalDateTime.now()
             );
 

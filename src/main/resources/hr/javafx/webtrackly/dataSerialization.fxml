@@ -34,11 +34,9 @@
                     </columns>
                 </TableView>
                 <TextField fx:id="dataTextFieldFieldName" layoutX="277.0" layoutY="93.0" prefHeight="35.0" prefWidth="112.0" promptText="Name" styleClass="search-input" />
-                <TextField fx:id="dataTextFieldOldValue" layoutX="277.0" layoutY="143.0" prefHeight="25.0" prefWidth="112.0" promptText="Old Value" styleClass="search-input" />
-                <TextField fx:id="dataTextFieldNewValue" layoutX="279.0" layoutY="190.0" prefHeight="35.0" prefWidth="112.0" promptText="New Value" styleClass="search-input" />
-                <Button layoutX="358.0" layoutY="287.0" onAction="#filterData" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Search" />
+                <Button layoutX="356.0" layoutY="187.0" onAction="#filterData" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Search" />
                 <Label layoutX="262.0" layoutY="19.0" styleClass="panel-header" text="Search Data Serialization" />
-                <ComboBox fx:id="dataComboBoxRole" layoutX="279.0" layoutY="236.0" prefHeight="35.0" prefWidth="150.0" promptText="Changed by Role" styleClass="search-combo" />
+                <ComboBox fx:id="dataComboBoxRole" layoutX="277.0" layoutY="138.0" prefHeight="35.0" prefWidth="150.0" promptText="Changed by Role" styleClass="search-combo" />
             </children></AnchorPane>
     </children>
 </AnchorPane>

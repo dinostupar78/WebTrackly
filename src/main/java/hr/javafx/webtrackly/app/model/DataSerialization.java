@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 
 public class DataSerialization implements Serializable {
     private static long serialVersionUID = 1L;
-    private long id;
+    private static long idCounter = 0L;
+    private Long id;
     private String fieldName;
     private String oldValue;
     private String newValue;
@@ -13,7 +14,7 @@ public class DataSerialization implements Serializable {
     private LocalDateTime changeTimestamp;
 
     public DataSerialization(String fieldName, String oldValue, String newValue, String changedByRole, LocalDateTime changeTimestamp) {
-        this.id = serialVersionUID++;
+        this.id = ++idCounter;
         this.fieldName = fieldName;
         this.oldValue = oldValue;
         this.newValue = newValue;
