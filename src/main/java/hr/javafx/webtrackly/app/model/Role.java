@@ -1,5 +1,7 @@
 package hr.javafx.webtrackly.app.model;
 
-public sealed interface Role permits AdminRole, MarketingRole, UserRole {
+import java.io.Serializable;
+
+public sealed interface Role extends Serializable permits AdminRole, MarketingRole, UserRole {
     String getPermission();
 }

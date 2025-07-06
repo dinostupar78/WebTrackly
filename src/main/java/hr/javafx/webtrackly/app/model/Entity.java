@@ -3,6 +3,7 @@ package hr.javafx.webtrackly.app.model;
 public abstract class Entity {
     private Long id;
 
+    public Entity() {}
     protected Entity(Long id) {
         this.id = id;
     }

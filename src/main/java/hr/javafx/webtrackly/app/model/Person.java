@@ -5,6 +5,10 @@ public class Person extends Entity {
     private String lastName;
     private PersonalData personalData;
 
+    public Person() {
+        super();
+    }
+
     public Person(Long id, String firstName, String lastName, PersonalData personalData) {
         super(id);
         this.firstName = firstName;
