@@ -1,9 +1,7 @@
 package hr.javafx.webtrackly.app.files;
-
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.*;
-
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -14,10 +12,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Klasa koja predstavlja repozitorij korisnika koji se temelji na datoteci.
+ * Ova klasa omogućuje čitanje i pisanje korisničkih podataka u datoteku.
+ *
+ * @param <T> Tip korisnika koji se pohranjuje u repozitoriju.
+ */
+
 public class UserFileRepository<T extends User> extends AbstractFileRepository<T> {
 
     private static final String USERS_FILE_PATH = "dat/users.txt";
     private static final Integer NUMBER_OF_ROWS_PER_USER = 9;
+
+    /**
+     * Konstruktor koji inicijalizira repozitorij korisnika.
+     */
 
     @Override
     public T findById(Long id) {
@@ -26,6 +35,12 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
                 .findFirst()
                 .orElse(null);
     }
+
+    /**
+     * Metoda koja dohvaća sve korisnike iz datoteke.
+     *
+     * @return Lista svih korisnika.
+     */
 
     @Override
     public List<T> findAll() {
@@ -76,6 +91,12 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
         return users;
     }
 
+    /**
+     * Metoda koja sprema listu korisnika u datoteku.
+     *
+     * @param entities Lista korisnika koji se spremaju.
+     */
+
     @Override
     public void save(List<T> entities) {
         try(PrintWriter writer = new PrintWriter(USERS_FILE_PATH);) {
@@ -98,6 +119,12 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
 
     }
 
+    /**
+     * Metoda koja sprema pojedinačnog korisnika u datoteku.
+     *
+     * @param entity Korisnik koji se sprema.
+     */
+
     @Override
     public void save(T entity) {
         List<T> entities = findAll();
@@ -109,6 +136,10 @@ public class UserFileRepository<T extends User> extends AbstractFileRepository<T
         save(entities);
 
     }
+
+    /**
+     * Metoda koja generira novi Id.
+     */
 
     private Long generateNewId() {
         return findAll().stream()

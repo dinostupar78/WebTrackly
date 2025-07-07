@@ -3,6 +3,11 @@ import hr.javafx.webtrackly.app.enums.WebsiteType;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Model klase koja predstavlja web stranicu.
+ * Sadrži informacije o nazivu, URL-u, kategoriji, opisu i korisnicima povezanim s tom stranicom.
+ */
+
 public class Website extends Entity {
     private String websiteName;
     private String websiteUrl;
@@ -60,6 +65,10 @@ public class Website extends Entity {
         this.users = users;
     }
 
+    /**
+     * Builder klasa za izgradnju objekta Website.
+     */
+
     public static class Builder{
         private Long id;
         private String websiteName;
@@ -102,6 +111,13 @@ public class Website extends Entity {
             return new Website(id, websiteName, websiteUrl, websiteCategory, websiteDescription, users);
         }
     }
+
+    /**
+     * Vraća string reprezentaciju objekta Website.
+     * Prikazuje naziv, URL, kategoriju, kratak opis i broj korisnika.
+     *
+     * @return String reprezentacija objekta Website.
+     */
 
     @Override
     public String toString() {

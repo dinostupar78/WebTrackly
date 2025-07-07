@@ -1,24 +1,32 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.EntityNotFoundException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.TrafficRecord;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Klasa koja predstavlja repozitorij za upravljanje prometnim zapisima u bazi podataka.
+ * Nasljeđuje apstraktnu klasu AbstractDbRepository i implementira metode za dohvat i spremanje prometnih zapisa.
+ *
+ * @param <T> Tip prometnog zapisa koji se koristi u repozitoriju.
+ */
 
 public class TrafficRecordDbRepository1<T extends TrafficRecord> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT FROM TRAFFIC_RECORD WHERE ID = ?";
 
     private static final String FIND_ALL_QUERY = "SELECT ID, WEBSITE_ID, TIME_OF_VISIT FROM TRAFFIC_RECORD";
+
+    /**
+     * Konstruktor koji inicijalizira repozitorij s tipom prometnog zapisa.
+     */
 
     @Override
     public T findById(Long id){
@@ -40,6 +48,14 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
         }
     }
 
+    /**
+     * Metoda koja dohvaća sve prometne zapise iz baze podataka.
+     * Pretražuje tablicu TRAFFIC_RECORD i vraća listu svih prometnih zapisa.
+     *
+     *
+     * @return Lista svih prometnih zapisa.
+     */
+
     @Override
     public List<T> findAll(){
         List<T> trafficRecords = new ArrayList<>();
@@ -56,6 +72,13 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
         }
         return trafficRecords;
     }
+
+    /**
+     * Metoda koja sprema listu prometnih zapisa u bazu podataka.
+     * Koristi SQL INSERT naredbu za dodavanje svakog prometnog zapisa u tablicu TRAFFIC_RECORD.
+     *
+     * @param entities Lista prometnih zapisa koji se spremaju.
+     */
 
     @Override
     public void save(List<T> entities){
@@ -77,6 +100,13 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
 
     }
 
+    /**
+     * Metoda koja sprema pojedinačni prometni zapis u bazu podataka.
+     * Koristi SQL INSERT naredbu za dodavanje prometnog zapisa u tablicu TRAFFIC_RECORD.
+     *
+     * @param entity Prometni zapis koji se sprema.
+     */
+
     @Override
     public void save(T entity){
         String sql = "INSERT INTO TRAFFIC_RECORD (WEBSITE_ID, TIME_OF_VISIT) " +
@@ -93,6 +123,15 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
         }
 
     }
+
+    /**
+     * Privatna metoda koja izvlači prometni zapis iz ResultSet objekta.
+     * Koristi se za pretvaranje rezultata upita u objekt prometnog zapisa.
+     *
+     * @param resultSet ResultSet iz kojeg se izvlače podaci.
+     * @return Prometni zapis koji sadrži podatke iz ResultSet-a.
+     * @throws SQLException Ako dođe do greške pri dohvaćanju podataka iz ResultSet-a.
+     */
 
     private static TrafficRecord extractTrafficRecordFromResultSet(ResultSet resultSet) throws SQLException {
         Long id = resultSet.getLong("ID");
@@ -111,7 +150,5 @@ public class TrafficRecordDbRepository1<T extends TrafficRecord> extends Abstrac
                 .build();
 
     }
-
-
 
 }

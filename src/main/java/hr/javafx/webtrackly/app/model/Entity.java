@@ -1,5 +1,10 @@
 package hr.javafx.webtrackly.app.model;
 
+/**
+ * Apstraktna klasa koja predstavlja entitet u aplikaciji WebTrackly.
+ * Sadrži jedinstveni identifikator entiteta.
+ */
+
 public abstract class Entity {
     private Long id;
 

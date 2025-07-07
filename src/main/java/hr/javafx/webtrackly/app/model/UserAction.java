@@ -1,10 +1,15 @@
 package hr.javafx.webtrackly.app.model;
-
 import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+/**
+ * Predstavlja korisničku akciju u aplikaciji WebTrackly.
+ * Sadrži informacije o korisniku, vrsti akcije, sesiji, web stranici, vremenu akcije i detaljima.
+ * Koristi se za praćenje korisničkog ponašanja i interakcija unutar aplikacije.
+ * * Ova klasa je izvedena iz klase Entity, što omogućava jedinstveno identificiranje svake akcije putem ID-a.
+ */
 
 public class UserAction extends Entity{
     private User user;
@@ -72,6 +77,11 @@ public class UserAction extends Entity{
         this.details = details;
     }
 
+    /**
+     * Builder klasa za izgradnju objekta UserAction.
+     * Omogućava postavljanje svih potrebnih atributa prije stvaranja instance UserAction.
+     */
+
     public static class Builder{
         private Long id;
         private User user;
@@ -120,6 +130,13 @@ public class UserAction extends Entity{
             return new UserAction(id, user, action, session, page, actionTimestamp, details);
         }
     }
+
+/**
+     * Vraća string reprezentaciju korisničke akcije.
+     * Koristi se za lakše ispisivanje informacija o akciji u konzoli ili logovima.
+     *
+     * @return String koji sadrži informacije o korisniku, akciji, sesiji, web stranici, vremenu i detaljima.
+     */
 
     @Override
     public String toString() {

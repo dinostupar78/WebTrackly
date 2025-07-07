@@ -1,19 +1,23 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.exception.*;
 import hr.javafx.webtrackly.app.model.Session;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Klasa koja predstavlja repozitorij za upravljanje sesijama u bazi podataka.
+ * Nasljeđuje apstraktnu klasu AbstractDbRepository i implementira metode za dohvat i spremanje sesija.
+ *
+ * @param <T> Tip entiteta koji predstavlja sesiju.
+ */
 
 public class SessionDbRepository1<T extends Session> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -22,6 +26,13 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
     private static final String FIND_ALL_QUERY =
             "SELECT ID, WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE FROM SESSION";
 
+
+    /**
+     * Metoda za dohvat sesije iz baze podataka prema ID-u.
+     * Ako sesija s danim ID-om ne postoji, baca se EntityNotFoundException.
+     * @param id ID sesije koju tražimo.
+     * @return Entitet sesije ako je pronađen.
+     */
 
     @Override
     public T findById(Long id) {
@@ -43,6 +54,13 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
         }
     }
 
+    /**
+     * Metoda za dohvat svih sesija iz baze podataka.
+     * Vraća listu svih sesija.
+     * Ako dođe do greške prilikom dohvaćanja, baca se RepositoryException.
+     * @return Lista svih sesija.
+     */
+
     @Override
     public List<T> findAll()  {
         List<T> sessions = new ArrayList<>();
@@ -59,6 +77,12 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
         }
         return sessions;
     }
+
+    /**
+     * Metoda za spremanje liste sesija u bazu podataka.
+     * Ako dođe do greške prilikom spremanja, baca se RepositoryException.
+     * @param entities Lista sesija koje se spremaju.
+     */
 
     @Override
     public void save(List<T> entities) {
@@ -84,6 +108,12 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
 
     }
 
+    /**
+     * Metoda za spremanje jedne sesije u bazu podataka.
+     * Ako dođe do greške prilikom spremanja, baca se RepositoryException.
+     * @param entity Sesija koja se sprema.
+     */
+
     @Override
     public void save(T entity) {
         String sql = "INSERT INTO SESSION (WEBSITE_ID, USER_ID, DEVICE_TYPE, START_TIME, END_TIME, IS_ACTIVE) " +
@@ -105,6 +135,15 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
         }
 
     }
+
+    /**
+     * Metoda za dohvat sesije iz ResultSet-a.
+     * Koristi se za ekstrakciju podataka o sesiji iz rezultata upita.
+     * @param resultSet Rezultat upita koji sadrži podatke o sesiji.
+     * @return Entitet sesije.
+     * @throws SQLException Ako dođe do greške prilikom dohvaćanja podataka iz ResultSet-a.
+     * @throws InvalidDataException Ako je došlo do greške u podacima (npr. nevažeći tip uređaja).
+     */
 
     public static Session extractFromSessionResultSet(ResultSet resultSet) throws SQLException, InvalidDataException {
         Long id = resultSet.getLong("ID");
@@ -140,7 +179,6 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
                 .setEndTime(endTime)
                 .setActive(active)
                 .build();
-
     }
 
 }

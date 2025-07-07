@@ -1,7 +1,12 @@
 package hr.javafx.webtrackly.app.model;
-
 import java.io.Serializable;
 import java.util.Optional;
+
+/**
+ * Klasa koja predstavlja korisnika u aplikaciji WebTrackly.
+ * Nasljeđuje klasu Person i implementira Serializable sučelje.
+ * Sadrži informacije o korisničkom imenu, emailu, lozinki, ulozi i ID-u web stranice.
+ */
 
 public class User extends Person implements Serializable {
     private String username;
@@ -64,6 +69,11 @@ public class User extends Person implements Serializable {
         this.websiteId = websiteId;
     }
 
+    /**
+     * Builder klasa za izgradnju objekta User.
+     * Omogućuje postavljanje svih atributa korisnika na jednostavan način.
+     */
+
     public static class Builder {
         private Long id;
         private String name;
@@ -123,6 +133,13 @@ public class User extends Person implements Serializable {
             return new User(id, name, surname, personalData, username, email, password, role, websiteId);
         }
     }
+
+    /**
+     * Vraća string reprezentaciju korisnika.
+     * Uključuje korisničko ime, email i ID web stranice.
+     *
+     * @return String reprezentacija korisnika.
+     */
 
     @Override
     public String toString() {

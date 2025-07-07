@@ -1,10 +1,13 @@
 package hr.javafx.webtrackly.app.model;
-
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+/**
+ * Klasa koja predstavlja zapis o prometu na web stranici.
+ * Sadrži informacije o web stranici, vremenu posjeta, broju pregleda stranice i stopi odbijanja.
+ */
 
 public class TrafficRecord extends Entity{
     private Website website;
@@ -53,6 +56,11 @@ public class TrafficRecord extends Entity{
         this.bounceRate = bounceRate;
     }
 
+    /**
+     * Builder klasa za izgradnju objekta TrafficRecord.
+     * Omogućuje postavljanje svih atributa objekta na jednostavan način.
+     */
+
     public static class Builder{
         private Long id;
         private Website website;
@@ -89,6 +97,13 @@ public class TrafficRecord extends Entity{
             return new TrafficRecord(id, website, timeOfVisit,pageViews, bounceRate);
         }
     }
+
+    /**
+     * Vraća string reprezentaciju objekta TrafficRecord.
+     * Formatira podatke o prometu na web stranici u čitljiv oblik.
+     *
+     * @return String reprezentacija objekta TrafficRecord.
+     */
 
     @Override
     public String toString() {

@@ -1,5 +1,10 @@
 package hr.javafx.webtrackly.app.model;
 
+/**
+ * Singleton klasa koja upravlja korisničkom sesijom u aplikaciji.
+ * Sadrži informacije o trenutno prijavljenom korisniku.
+ */
+
 public class UserSession {
     private static UserSession instance;
     private User currentUser;

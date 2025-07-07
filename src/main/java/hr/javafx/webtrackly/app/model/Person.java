@@ -1,5 +1,10 @@
 package hr.javafx.webtrackly.app.model;
 
+/**
+ * Klasa koja predstavlja osobu u aplikaciji WebTrackly.
+ * Nasljeđuje klasu Entity i sadrži osobne podatke osobe.
+ */
+
 public class Person extends Entity {
     private String firstName;
     private String lastName;

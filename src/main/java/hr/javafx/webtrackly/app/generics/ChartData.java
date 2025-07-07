@@ -1,5 +1,13 @@
 package hr.javafx.webtrackly.app.generics;
 
+/**
+ * Generička klasa koja predstavlja podatke za grafikon.
+ * Sadrži dva generička tipa podataka: D1 i D2.
+ *
+ * @param <D1> Tip podataka za x-os
+ * @param <D2> Tip podataka za y-os
+ */
+
 public class ChartData<D1, D2>{
     private D1 x;
     private D2 y;

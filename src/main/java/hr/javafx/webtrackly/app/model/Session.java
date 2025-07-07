@@ -1,10 +1,14 @@
 package hr.javafx.webtrackly.app.model;
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.utils.DateFormatterUtil;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+/**
+ * Klasa koja predstavlja sesiju korisnika na određenoj web stranici.
+ * Sadrži informacije o web stranici, korisniku, vrsti uređaja, vremenu početka i završetka sesije te statusu aktivnosti.
+ */
 
 public class Session extends Entity{
     private Website website;
@@ -78,6 +82,10 @@ public class Session extends Entity{
         isActive = active;
     }
 
+    /**
+     * Builder klasa za izgradnju objekta Session.
+     */
+
     public static class Builder{
         private Long id;
         private Website website;
@@ -126,6 +134,11 @@ public class Session extends Entity{
             return new Session(id, website, user, deviceType, startTime, endTime, isActive);
         }
     }
+
+    /**
+     * Vraća string reprezentaciju objekta Session.
+     * @return String koji sadrži informacije o sesiji.
+     */
 
     @Override
     public String toString() {

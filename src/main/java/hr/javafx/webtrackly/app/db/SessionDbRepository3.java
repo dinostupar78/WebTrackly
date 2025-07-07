@@ -1,17 +1,30 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
 
+/**
+ * Klasa koja predstavlja repozitorij za upravljanje sesijama u bazi podataka.
+ * Ova klasa omogućuje dohvat najčešće korištenog tipa uređaja i broj sesija po tipu uređaja.
+ */
+
 public class SessionDbRepository3 {
 
     private boolean dbLock = false;
+
+    /**
+     * Dohvaća najčešće korišteni tip uređaja iz baze podataka.
+     * Ova metoda izvršava SQL upit koji grupira sesije po tipu uređaja,
+     * broji ih i vraća tip uređaja koji se najčešće pojavljuje.
+     * Ako nema sesija, vraća prazan Optional.
+     *
+     * @return Optional koji sadrži najčešće korišteni tip uređaja, ili prazan Optional ako nema sesija.
+     * @throws RepositoryException ako dođe do greške pri dohvaćanju podataka iz baze.
+     */
 
     public synchronized Optional<DeviceType> findMostFrequentDeviceType() {
         while (dbLock) {
@@ -48,6 +61,16 @@ public class SessionDbRepository3 {
             notifyAll();
         }
     }
+
+    /**
+     * Broji broj sesija po tipu uređaja.
+     * Ova metoda izvršava SQL upit koji broji sve sesije za određeni tip uređaja.
+     * Ako nema sesija za navedeni tip uređaja, vraća 0.
+     *
+     * @param device Tip uređaja za koji se broje sesije.
+     * @return Broj sesija za navedeni tip uređaja.
+     * @throws RepositoryException ako dođe do greške pri dohvaćanju podataka iz baze.
+     */
 
     public synchronized int countByDeviceType(DeviceType device) {
         while (dbLock) {

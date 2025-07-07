@@ -1,7 +1,12 @@
 package hr.javafx.webtrackly.app.model;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+/**
+ * Klasa koja predstavlja serijalizirane podatke o promjenama u aplikaciji WebTrackly.
+ * Ova klasa sadrži informacije o polju koje je promijenjeno, staroj i novoj vrijednosti,
+ * ulozi korisnika koji je izvršio promjenu te vremenu promjene.
+ */
 
 public class DataSerialization implements Serializable {
     private static long serialVersionUID = 1L;

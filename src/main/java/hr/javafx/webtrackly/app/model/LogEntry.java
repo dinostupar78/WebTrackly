@@ -1,5 +1,10 @@
 package hr.javafx.webtrackly.app.model;
 
+/**
+ * Klasa koja predstavlja zapis u dnevniku aplikacije WebTrackly.
+ * Sadrži informacije o vremenu, razini i poruci zapisa.
+ */
+
 public class LogEntry {
     private final String timestamp;
     private final String level;
