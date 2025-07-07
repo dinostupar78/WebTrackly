@@ -1,10 +1,13 @@
 package hr.javafx.webtrackly.utils;
+
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Properties;
 
 import static hr.javafx.webtrackly.main.HelloApplication.log;
@@ -62,16 +65,16 @@ public class DbActiveUtil {
      */
 
     public static void disconnectFromDatabase(Connection connection) {
-        if (connection != null) {
+        Optional.ofNullable(connection).ifPresent(conn -> {
             try {
-                if (!connection.isClosed()) {
-                    connection.close();
+                if (!conn.isClosed()) {
+                    conn.close();
                     log.info("Disconnected from database.");
                 }
             } catch (SQLException e) {
                 log.error("Error while disconnecting from database.", e);
             }
-        }
+        });
     }
 
 
