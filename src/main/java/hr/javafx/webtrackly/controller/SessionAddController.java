@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
@@ -15,18 +14,22 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+
+/**
+ * Kontroler za dodavanje nove sesije u aplikaciji WebTrackly.
+ * Ovaj kontroler upravlja korisničkim sučeljem za unos podataka o sesiji,
+ * uključujući web stranicu, korisnika, vrstu uređaja, vrijeme početka i završetka te aktivnost.
+ */
 
 public class SessionAddController {
     @FXML
@@ -60,6 +63,11 @@ public class SessionAddController {
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
     private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
+
+    /**
+     * Inicijalizira kontroler i postavlja početne vrijednosti u ComboBox-ove i TextField-ove.
+     * Također provjerava je li baza podataka aktivna i postavlja formatiranje vremena.
+     */
 
     public void initialize() {
         if (!DbActiveUtil.isDatabaseOnline()) {
@@ -101,6 +109,12 @@ public class SessionAddController {
         }, sessionDatePickerEndDate.valueProperty(), endFormatter.valueProperty());
 
     }
+
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za dodavanje sesije.
+     * Provjerava unesene podatke, kreira novu sesiju i sprema je u bazu podataka.
+     * Ako su uneseni podaci neispravni, prikazuje odgovarajuće poruke o grešci.
+     */
 
     public void addSession() {
         StringBuilder errorMessages = new StringBuilder();

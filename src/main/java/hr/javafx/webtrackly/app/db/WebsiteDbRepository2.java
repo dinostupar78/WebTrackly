@@ -1,20 +1,32 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Klasa koja predstavlja repozitorij za upravljanje web stranicama u bazi podataka.
+ * Ova klasa omogućuje brisanje i ažuriranje web stranica u bazi podataka.
+ *
+ * @param <T> Tip entiteta koji nasljeđuje klasu Website.
+ */
 
 public class WebsiteDbRepository2<T extends Website> {
 
     private static boolean dbLock = false;
+
+    /**
+     * Metoda za brisanje web stranice iz baze podataka.
+     * Ova metoda koristi zaključavanje kako bi se spriječile istovremene promjene u bazi podataka.
+     *
+     * @param id ID web stranice koja se briše.
+     * @throws RepositoryException Ako dođe do greške prilikom brisanja web stranice.
+     */
 
     public synchronized void delete(Long id){
         while (dbLock) {
@@ -38,6 +50,14 @@ public class WebsiteDbRepository2<T extends Website> {
         }
     }
 
+/**
+     * Izvršava brisanje web stranice i svih povezanih podataka iz baze podataka.
+     * Ova metoda koristi pripremljene izjave za brisanje podataka iz povezanih tablica.
+     *
+     * @param connection Veza s bazom podataka.
+     * @param id ID web stranice koja se briše.
+     */
+
     private void performDeleteOperation(Connection connection, Long id) {
         try {
             executeDeleteWebsiteQuery(connection, id);
@@ -53,6 +73,15 @@ public class WebsiteDbRepository2<T extends Website> {
             throw new RepositoryException("Error while deleting website from database");
         }
     }
+
+    /**
+     * Izvršava pripremljene izjave za brisanje web stranice i svih povezanih podataka iz baze podataka.
+     * Ova metoda koristi pripremljene izjave za brisanje podataka iz povezanih tablica.
+     *
+     * @param connection Veza s bazom podataka.
+     * @param id ID web stranice koja se briše.
+     * @throws SQLException Ako dođe do greške prilikom izvršavanja SQL upita.
+     */
 
     private void executeDeleteWebsiteQuery(Connection connection, Long id) throws SQLException {
         try (PreparedStatement deleteUserActionStmt = connection.prepareStatement("DELETE FROM USER_ACTION WHERE WEBSITE_ID = ?");
@@ -81,6 +110,14 @@ public class WebsiteDbRepository2<T extends Website> {
             throw new RepositoryException("Error while deleting website from database");
         }
     }
+
+    /**
+     * Metoda za ažuriranje web stranice u bazi podataka.
+     * Ova metoda koristi zaključavanje kako bi se spriječile istovremene promjene u bazi podataka.
+     *
+     * @param entity Entitet web stranice koji se ažurira.
+     * @throws RepositoryException Ako dođe do greške prilikom ažuriranja web stranice.
+     */
 
     public synchronized void update(T entity) throws RepositoryException {
         while (dbLock) {

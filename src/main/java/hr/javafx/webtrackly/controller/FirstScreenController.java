@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.model.MarketingRole;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserSession;
@@ -17,12 +16,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
+
+/**
+ * Kontroler za prvi ekran aplikacije WebTrackly.
+ * Ovaj kontroler upravlja prikazom i interakcijom s početnim ekranom aplikacije.
+ */
 
 public class FirstScreenController {
     @FXML
@@ -31,6 +33,12 @@ public class FirstScreenController {
     @FXML
     private TitledPane menuLog;
 
+    /**
+     * Inicijalizacija kontrolera.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke i postavlja vidljivost izbornika
+     * ovisno o ulozi trenutnog korisnika.
+     */
+
     public void initialize() {
         User currentUser = UserSession.getInstance().getCurrentUser();
         if (currentUser.getRole() instanceof MarketingRole) {
@@ -38,6 +46,14 @@ public class FirstScreenController {
             menuLog.setVisible(false);
         }
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik klikne na gumb za odjavu.
+     * Prikazuje potvrdu o odjavi i, ako korisnik potvrdi, postavlja trenutnog korisnika na null
+     * i prikazuje početni ekran prijave.
+     *
+     * @param event Događaj klika na gumb za odjavu.
+     */
 
     public void onClickLogout(ActionEvent event) {
         Optional<ButtonType> result = ShowAlertUtil.showConfirmationAlert("Logout Confirmation", "Are you sure you want to log out?");
@@ -58,6 +74,13 @@ public class FirstScreenController {
         }
     }
 
+    /**
+     * Metoda koja prikazuje početni ekran aplikacije.
+     * Učitava FXML datoteku za početni ekran i vraća novu scenu.
+     *
+     * @return Nova scena s početnim ekranom.
+     */
+
     public Scene showWelcomeScreen() {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/hr/javafx/webtrackly/welcomeScreen.fxml"));
         Scene scene = null;
@@ -68,6 +91,11 @@ public class FirstScreenController {
         }
         return scene;
     }
+
+    /**
+     * Metode za navigaciju na različite panele aplikacije.
+     * Svaka metoda koristi ScreenChangeUtil za promjenu prikaza.
+     */
 
     public void onClickShowDashboardPanel(ActionEvent event) {
         ScreenChangeUtil searchClickUtils = new ScreenChangeUtil();

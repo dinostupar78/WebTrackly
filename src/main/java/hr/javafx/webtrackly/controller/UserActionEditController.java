@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository2;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
@@ -13,14 +12,17 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
+
+/**
+ * Kontroler za uređivanje korisničkih akcija u aplikaciji WebTrackly.
+ * Omogućuje korisnicima da ažuriraju informacije o akcijama koje su izvršili na web stranicama.
+ */
 
 public class UserActionEditController {
     @FXML
@@ -53,6 +55,13 @@ public class UserActionEditController {
     private UserActionDbRepository2<UserAction> userActionRepository = new UserActionDbRepository2<>();
     private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
+    /**
+     * Postavlja korisničku akciju koja se uređuje u kontroleru.
+     * Ova metoda inicijalizira polja u sučelju s podacima iz objekta korisničke akcije.
+     *
+     * @param userAction Objekt korisničke akcije koji se uređuje.
+     */
+
     public void setUserActionData(UserAction userAction) {
         this.userAction = userAction;
 
@@ -65,6 +74,11 @@ public class UserActionEditController {
         actionEditTextFieldDetails.setText(userAction.getDetails());
 
     }
+
+    /**
+     * Inicijalizira kontroler i postavlja početne vrijednosti za ComboBox-ove i DatePicker.
+     * Također postavlja formatiranje za polje vremena.
+     */
 
     public void initialize() {
         actionEditComboBoxUser.getItems().setAll(userRepository.findAll());
@@ -85,6 +99,12 @@ public class UserActionEditController {
             return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
         }, actionEditDatePickerDateOfAction.valueProperty(), tf.valueProperty());
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi urediti korisničku akciju.
+     * Provjerava unesene podatke i ažurira korisničku akciju u bazi podataka.
+     * Ako su podaci neispravni, prikazuje se upozorenje s greškama.
+     */
 
     public void editUserAction(){
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultEdit();
@@ -177,6 +197,11 @@ public class UserActionEditController {
             ShowAlertUtil.showAlert("Error", "User action not updated!", Alert.AlertType.ERROR);
         }
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi otkazati uređivanje korisničke akcije.
+     * Vraća korisnika na prethodni ekran i čisti formu.
+     */
 
     private void clearForm(){
         actionEditComboBoxUser.setValue(null);

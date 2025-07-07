@@ -1,5 +1,10 @@
 package hr.javafx.webtrackly.app.enums;
 
+/**
+ * Enum koji predstavlja tip web stranice.
+ * Koristi se za identifikaciju vrste web stranice u aplikaciji WebTrackly.
+ */
+
 public enum WebsiteType {
     PERSONAL,
     HEALTH,

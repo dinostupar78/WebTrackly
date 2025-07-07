@@ -1,5 +1,10 @@
 package hr.javafx.webtrackly.app.enums;
 
+/**
+ * Enum koji definira različite tipove ponašanja korisnika u aplikaciji WebTrackly.
+ * Svaki tip ponašanja predstavlja specifičnu interakciju korisnika s aplikacijom.
+ */
+
 public enum BehaviourType {
     CLICK,
     SCROLL,

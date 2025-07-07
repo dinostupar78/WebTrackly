@@ -15,6 +15,11 @@ import java.time.LocalDate;
 import java.util.Optional;
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
+/**
+ * Kontroler za registraciju korisnika u aplikaciji WebTrackly.
+ * Omogućuje unos osobnih podataka, korisničkog imena, lozinke i odabir uloge.
+ */
+
 public class RegisterController {
     @FXML
     private TextField registerTextFieldFirstName;
@@ -40,10 +45,23 @@ public class RegisterController {
     @FXML
     private ComboBox<Role> registerComboBoxRole;
 
+    /**
+     * Inicijalizira kontroler i postavlja vrijednosti u ComboBox elemente.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize() {
         registerComboBoxGender.getItems().setAll(GenderType.values());
         registerComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole());
     }
+
+    /**
+     * Metoda koja se poziva prilikom klika na gumb "Registriraj se".
+     * Provjerava unesene podatke, kreira novog korisnika i sprema ga u datoteku.
+     * Ako su uneseni podaci neispravni, prikazuje se upozorenje.
+     *
+     * @param event Događaj klika na gumb.
+     */
 
     public void onClickRegister(ActionEvent event) {
         StringBuilder errorMessages = new StringBuilder();
@@ -121,8 +139,13 @@ public class RegisterController {
                 showAlert("Registration failed: " + e.getMessage());
             }
         }
-
     }
+
+    /**
+     * Prikazuje obavijesni dijalog s porukom o statusu registracije.
+     * @param message Poruka koja će biti prikazana u dijalogu.
+     */
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Registration Status");
@@ -130,9 +153,15 @@ public class RegisterController {
         alert.showAndWait();
     }
 
+    /**
+     * Metoda koja se poziva prilikom klika na gumb "Prijavi se".
+     * Mijenja prikaz na ekran za prijavu.
+     *
+     * @param event Događaj klika na gumb.
+     */
+
     public void onClickSwitchToLogin(ActionEvent event) {
         ScreenChangeUtil.showLoginPanel(event);
     }
-
 
 }

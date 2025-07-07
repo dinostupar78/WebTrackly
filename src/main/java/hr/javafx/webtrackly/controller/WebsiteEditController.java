@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository2;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.model.*;
@@ -10,10 +9,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
+
+/**
+ * Kontroler za uređivanje web stranica u aplikaciji WebTrackly.
+ * Omogućuje korisnicima da ažuriraju informacije o web stranicama.
+ */
 
 public class WebsiteEditController {
     @FXML
@@ -31,6 +34,13 @@ public class WebsiteEditController {
     private WebsiteDbRepository2<Website> websiteRepository = new WebsiteDbRepository2<>();
     private Website website;
 
+    /**
+     * Postavlja web stranicu koja se uređuje.
+     * Ova metoda inicijalizira polja u sučelju s podacima web stranice.
+     *
+     * @param website Web stranica koja se uređuje.
+     */
+
     public void setWebsite(Website website){
         this.website = website;
 
@@ -40,12 +50,23 @@ public class WebsiteEditController {
         websiteEditTextFieldDescription.setText(website.getWebsiteDescription());
     }
 
+    /**
+     * Inicijalizira polja u sučelju za uređivanje web stranica.
+     * Postavlja prazne vrijednosti za ime, URL, kategoriju i opis web stranice.
+     */
+
     public void initialize() {
         websiteEditTextFieldName.setText("");
         websiteEditTextFieldUrl.setText("");
         websiteEditComboBoxCategory.getItems().setAll(WebsiteType.values());
         websiteEditTextFieldDescription.setText("");
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi urediti web stranicu.
+     * Provjerava unesene podatke i ažurira web stranicu u bazi podataka.
+     * Ako su podaci ispravni, prikazuje poruku o uspjehu, inače prikazuje greške.
+     */
 
     public void editWebsite(){
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultEdit();
@@ -113,6 +134,11 @@ public class WebsiteEditController {
             ShowAlertUtil.showAlert("Error", "Website not updated!", Alert.AlertType.ERROR);
         }
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi otkazati uređivanje web stranice.
+     * Vraća korisnika na prethodni ekran i čisti formu.
+     */
 
     private void clearForm(){
         websiteEditTextFieldName.clear();

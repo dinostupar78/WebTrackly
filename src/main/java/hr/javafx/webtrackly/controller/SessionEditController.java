@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository2;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
@@ -12,16 +11,20 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+
+/**
+ * Kontroler za uređivanje sesije u aplikaciji WebTrackly.
+ * Omogućuje korisniku da promijeni podatke o sesiji, uključujući web stranicu, korisnika, tip uređaja,
+ * vrijeme početka i završetka sesije te aktivnost.
+ */
 
 public class SessionEditController {
     @FXML
@@ -58,6 +61,13 @@ public class SessionEditController {
 
     private Session session;
 
+    /**
+     * Postavlja podatke o sesiji koja se uređuje.
+     * Ova metoda inicijalizira polja u kontroleru s podacima iz objekta sesije.
+     *
+     * @param session Objekt sesije koji sadrži podatke o sesiji za uređivanje.
+     */
+
     public void setSessionData(Session session) {
         this.session = session;
 
@@ -71,6 +81,10 @@ public class SessionEditController {
         sessionEditComboBoxActivity.setValue(session.getActive());
     }
 
+    /**
+     * Inicijalizira kontroler i postavlja početne vrijednosti za ComboBox-ove i TextField-ove.
+     * Također postavlja formatiranje vremena za polja za unos vremena.
+     */
 
     public void initialize() {
         sessionEditComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
@@ -99,6 +113,12 @@ public class SessionEditController {
             return (date != null && time != null) ? LocalDateTime.of(date, time) : null;
         }, sessionEditDatePickerEndDate.valueProperty(), endFormatter.valueProperty());
     }
+
+    /**
+     * Metoda koja se poziva prilikom uređivanja sesije.
+     * Provjerava unesene podatke, ažurira sesiju u bazi podataka i serijalizira promjene.
+     * Ako su uneseni podaci neispravni, prikazuje se upozorenje s greškama.
+     */
 
     public void editSession(){
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultEdit();
@@ -195,6 +215,11 @@ public class SessionEditController {
             ShowAlertUtil.showAlert("Error", "Session not updated!", Alert.AlertType.ERROR);
         }
     }
+
+    /**
+     * Metoda koja se poziva prilikom otkazivanja uređivanja sesije.
+     * Vraća korisnika na prethodni ekran i čisti formu.
+     */
 
     private void clearForm() {
         sessionEditComboBoxWebsite.getSelectionModel().clearSelection();

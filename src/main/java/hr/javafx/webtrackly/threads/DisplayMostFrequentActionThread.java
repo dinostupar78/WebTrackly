@@ -1,11 +1,14 @@
 package hr.javafx.webtrackly.threads;
-
 import hr.javafx.webtrackly.app.db.UserActionDbRepository3;
 import hr.javafx.webtrackly.app.enums.BehaviourType;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-
 import java.util.Optional;
+
+/**
+ * Thread koji dohvaća i prikazuje najčešću korisničku akciju iz baze podataka.
+ * Koristi UserActionDbRepository3 za pristup podacima i ažurira UI elemente.
+ */
 
 public class DisplayMostFrequentActionThread implements Runnable {
 
@@ -19,6 +22,10 @@ public class DisplayMostFrequentActionThread implements Runnable {
         this.countLabel = countLabel;
     }
 
+    /**
+     * Metoda koja se izvršava u threadu.
+     * Dohvaća najčešću akciju iz baze podataka i ažurira UI elemente.
+     */
 
     @Override
     public void run() {

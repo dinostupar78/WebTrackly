@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
@@ -20,13 +19,16 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
 import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * Kontroler za upravljanje korisničkim akcijama u aplikaciji WebTrackly.
+ * Ovaj kontroler omogućuje pregled, filtriranje, uređivanje i brisanje korisničkih akcija.
+ */
 
 public class UserActionController {
     @FXML
@@ -70,6 +72,11 @@ public class UserActionController {
 
     private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
 
+    /**
+     * Inicijalizira kontroler i postavlja sve potrebne postavke za prikaz korisničkih akcija.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize() {
         userActionTableColumnID.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
@@ -109,11 +116,22 @@ public class UserActionController {
 
     }
 
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za filtriranje korisničkih akcija.
+     * Ova metoda dohvaća sve korisničke akcije iz baze podataka i filtrira ih prema unosima u tekstualnim poljima.
+     *
+     * @param event Događaj klika na gumb.
+     */
 
     @FXML
     private void openAddUserActionScreen(ActionEvent event) {
         ScreenChangeButtonUtil.openUserActionAddScreen(event);
     }
+
+    /**
+     * Metoda koja filtrira korisničke akcije na temelju unosa u tekstualnim poljima.
+     * Prikazuje filtrirane rezultate u tablici i ažurira grafikone.
+     */
 
     public void filterUserActions(){
         List<UserAction> initialUserActionList;
@@ -159,6 +177,11 @@ public class UserActionController {
 
     }
 
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za osvježavanje korisničkih akcija.
+     * Ova metoda ponovno dohvaća sve korisničke akcije iz baze podataka i prikazuje ih u tablici.
+     */
+
     private void showUserActionAreaChart(List<UserAction> actions) {
         userActionAreaChart.getData().clear();
         userActionAreaChart.setLegendVisible(false);
@@ -186,6 +209,13 @@ public class UserActionController {
 
         userActionAreaChart.getData().add(series);
     }
+
+    /**
+     * Metoda koja prikazuje statistiku korisničkih akcija prema vrsti ponašanja.
+     * Ova metoda ažurira PieChart s brojem akcija po vrsti ponašanja.
+     *
+     * @param actions Lista korisničkih akcija koje se koriste za izračun statistike.
+     */
 
     private void showUserActionBehaviourTypeChart(List<UserAction> actions) {
         userActionBehaviourTypeChart.getData().clear();

@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.UserDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
@@ -14,14 +13,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Kontroler za dodavanje korisnika u aplikaciji WebTrackly.
+ * Ovaj kontroler upravlja unosom podataka o korisniku i njihovim validacijama.
+ * Također, omogućuje spremanje korisnika u bazu podataka i serijalizaciju podataka o promjenama.
+ */
 
 public class UserAddController {
     @FXML
@@ -54,10 +57,21 @@ public class UserAddController {
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository2<User> userRepository = new UserDbRepository2<>();
 
+    /**
+     * Inicijalizira kontroler i postavlja vrijednosti za ComboBox elemente.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize() {
         userComboBoxGender.getItems().setAll(GenderType.values());
         userComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
     }
+
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za dodavanje korisnika.
+     * Validira unesene podatke, provjerava duplikate i sprema novog korisnika u bazu podataka.
+     * Također, serijalizira podatke o promjeni i prikazuje odgovarajuće poruke korisniku.
+     */
 
     public void addUser(){
         StringBuilder errorMessages = new StringBuilder();
@@ -181,6 +195,15 @@ public class UserAddController {
         }
     }
 
+/**
+     * Validira unesenu email adresu prema regularnom izrazu.
+     * Ako email nije valjan, baca EMailValidatorException.
+     *
+     * @param email Email adresa za validaciju.
+     * @return true ako je email valjan, inače baca iznimku.
+     * @throws EMailValidatorException Ako email nije valjan.
+     */
+
     public static Boolean validateEmail(String email) throws EMailValidatorException {
 
         Pattern emailRegex =
@@ -195,6 +218,11 @@ public class UserAddController {
             return true;
         }
     }
+
+    /**
+     * Čisti formu tako da briše sve unesene podatke u poljima.
+     * Ova metoda se koristi nakon uspješnog dodavanja korisnika kako bi se resetirala forma.
+     */
 
     private void clearForm(){
         userTextFieldFirstName.clear();

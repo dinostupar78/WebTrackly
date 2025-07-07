@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviourType;
@@ -21,15 +20,18 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * Kontroler za upravljanje prometnim zapisima u aplikaciji WebTrackly.
+ * Ovaj kontroler omogućuje pregled, filtriranje, uređivanje i brisanje prometnih zapisa.
+ */
 
 public class TrafficRecordController {
     @FXML
@@ -68,6 +70,11 @@ public class TrafficRecordController {
     private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
     private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
 
+/**
+     * Inicijalizira kontroler i postavlja vrijednosti za stupce tablice prometnih zapisa.
+     * Također dodaje rukovatelje događaja za brisanje i uređivanje redaka.
+     */
+
     public void initialize(){
         trafficColumnID.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
@@ -100,10 +107,20 @@ public class TrafficRecordController {
         });
     }
 
+    /**
+     * Metoda koja se poziva prilikom promjene teksta u polju za ID prometnog zapisa.
+     * Pokreće filtriranje prometnih zapisa na temelju unesenog ID-a.
+     */
+
     @FXML
     private void openAddTrafficRecordScreen(ActionEvent event) {
         ScreenChangeButtonUtil.openTrafficRecordAddScreen(event);
     }
+
+    /**
+     * Metoda koja se poziva prilikom promjene teksta u polju za naziv web stranice.
+     * Pokreće filtriranje prometnih zapisa na temelju unesenog naziva web stranice.
+     */
 
     public void filterTrafficRecords(){
         List<TrafficRecord> initialTrafficRecordList;
@@ -177,6 +194,11 @@ public class TrafficRecordController {
 
     }
 
+    /**
+     * Metoda koja se poziva prilikom promjene teksta u polju za naziv web stranice.
+     * Pokreće filtriranje prometnih zapisa na temelju unesenog naziva web stranice.
+     */
+
     private void showPageViewsTrendChart(List<TrafficRecord> data) {
         pageViewsChart.getData().clear();
 
@@ -204,6 +226,13 @@ public class TrafficRecordController {
         CategoryAxis xAxis = (CategoryAxis) pageViewsChart.getXAxis();
         xAxis.setTickLabelRotation(-45);
     }
+
+    /**
+     * Metoda koja prikazuje ukupne prikaze stranica po web stranicama u obliku stupčastog grafikona.
+     * Prikazuje samo podatke za zadnjih 200 sati.
+     *
+     * @param data Lista prometnih zapisa koji sadrže podatke o prikazima stranica.
+     */
 
     private void showPageViewsBySiteChart(List<TrafficRecord> data) {
         totalPageViewsChart.getData().clear();

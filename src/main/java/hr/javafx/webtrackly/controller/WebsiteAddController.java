@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.model.*;
@@ -12,13 +11,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
+
+/**
+ * Kontroler za dodavanje web stranica u aplikaciji WebTrackly.
+ * Ova klasa upravlja unosom podataka o web stranicama i njihovim kategorijama.
+ */
 
 public class WebsiteAddController {
     @FXML
@@ -34,6 +36,11 @@ public class WebsiteAddController {
     private TextField websiteTextFieldDescription;
 
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
+
+    /**
+     * Inicijalizira kontroler i postavlja početne vrijednosti za unos web stranica.
+     * Provjerava je li baza podataka aktivna i postavlja kategorije web stranica.
+     */
 
     public void initialize(){
         if (!DbActiveUtil.isDatabaseOnline()) {
@@ -56,6 +63,12 @@ public class WebsiteAddController {
 
         websiteComboBoxCategory.getSelectionModel().select(WebsiteType.OTHER);
     }
+
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za dodavanje web stranice.
+     * Provjerava unesene podatke i dodaje novu web stranicu u bazu podataka.
+     * Ako su uneseni podaci neispravni, prikazuje upozorenje.
+     */
 
     public void addWebsite() {
         StringBuilder errorMessages = new StringBuilder();
@@ -115,6 +128,11 @@ public class WebsiteAddController {
 
         }
     }
+
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za zatvaranje prozora.
+     * Zatvara prozor bez spremanja promjena.
+     */
 
     private void clearForm(){
         websiteTextFieldName.clear();

@@ -1,7 +1,5 @@
 package hr.javafx.webtrackly.utils;
-
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,6 +12,14 @@ import static hr.javafx.webtrackly.main.HelloApplication.log;
 public class DbActiveUtil {
     private DbActiveUtil() {}
 
+    /**
+     * Provjerava je li baza podataka dostupna.
+     * Pokušava se povezati na bazu podataka koristeći konfiguraciju iz datoteke database.properties.
+     * Ako je veza uspješna, vraća true, inače vraća false i ispisuje grešku u log.
+     *
+     * @return boolean - true ako je baza online, false inače
+     */
+
     public static boolean isDatabaseOnline() {
         try (Connection connection = connectToDatabase()) {
             log.info("Database is online.");
@@ -23,6 +29,16 @@ public class DbActiveUtil {
             return false;
         }
     }
+
+    /**
+     * Povezuje se na bazu podataka koristeći konfiguraciju iz datoteke database.properties.
+     * Ako dođe do greške prilikom čitanja datoteke ili uspostavljanja veze, baca DbConnectionException.
+     *
+     * @return Connection - objekt koji predstavlja vezu s bazom podataka
+     * @throws DbConnectionException ako dođe do greške prilikom povezivanja na bazu
+     * @throws IOException ako dođe do greške prilikom čitanja datoteke
+     * @throws SQLException ako dođe do SQL greške prilikom uspostavljanja veze
+     */
 
     public static Connection connectToDatabase() throws DbConnectionException, IOException, SQLException {
         Properties props = new Properties();
@@ -36,6 +52,26 @@ public class DbActiveUtil {
                 props.getProperty("databaseUrl"),
                 props.getProperty("username"),
                 props.getProperty("password"));
+    }
+
+    /**
+     * Zatvara vezu s bazom podataka ako je otvorena.
+     * Ako dođe do greške prilikom zatvaranja veze, ispisuje grešku u log.
+     *
+     * @param connection - objekt koji predstavlja vezu s bazom podataka
+     */
+
+    public static void disconnectFromDatabase(Connection connection) {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.close();
+                    log.info("Disconnected from database.");
+                }
+            } catch (SQLException e) {
+                log.error("Error while disconnecting from database.", e);
+            }
+        }
     }
 
 

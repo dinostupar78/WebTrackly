@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.*;
@@ -13,15 +12,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
+
+/**
+ * Kontroler za dodavanje zapisa o prometu u aplikaciji WebTrackly.
+ * Ovaj kontroler upravlja unosom podataka o posjetama web stranicama i njihovo spremanje u bazu podataka.
+ */
 
 public class TrafficRecordAddController {
     @FXML
@@ -38,6 +40,12 @@ public class TrafficRecordAddController {
 
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private TrafficRecordDbRepository1<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository1<>();
+
+    /**
+     * Inicijalizira kontroler i postavlja potrebne vrijednosti.
+     * Provjerava je li baza podataka aktivna i učitava sve web stranice u ComboBox.
+     * Postavlja formatiranje vremena za unos posjeta.
+     */
 
     public void initialize() {
         if (!DbActiveUtil.isDatabaseOnline()) {
@@ -65,6 +73,12 @@ public class TrafficRecordAddController {
             return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
         }, trafficRecordDatePickerDateOfVisit.valueProperty(), tf.valueProperty());
     }
+
+    /**
+     * Metoda koja se poziva prilikom dodavanja novog zapisa o prometu.
+     * Provjerava unesene podatke, stvara novi zapis i sprema ga u bazu podataka.
+     * Ako su uneseni podaci neispravni, prikazuje upozorenje.
+     */
 
     public void addTrafficRecord() {
         StringBuilder errorMessages = new StringBuilder();
@@ -114,6 +128,11 @@ public class TrafficRecordAddController {
 
         }
     }
+
+    /**
+     * Metoda koja se poziva prilikom zatvaranja prozora za dodavanje zapisa o prometu.
+     * Zatvara prozor i vraća se na prethodni ekran.
+     */
 
     private void clearForm() {
         trafficRecordComboBoxWebsite.getSelectionModel().clearSelection();

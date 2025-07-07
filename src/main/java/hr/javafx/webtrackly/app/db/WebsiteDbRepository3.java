@@ -1,17 +1,32 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.WebsiteType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
 
+/**
+ * Repozitorij za rad s bazom podataka za entitet Website.
+ * Ova klasa sadrži metode za dohvat najčešće kategorije,
+ * brojanje broja web stranica po kategoriji,
+ * dohvat najčešće URL adrese i brojanje broja web stranica po URL adresi.
+ * Ova klasa koristi zaključavanje kako bi se spriječile
+ * istovremene promjene baze podataka i osigurala konsistentnost podataka.
+ */
+
 public class WebsiteDbRepository3 {
 
     private static boolean dbLock = false;
+
+    /**
+     * Dohvaća najčešću kategoriju web stranica iz baze podataka.
+     * Ova metoda koristi SQL upit za grupiranje i brojanje kategorija,
+     * te vraća opcionalnu vrijednost najčešće kategorije.
+     *
+     * @return Opcionalna vrijednost najčešće kategorije web stranica.
+     */
 
     public synchronized Optional<WebsiteType> findMostFrequentCategory() {
         while (dbLock) {
@@ -46,6 +61,15 @@ public class WebsiteDbRepository3 {
         }
     }
 
+    /**
+     * Broji broj web stranica po kategoriji.
+     * Ova metoda koristi SQL upit za brojanje web stranica
+     * koje pripadaju određenoj kategoriji.
+     *
+     * @param category Kategorija web stranica za koju se broji broj stranica.
+     * @return Broj web stranica u zadanoj kategoriji.
+     */
+
     public synchronized Integer countByCategory(WebsiteType category) {
         while (dbLock) {
             try {
@@ -75,6 +99,14 @@ public class WebsiteDbRepository3 {
             notifyAll();
         }
     }
+
+    /**
+     * Dohvaća najčešću URL adresu web stranica iz baze podataka.
+     * Ova metoda koristi SQL upit za grupiranje i brojanje URL adresa,
+     * te vraća opcionalnu vrijednost najčešće URL adrese.
+     *
+     * @return Opcionalna vrijednost najčešće URL adrese web stranica.
+     */
 
 
     public synchronized Optional<String> findMostFrequentUrl() {
@@ -111,6 +143,15 @@ public class WebsiteDbRepository3 {
             notifyAll();
         }
     }
+
+    /**
+     * Broji broj web stranica po URL adresi.
+     * Ova metoda koristi SQL upit za brojanje web stranica
+     * koje imaju određenu URL adresu.
+     *
+     * @param url URL adresa web stranica za koju se broji broj stranica.
+     * @return Broj web stranica s zadanim URL-om.
+     */
 
     public synchronized Integer countByUrl(String url) {
         while (dbLock) {

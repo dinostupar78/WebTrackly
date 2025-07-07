@@ -1,12 +1,10 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.model.LogEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,9 +12,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * Kontroler za upravljanje prikazom i filtriranjem logova u aplikaciji WebTrackly.
+ * Omogućuje korisnicima pregled logova, filtriranje po datumu, razini loga i ključnim riječima.
+ */
 
 public class LogController {
     @FXML
@@ -40,14 +42,22 @@ public class LogController {
 
     private ObservableList<LogEntry> logEntries = FXCollections.observableArrayList();
 
+    /**
+     * Inicijalizira kolone u TableView-u i postavlja vrijednosti za prikaz logova.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize(){
         logColumnTimestamp.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         logColumnLevel.setCellValueFactory(new PropertyValueFactory<>("level"));
         logColumnMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
 
-
-
     }
+
+    /**
+     * Metoda za filtriranje logova prema ključnim riječima, razini loga i datumu.
+     * Učitava logove iz datoteke i primjenjuje filtre na temelju korisničkog unosa.
+     */
 
     public void filterLogs() {
         logComboBoxLogLevel.setItems(observableArrayList("ALL", "INFO", "WARNING", "ERROR", "DEBUG"));

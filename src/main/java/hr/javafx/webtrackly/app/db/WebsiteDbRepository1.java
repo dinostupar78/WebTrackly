@@ -14,8 +14,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Repozitorij za upravljanje web stranicama u bazi podataka.
+ * Ova klasa omogućuje dohvat, spremanje i upravljanje web stranicama.
+ * Ona nasljeđuje apstraktnu klasu AbstractDbRepository i implementira metode za rad s web stranicama.
+ * @param <T> Tip entiteta koji predstavlja web stranicu, nasljeđuje klasu Website.
+ */
 
 public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -24,6 +30,11 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
             "SELECT ID, WEBSITE_NAME, WEBSITE_URL, WEBSITE_CATEGORY, WEBSITE_DESCRIPTION FROM WEBSITE";
 
     private static boolean dbLock = false;
+
+    /**
+     * Konstruktor koji inicijalizira repozitorij web stranica.
+     * Ovaj konstruktor poziva super konstruktor s tipom entiteta Website.
+     */
 
     @Override
     public synchronized T findById(Long id){
@@ -58,6 +69,12 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         }
     }
 
+    /**
+     * Metoda koja dohvaća sve web stranice iz baze podataka.
+     * Ova metoda koristi SQL upit za dohvat svih web stranica i vraća listu entiteta tipa T.
+     * @return Lista web stranica.
+     */
+
     @Override
     public synchronized List<T> findAll(){
         while (dbLock) {
@@ -88,6 +105,12 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         }
         return websites;
     }
+
+    /**
+     * Metoda koja sprema listu web stranica u bazu podataka.
+     * Ova metoda koristi SQL upit za umetanje više redaka u tablicu WEBSITE.
+     * @param entities Lista web stranica koje se spremaju.
+     */
 
     @Override
     public synchronized void save(List<T> entities){
@@ -123,6 +146,12 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         }
     }
 
+    /**
+     * Metoda koja sprema pojedinačnu web stranicu u bazu podataka.
+     * Ova metoda koristi SQL upit za umetanje jednog retka u tablicu WEBSITE.
+     * @param entity Web stranica koja se sprema.
+     */
+
     @Override
     public synchronized void save(T entity){
         while (dbLock) {
@@ -153,6 +182,14 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
         }
     }
 
+    /**
+     * Metoda koja dohvaća web stranicu iz ResultSet-a.
+     * Ova metoda koristi podatke iz ResultSet-a za kreiranje objekta tipa Website.
+     * @param resultSet ResultSet koji sadrži podatke o web stranici.
+     * @return Web stranica kao objekt tipa Website.
+     * @throws SQLException Ako dođe do greške pri dohvaćanju podataka iz ResultSet-a.
+     * @throws InvalidDataException Ako su podaci neispravni ili nedostaju.
+     */
 
     public static Website extractWebsiteFromResultSet(ResultSet resultSet) throws SQLException, InvalidDataException {
         Long id = resultSet.getLong("ID");
@@ -181,6 +218,13 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
                 .build();
 
     }
+
+    /**
+     * Metoda koja dohvaća korisnike povezane s određenom web stranicom.
+     * Ova metoda koristi SQL upit za dohvat korisnika na temelju ID-a web stranice.
+     * @param websiteId ID web stranice za koju se dohvaćaju korisnici.
+     * @return Skup korisnika povezanih s web stranicom.
+     */
 
     private static Set<User> fetchUsersForWebsite(Long websiteId) {
         Set<User> users = new HashSet<>();

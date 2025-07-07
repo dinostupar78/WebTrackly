@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
@@ -21,13 +20,17 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
 import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * Kontroler za upravljanje sesijama u aplikaciji WebTrackly.
+ * Omogućuje pregled, filtriranje, uređivanje i brisanje sesija.
+ * Također prikazuje statističke podatke o aktivnostima sesija.
+ */
 
 public class SessionController {
     @FXML
@@ -74,10 +77,20 @@ public class SessionController {
 
     private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
+    /**
+     * Otvara ekran za uređivanje sesije.
+     * @param event događaj koji pokreće otvaranje ekrana
+     */
+
     @FXML
     private void openAddSessionScreen(ActionEvent event) {
         ScreenChangeButtonUtil.openSessionAddScreen(event);
     }
+
+    /**
+     * Inicijalizira kontroler i postavlja vrijednosti za stupce tablice sesija.
+     * Također postavlja događaje za brisanje i uređivanje redaka.
+     */
 
     public void initialize(){
         sessionColumnID.setCellValueFactory(cellData ->
@@ -124,6 +137,11 @@ public class SessionController {
         });
     }
 
+    /**
+     * Filtrira sesije na temelju unesenih kriterija.
+     * Prikazuje filtrirane rezultate u tablici i ažurira statističke grafikone.
+     */
+
     public void filterSessions(){
         List<Session> initialSessionList;
         try{
@@ -168,6 +186,11 @@ public class SessionController {
 
     }
 
+    /**
+     * Ažurira tablicu sesija s novim podacima.
+     * Ova metoda se poziva nakon filtriranja sesija.
+     */
+
     private void showSessionActivityLineChart(List<Session> sessions) {
         sessionActivityLineChart.getData().clear();
         sessionActivityLineChart.setLegendVisible(false);
@@ -197,6 +220,13 @@ public class SessionController {
         CategoryAxis xAxis = (CategoryAxis)sessionActivityLineChart.getXAxis();
         xAxis.setTickLabelRotation(-45);
     }
+
+    /**
+     * Prikazuje statističke podatke o distribuciji uređaja korištenih u sesijama.
+     * Prikazuje podatke u obliku tortnog grafikona.
+     *
+     * @param sessions Lista sesija za koje se prikazuju statistički podaci.
+     */
 
     private void showDeviceDistributionPieChart(List<Session> sessions) {
         sessionDeviceDistributionPieChart.getData().clear();

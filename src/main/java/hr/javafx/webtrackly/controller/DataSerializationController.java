@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.model.AdminRole;
 import hr.javafx.webtrackly.app.model.DataSerialization;
 import hr.javafx.webtrackly.app.model.MarketingRole;
@@ -13,9 +12,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
-
 import java.util.List;
 import java.util.Optional;
+
+/**
+ * Kontroler za upravljanje serijalizacijom podataka u aplikaciji WebTrackly.
+ * Ovaj kontroler omogućuje filtriranje i prikaz promjena podataka u tablici.
+ */
 
 public class DataSerializationController {
     @FXML
@@ -41,6 +44,11 @@ public class DataSerializationController {
 
     @FXML
     private TableColumn<DataSerialization, String> dataColumnChangeTimestamp;
+
+    /**
+     * Inicijalizira kontroler i postavlja vrijednosti za kolone tablice.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
 
     public void initialize(){
         dataColumnName.setCellValueFactory(cellData ->
@@ -76,6 +84,11 @@ public class DataSerializationController {
                 new SimpleStringProperty(DateFormatterUtil.formatLocalDateTime(cellData.getValue().getChangeTimestamp()))
         );
     }
+
+    /**
+     * Filtrira podatke u tablici na temelju unosa u tekstualnom polju i odabranog role.
+     * Ova metoda se poziva prilikom promjene unosa u tekstualnom polju ili odabira role.
+     */
 
     public void filterData() {
         List<DataSerialization> changes = DataSerializeUtil.deserializeData();

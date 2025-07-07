@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.utils;
-
 import hr.javafx.webtrackly.app.db.*;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.Session;
@@ -11,10 +10,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-
 import java.util.Optional;
-
 import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * Util klasa za upravljanje brisanjem redaka u tablicama aplikacije WebTrackly.
+ * Ova klasa pruža metode za dodavanje rukovatelja događajima brisanja redaka
+ * i potvrdu brisanja za različite entitete poput korisnika, korisničkih akcija,
+ * sesija i zapisa prometa.
+ */
 
 public class RowDeletion1Util {
     private RowDeletion1Util() {}
@@ -26,6 +30,13 @@ public class RowDeletion1Util {
     private static final UserActionDbRepository2<UserAction> userActionRepository = new UserActionDbRepository2<>();
     private static final SessionDbRepository2<Session> sessionRepository = new SessionDbRepository2<>();
     private static final TrafficRecordDbRepository2<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository2<>();
+
+    /**
+     * Dodaje rukovatelja događajem za brisanje redaka u tablici korisnika.
+     * Kada se klikne na redak, korisnik će biti upitan za potvrdu brisanja.
+     *
+     * @param tableView Tablica korisnika
+     */
 
     public static void addUserRowDeletionHandler(TableView<User> tableView) {
         tableView.setRowFactory(tv -> {
@@ -49,6 +60,14 @@ public class RowDeletion1Util {
         deleteUserWithConfirmation(tableView, selectedUser);
     }
 
+    /**
+     * Briše korisnika nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica korisnika
+     * @param user      Korisnik koji se briše
+     */
+
     private static void deleteUserWithConfirmation(TableView<User> tableView, User user) {
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultDelete();
 
@@ -68,6 +87,13 @@ public class RowDeletion1Util {
         }
     }
 
+    /**
+     * Dodaje rukovatelja događajem za brisanje redaka u tablici korisničkih akcija.
+     * Kada se klikne na redak, korisnik će biti upitan za potvrdu brisanja.
+     *
+     * @param tableView Tablica korisničkih akcija
+     */
+
     public static void addUserActionRowDeletionHandler(TableView<UserAction> tableView) {
         tableView.setRowFactory(tv -> {
             TableRow<UserAction> row = new TableRow<>();
@@ -80,6 +106,13 @@ public class RowDeletion1Util {
         });
     }
 
+    /**
+     * Briše korisničku akciju nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica korisničkih akcija
+     */
+
     public static void deleteUserActionWithConfirmation(TableView<UserAction> tableView) {
         UserAction selectedAction = tableView.getSelectionModel().getSelectedItem();
         if (selectedAction == null) {
@@ -89,6 +122,14 @@ public class RowDeletion1Util {
 
         deleteUserActionWithConfirmation(tableView, selectedAction);
     }
+
+    /**
+     * Briše korisničku akciju nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica korisničkih akcija
+     * @param action    Korisnička akcija koja se briše
+     */
 
     private static void deleteUserActionWithConfirmation(TableView<UserAction> tableView, UserAction action) {
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultDelete();
@@ -109,6 +150,13 @@ public class RowDeletion1Util {
         }
     }
 
+    /**
+     * Dodaje rukovatelja događajem za brisanje redaka u tablici sesija.
+     * Kada se klikne na redak, korisnik će biti upitan za potvrdu brisanja.
+     *
+     * @param tableView Tablica sesija
+     */
+
     public static void addSessionDeletionHandler(TableView<Session> tableView) {
         tableView.setRowFactory(tv -> {
             TableRow<Session> row = new TableRow<>();
@@ -121,6 +169,13 @@ public class RowDeletion1Util {
         });
     }
 
+    /**
+     * Briše sesiju nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica sesija
+     */
+
     public static void deleteSessionWithConfirmation(TableView<Session> tableView) {
         Session selectedSession = tableView.getSelectionModel().getSelectedItem();
         if (selectedSession == null) {
@@ -130,6 +185,14 @@ public class RowDeletion1Util {
 
         deleteSessionWithConfirmation(tableView, selectedSession);
     }
+
+    /**
+     * Briše sesiju nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica sesija
+     * @param session   Sesija koja se briše
+     */
 
     private static void deleteSessionWithConfirmation(TableView<Session> tableView, Session session) {
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultDelete();
@@ -150,6 +213,13 @@ public class RowDeletion1Util {
         }
     }
 
+    /**
+     * Dodaje rukovatelja događajem za brisanje redaka u tablici zapisa prometa.
+     * Kada se klikne na redak, korisnik će biti upitan za potvrdu brisanja.
+     *
+     * @param tableView Tablica zapisa prometa
+     */
+
     public static void addTrafficRecordDeletionHandler(TableView<TrafficRecord> tableView) {
         tableView.setRowFactory(tv -> {
             TableRow<TrafficRecord> row = new TableRow<>();
@@ -162,6 +232,13 @@ public class RowDeletion1Util {
         });
     }
 
+    /**
+     * Briše zapis prometa nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica zapisa prometa
+     */
+
     public static void deleteTrafficRecordWithConfirmation(TableView<TrafficRecord> tableView) {
         TrafficRecord selectedTrafficRecord = tableView.getSelectionModel().getSelectedItem();
         if (selectedTrafficRecord == null) {
@@ -171,6 +248,14 @@ public class RowDeletion1Util {
 
         deleteTrafficRecordWithConfirmation(tableView, selectedTrafficRecord);
     }
+
+    /**
+     * Briše zapis prometa nakon potvrde.
+     * Ako je brisanje uspješno, redak se uklanja iz tablice.
+     *
+     * @param tableView Tablica zapisa prometa
+     * @param trafficRecord Zapis prometa koji se briše
+     */
 
     private static void deleteTrafficRecordWithConfirmation(TableView<TrafficRecord> tableView, TrafficRecord trafficRecord) {
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultDelete();

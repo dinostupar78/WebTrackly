@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
@@ -13,10 +12,13 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.util.List;
-
 import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * Kontroler za upravljanje korisničkim sučeljem aplikacije WebTrackly.
+ * Ovaj kontroler omogućuje filtriranje, prikaz i uređivanje korisnika.
+ */
 
 public class UserController {
     @FXML
@@ -70,6 +72,11 @@ public class UserController {
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private UserDbRepository1<User> userRepository = new UserDbRepository1<>();
 
+    /**
+     * Inicijalizira kontroler i postavlja vrijednosti za tablicu korisnika.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize(){
         userColumnID.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
@@ -112,6 +119,11 @@ public class UserController {
         });
 
     }
+
+    /**
+     * Filtrira korisnike na temelju unesenih kriterija u tekstualnim poljima.
+     * Ova metoda se poziva kada korisnik unese podatke za filtriranje.
+     */
 
     public void filterUsers(){
         List<User> initialUserList;

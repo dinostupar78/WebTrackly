@@ -1,11 +1,14 @@
 package hr.javafx.webtrackly.threads;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository3;
 import hr.javafx.webtrackly.app.enums.DeviceType;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-
 import java.util.Optional;
+
+/**
+ * Thread koji dohvaća i prikazuje najčešće korišteni tip uređaja iz baze podataka.
+ * Koristi SessionDbRepository3 za pristup podacima i ažurira UI elemente Label.
+ */
 
 public class DisplayMostFrequentDeviceThread implements Runnable{
     private final SessionDbRepository3 sessionRepository;
@@ -18,6 +21,11 @@ public class DisplayMostFrequentDeviceThread implements Runnable{
         this.countLabel = countLabel;
 
     }
+
+    /**
+     * Metoda koja se izvršava u threadu.
+     * Dohvaća najčešće korišteni tip uređaja i ažurira UI elemente.
+     */
 
     @Override
     public void run() {

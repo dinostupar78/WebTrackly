@@ -1,17 +1,25 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 
+/**
+ * Klasa koja predstavlja repozitorij za korisnike u bazi podataka.
+ * Nasljeđuje UserDbRepository1 i dodaje mogućnost ažuriranja i brisanja korisnika.
+ *
+ * @param <T> Tip korisnika koji se koristi u repozitoriju.
+ */
+
 public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
+    /**
+     * Konstruktor koji inicijalizira repozitorij korisnika.
+     */
+
     public void update(T entity){
         String query = "UPDATE APP_USER " +
                 "SET FIRST_NAME = ?, LAST_NAME = ?, DATE_OF_BIRTH = ?, NATIONALITY = ?, " +
@@ -40,6 +48,14 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
         }
     }
 
+    /**
+     * Metoda koja briše korisnika iz baze podataka.
+     * Prvo briše sve akcije korisnika, zatim sesije i na kraju samog korisnika.
+     * Ako dođe do greške, transakcija se vraća na početak (rollback).
+     *
+     * @param id ID korisnika koji se briše.
+     */
+
     public void delete(Long id) {
         try (Connection connection = DbActiveUtil.connectToDatabase()) {
             connection.setAutoCommit(false);
@@ -49,6 +65,14 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
             throw new RepositoryException("Error while deleting user from database");
         }
     }
+
+    /**
+     * Privatna metoda koja izvršava brisanje korisnika i njegovih povezanih podataka.
+     * Koristi se unutar transakcije kako bi se osigurala konzistentnost podataka.
+     *
+     * @param connection Veza s bazom podataka.
+     * @param id ID korisnika koji se briše.
+     */
 
     private void performDeleteOperation(Connection connection, Long id){
         try {
@@ -65,6 +89,15 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
             throw new RepositoryException("Error while deleting user from database");
         }
     }
+
+    /**
+     * Privatna metoda koja izvršava SQL upite za brisanje korisnika i njegovih povezanih podataka.
+     * Prvo briše sve akcije korisnika, zatim sesije i na kraju samog korisnika.
+     *
+     * @param connection Veza s bazom podataka.
+     * @param id ID korisnika koji se briše.
+     * @throws SQLException Ako dođe do greške prilikom izvršavanja SQL upita.
+     */
 
     private void executeDeleteUserQuery(Connection connection, Long id) throws SQLException {
         String deleteUserActionQuery = "DELETE FROM USER_ACTION WHERE USER_ID = ?";
@@ -95,6 +128,15 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
         }
     }
 
+    /**
+     * Metoda koja pronalazi korisnika po korisničkom imenu.
+     * Ako korisnik postoji, vraća ga kao Optional<User>.
+     * Ako ne postoji, vraća Optional.empty().
+     *
+     * @param username Korisničko ime koje se traži.
+     * @return Optional<User> koji sadrži pronađenog korisnika ili je prazan ako korisnik ne postoji.
+     */
+
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID WHERE USERNAME = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
@@ -112,6 +154,15 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
             throw new RepositoryException("Error checking username", e);
         }
     }
+
+    /**
+     * Metoda koja pronalazi korisnika po email adresi.
+     * Ako korisnik postoji, vraća ga kao Optional<User>.
+     * Ako ne postoji, vraća Optional.empty().
+     *
+     * @param email Email adresa koju se traži.
+     * @return Optional<User> koji sadrži pronađenog korisnika ili je prazan ako korisnik ne postoji.
+     */
 
     public Optional<User> findByEmail(String email) {
 

@@ -36,6 +36,12 @@ import java.util.Map;
 import static javafx.animation.Animation.INDEFINITE;
 import static javafx.collections.FXCollections.observableArrayList;
 
+/**
+ * Kontroler za upravljanje web stranicama u aplikaciji WebTrackly.
+ * Omogućuje pregled, filtriranje, dodavanje i uređivanje web stranica,
+ * kao i prikaz statističkih podataka vezanih uz web stranice.
+ */
+
 public class WebsiteController {
     @FXML
     private TextField websiteSearchTextField;
@@ -102,10 +108,24 @@ public class WebsiteController {
     UserActionDbRepository3 userActionRepository3 = new UserActionDbRepository3();
     SessionDbRepository3 sessionRepository3 = new SessionDbRepository3();
 
+    /**
+     * Otvara ekran za uređivanje web stranice.
+     *
+     * @param event događaj koji pokreće otvaranje ekrana
+     */
+
     @FXML
     private void openAddWebsiteScreen(ActionEvent event) {
         ScreenChangeButtonUtil.openWebsiteAddScreen(event);
     }
+
+    /**
+     * Inicijalizira kontroler i postavlja potrebne postavke za tablicu web stranica.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     * Postavlja se način prikaza podataka u tablici, dodaju se rukovatelji događaja za brisanje i uređivanje redaka,
+     * te se postavljaju kolone tablice za prikaz informacija o web stranicama.
+     * Ova metoda također postavlja vremenski okvir za automatsko osvježavanje podataka o najčešćim uređajima, radnjama, domenama i kategorijama.
+     */
 
     public void initialize(){
         websiteTableColumnID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getId()))
@@ -137,6 +157,11 @@ public class WebsiteController {
         });
 
     }
+
+    /**
+     * Filtrira web stranice prema ID-u i imenu te prikazuje rezultate u tablici.
+     * Također prikazuje statističke podatke o najčešćim uređajima, radnjama, domenama i kategorijama.
+     */
 
     public void filterWebsites() {
         List<Website> initialWebsiteList;
@@ -211,6 +236,13 @@ public class WebsiteController {
         tl.play();
     }
 
+    /**
+     * Prikazuje statistički prikaz kategorija web stranica u obliku kružnog grafikona.
+     * Kategorije su grupirane prema vrsti web stranice, a broj web stranica u svakoj kategoriji je prikazan kao segment grafikona.
+     *
+     * @param websites Lista web stranica za koje se prikazuje statistika.
+     */
+
     private void showCategoryBreakdownPieChart(List<Website> websites) {
         categoryBreakdownChart.getData().clear();
 
@@ -227,6 +259,13 @@ public class WebsiteController {
         categoryBreakdownChart.setLegendSide(Side.BOTTOM);
         categoryBreakdownChart.setLabelsVisible(true);
     }
+
+    /**
+     * Prikazuje statistički prikaz broja korisnika po web stranicama u obliku stupčastog grafikona.
+     * Svaki stupac predstavlja broj korisnika za određenu web stranicu.
+     *
+     * @param websites Lista web stranica za koje se prikazuje statistika.
+     */
 
     private void usersByWebsiteChart(List<Website> websites) {
         usersByWebsiteChart.getData().clear();

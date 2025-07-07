@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.utils;
-
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.controller.*;
 import javafx.event.ActionEvent;
@@ -8,11 +7,20 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+
+/**
+ * Utility klasa za otvaranje različitih ekrana u aplikaciji WebTrackly.
+ * Ova klasa sadrži statičke metode koje otvaraju nove prozore za uređivanje korisnika, akcija korisnika, sesija, zapisa prometa i web stranica.
+ */
 
 public class ScreenChangeButtonUtil {
     private ScreenChangeButtonUtil(){}
+
+    /**
+     * Otvara ekran za dodavanje novog korisnika.
+     * Ova metoda učitava FXML datoteku za dodavanje korisnika, postavlja scenu i prikazuje prozor.
+     */
 
     public static void openUserEditScreen(User user) {
         try {
@@ -32,6 +40,12 @@ public class ScreenChangeButtonUtil {
         }
     }
 
+    /**
+     * Otvara ekran za dodavanje nove akcije korisnika.
+     * Ova metoda učitava FXML datoteku za dodavanje akcije korisnika, postavlja scenu i prikazuje prozor.
+     * @param event Event koji pokreće otvaranje ekrana, obično klik na gumb.
+     */
+
     public static void openUserActionAddScreen(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/userActionAdd.fxml"));
@@ -49,6 +63,12 @@ public class ScreenChangeButtonUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Otvara ekran za uređivanje postojeće akcije korisnika.
+     * Ova metoda učitava FXML datoteku za uređivanje akcije korisnika, postavlja scenu i prikazuje prozor.
+     * @param userAction Akcija korisnika koja se uređuje.
+     */
 
     public static void openUserActionEditScreen(UserAction userAction) {
         try {
@@ -68,6 +88,12 @@ public class ScreenChangeButtonUtil {
         }
     }
 
+    /**
+     * Otvara ekran za dodavanje nove sesije.
+     * Ova metoda učitava FXML datoteku za dodavanje sesije, postavlja scenu i prikazuje prozor.
+     * @param event Event koji pokreće otvaranje ekrana, obično klik na gumb.
+     */
+
     public static void openSessionAddScreen(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/sessionAdd.fxml"));
@@ -85,6 +111,12 @@ public class ScreenChangeButtonUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Otvara ekran za uređivanje postojeće sesije.
+     * Ova metoda učitava FXML datoteku za uređivanje sesije, postavlja scenu i prikazuje prozor.
+     * @param session Sesija koja se uređuje.
+     */
 
     public static void openSessionEditScreen(Session session) {
         try {
@@ -104,6 +136,12 @@ public class ScreenChangeButtonUtil {
         }
     }
 
+    /**
+     * Otvara ekran za dodavanje novog zapisa prometa.
+     * Ova metoda učitava FXML datoteku za dodavanje zapisa prometa, postavlja scenu i prikazuje prozor.
+     * @param event Event koji pokreće otvaranje ekrana, obično klik na gumb.
+     */
+
     public static void openTrafficRecordAddScreen(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/trafficRecordAdd.fxml"));
@@ -121,6 +159,12 @@ public class ScreenChangeButtonUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Otvara ekran za uređivanje postojećeg zapisa prometa.
+     * Ova metoda učitava FXML datoteku za uređivanje zapisa prometa, postavlja scenu i prikazuje prozor.
+     * @param trafficRecord Zapis prometa koji se uređuje.
+     */
 
     public static void openTrafficRecordEditScreen(TrafficRecord trafficRecord) {
         try {
@@ -140,6 +184,12 @@ public class ScreenChangeButtonUtil {
         }
     }
 
+    /**
+     * Otvara ekran za dodavanje nove web stranice.
+     * Ova metoda učitava FXML datoteku za dodavanje web stranice, postavlja scenu i prikazuje prozor.
+     * @param event Event koji pokreće otvaranje ekrana, obično klik na gumb.
+     */
+
     public static void openWebsiteAddScreen(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(ScreenChangeButtonUtil.class.getResource("/hr/javafx/webtrackly/websiteAdd.fxml"));
@@ -157,6 +207,12 @@ public class ScreenChangeButtonUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Otvara ekran za uređivanje postojeće web stranice.
+     * Ova metoda učitava FXML datoteku za uređivanje web stranice, postavlja scenu i prikazuje prozor.
+     * @param website Web stranica koja se uređuje.
+     */
 
     public static void openWebsiteEditScreen(Website website) {
         try {

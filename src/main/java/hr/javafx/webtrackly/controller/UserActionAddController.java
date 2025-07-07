@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.SessionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.db.UserDbRepository1;
@@ -16,16 +15,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
+
+/**
+ * Kontroler za dodavanje korisničkih akcija u aplikaciji WebTrackly.
+ * Ovaj kontroler upravlja unosom podataka o korisničkim akcijama, uključujući korisnika,
+ * vrstu akcije, web stranicu, sesiju, datum i vrijeme akcije te dodatne detalje.
+ */
 
 public class UserActionAddController {
     @FXML
@@ -56,6 +59,11 @@ public class UserActionAddController {
     private UserActionDbRepository1<UserAction> userActionRepository = new UserActionDbRepository1<>();
     private SessionDbRepository1<Session> sessionRepository = new SessionDbRepository1<>();
 
+/**
+     * Inicijalizira kontroler i postavlja početne vrijednosti za ComboBox-ove i TextField-ove.
+     * Također provjerava je li baza podataka aktivna i postavlja formatiranje vremena.
+     */
+
     public void initialize() {
         if (!DbActiveUtil.isDatabaseOnline()) {
             log.error("Database is inactive. Please check your connection.");
@@ -85,6 +93,12 @@ public class UserActionAddController {
             return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
         }, actionDatePickerDateOfAction.valueProperty(), tf.valueProperty());
     }
+
+    /**
+     * Metoda koja se poziva prilikom klika na gumb za dodavanje akcije.
+     * Provjerava unesene podatke, kreira novu korisničku akciju i sprema je u bazu podataka.
+     * Ako su uneseni podaci neispravni, prikazuje se upozorenje s greškama.
+     */
 
     public void addAction() {
         StringBuilder errorMessages = new StringBuilder();

@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.files.UserFileRepository;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
@@ -15,10 +14,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+/**
+ * Kontroler za upravljanje login funkcionalnošću u aplikaciji WebTrackly.
+ * Omogućuje korisnicima da se prijave koristeći svoje korisničko ime, lozinku i ulogu.
+ */
 
 public class LoginController {
 
@@ -31,9 +34,19 @@ public class LoginController {
     @FXML
     private ComboBox<Role> loginComboBoxRole;
 
+    /**
+     * Inicijalizira kontroler i popunjava ComboBox s dostupnim ulogama.
+     * Ova metoda se poziva automatski prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize() {
         loginComboBoxRole.getItems().addAll(new AdminRole(), new MarketingRole());
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik klikne na gumb za prijavu.
+     * Provjerava unesene podatke i otvara dashboard ako su podaci ispravni.
+     */
 
     public void onClickLogin() {
         if(!DbActiveUtil.isDatabaseOnline()) {
@@ -71,6 +84,13 @@ public class LoginController {
         }
     }
 
+    /**
+     * Prikazuje alert s porukom.
+     * Ova metoda se koristi za prikazivanje informacija korisniku.
+     *
+     * @param message Poruka koja će biti prikazana u alertu.
+     */
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Login Status");
@@ -78,9 +98,21 @@ public class LoginController {
         alert.showAndWait();
     }
 
+    /**
+     * Metoda koja se poziva kada korisnik klikne na gumb za registraciju.
+     * Otvara panel za registraciju.
+     *
+     * @param event Događaj koji se događa prilikom klika na gumb.
+     */
+
     public void onClickRegister(ActionEvent event) {
         ScreenChangeUtil.showRegisterPanel(event);
     }
+
+    /**
+     * Otvara dashboard nakon uspješne prijave.
+     * Učitava FXML datoteku za dashboard i postavlja novu scenu.
+     */
 
     private void openDashboard() {
         try {
@@ -98,14 +130,5 @@ public class LoginController {
             showAlert("Error opening dashboard: " + e.getMessage());
         }
     }
-
-
-
-
-
-
-
-
-
 
 }

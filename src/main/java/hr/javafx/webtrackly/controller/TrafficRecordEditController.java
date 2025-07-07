@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.model.*;
@@ -15,6 +14,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+/**
+ * Kontroler za uređivanje zapisa o prometu u aplikaciji WebTrackly.
+ * Omogućuje korisniku da ažurira informacije o web stranici i vremenu posjeta.
+ */
 
 public class TrafficRecordEditController {
     @FXML
@@ -33,6 +37,13 @@ public class TrafficRecordEditController {
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
     private TrafficRecordDbRepository2<TrafficRecord> trafficRecordRepository = new TrafficRecordDbRepository2<>();
 
+    /**
+     * Postavlja podatke o zapisu o prometu koji se uređuje.
+     * Ova metoda se poziva kada se učitaju podaci za uređivanje.
+     *
+     * @param trafficRecord Zapisi o prometu koji se uređuje.
+     */
+
     public void setTrafficRecordData(TrafficRecord trafficRecord) {
         this.trafficRecord = trafficRecord;
         trafficRecordEditComboBoxWebsite.setValue(trafficRecord.getWebsite());
@@ -40,6 +51,11 @@ public class TrafficRecordEditController {
         trafficRecordEditDatePickerTimeOfVisit.setText(trafficRecord.getTimeOfVisit().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
 
     }
+
+    /**
+     * Inicijalizira kontroler i postavlja potrebne vrijednosti.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
 
     public void initialize(){
         trafficRecordEditComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
@@ -55,6 +71,12 @@ public class TrafficRecordEditController {
             return ld == null || lt == null ? null : LocalDateTime.of(ld, lt);
         }, trafficRecordEditDatePickerDateOfVisit.valueProperty(), tf.valueProperty());
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi urediti zapis o prometu.
+     * Provjerava unesene podatke i ažurira zapis u bazi podataka.
+     * Ako su podaci ispravni, zapis se ažurira i serijalizira promjena.
+     */
 
     public void editTrafficRecord(){
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultEdit();
@@ -113,6 +135,11 @@ public class TrafficRecordEditController {
             ShowAlertUtil.showAlert("Error", "Session not updated!", Alert.AlertType.ERROR);
         }
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi poništiti uređivanje zapisa o prometu.
+     * Vraća formu u početno stanje.
+     */
 
     public void clearForm() {
         trafficRecordEditComboBoxWebsite.getSelectionModel().clearSelection();

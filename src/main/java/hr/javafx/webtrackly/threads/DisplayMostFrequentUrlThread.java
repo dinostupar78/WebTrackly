@@ -1,12 +1,14 @@
 package hr.javafx.webtrackly.threads;
-
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository3;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.utils.ExtractDomainUtil.extractDomain;
+
+/**
+ * Thread koji dohvaća i prikazuje najčešće korištenu URL adresu iz baze podataka.
+ * Ažurira GUI s nazivom domene i brojem pojavljivanja.
+ */
 
 public class DisplayMostFrequentUrlThread implements Runnable{
 
@@ -19,6 +21,11 @@ public class DisplayMostFrequentUrlThread implements Runnable{
         this.mostFrequentDomainLabel = mostFrequentDomainLabel;
         this.mostFrequentDomainCountLabel = mostFrequentDomainCountLabel;
     }
+
+    /**
+     * Metoda koja se izvršava u threadu.
+     * Dohvaća najčešće korištenu URL adresu iz baze podataka i ažurira GUI s nazivom domene i brojem pojavljivanja.
+     */
 
     @Override
     public void run() {
@@ -40,7 +47,6 @@ public class DisplayMostFrequentUrlThread implements Runnable{
                 mostFrequentDomainCountLabel.setText("Number Of Domains: N/A");
             });
         }
-
 
     }
 }

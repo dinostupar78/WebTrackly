@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.controller;
-
 import hr.javafx.webtrackly.app.db.UserDbRepository2;
 import hr.javafx.webtrackly.app.db.WebsiteDbRepository1;
 import hr.javafx.webtrackly.app.enums.GenderType;
@@ -9,12 +8,16 @@ import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import static hr.javafx.webtrackly.controller.UserAddController.validateEmail;
+
+/**
+ * Kontroler za uređivanje korisničkih podataka u aplikaciji WebTrackly.
+ * Omogućuje korisniku da ažurira svoje osobne podatke, uključujući ime, prezime, datum rođenja,
+ * nacionalnost, spol, korisničko ime, email i lozinku.
+ */
 
 public class UserEditController {
     @FXML
@@ -49,9 +52,15 @@ public class UserEditController {
     private UserDbRepository2<User> userRepository = new UserDbRepository2<>();
     private WebsiteDbRepository1<Website> websiteRepository = new WebsiteDbRepository1<>();
 
+    /**
+     * Postavlja korisnika čije podatke treba urediti.
+     * Ažurira polja obrasca s podacima korisnika.
+     *
+     * @param user Korisnik čiji se podaci uređuju.
+     */
+
     public void setUser(User user) {
         this.user = user;
-
         userEditTextFieldFirstName.setText(user.getFirstName());
         userEditTextFieldLastName.setText(user.getLastName());
         userEditDatePickerBirth.setValue(user.getPersonalData().dateOfBirth());
@@ -63,10 +72,21 @@ public class UserEditController {
         userEditComboBoxWebsite.setValue(websiteRepository.findById(user.getWebsiteId()));
     }
 
+    /**
+     * Inicijalizira kontroler, postavlja vrijednosti u ComboBox elemente.
+     * Ova metoda se poziva prilikom učitavanja FXML datoteke.
+     */
+
     public void initialize() {
         userEditComboBoxGender.getItems().setAll(GenderType.values());
         userEditComboBoxWebsite.getItems().setAll(websiteRepository.findAll());
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi urediti svoje podatke.
+     * Validira unesene podatke i ažurira korisnika u bazi podataka.
+     * Ako su podaci ispravni, prikazuje poruku o uspjehu, inače prikazuje greške.
+     */
 
     public void editUser(){
         Optional<ButtonType> result = ShowAlertUtil.getAlertResultEdit();
@@ -180,6 +200,11 @@ public class UserEditController {
             ShowAlertUtil.showAlert("Error", "Session not updated!", Alert.AlertType.ERROR);
         }
     }
+
+    /**
+     * Metoda koja se poziva kada korisnik želi otkazati uređivanje podataka.
+     * Vraća korisnika na prethodni ekran i čisti formu.
+     */
 
     private void clearForm(){
         userEditTextFieldFirstName.clear();
