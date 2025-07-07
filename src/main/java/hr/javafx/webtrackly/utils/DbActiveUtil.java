@@ -45,7 +45,7 @@ public class DbActiveUtil {
 
     public static Connection connectToDatabase() throws DbConnectionException, IOException, SQLException {
         Properties props = new Properties();
-        try (FileReader reader = new FileReader("C:\\Users\\Dino\\Desktop\\PROJEKT\\WebTrackly\\src\\main\\resources\\database.properties")) {
+        try (FileReader reader = new FileReader("C:\\Users\\Dominik\\Desktop\\PROJEKT\\src\\main\\resources\\database.properties")) {
             props.load(reader);
         } catch (IOException e) {
             log.error("Error reading database properties file.", e);

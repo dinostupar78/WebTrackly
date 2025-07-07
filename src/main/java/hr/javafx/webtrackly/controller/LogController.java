@@ -60,7 +60,7 @@ public class LogController {
     public void filterLogs() {
         Pattern pattern = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3})\\s+(\\S+)\\s+\\[.*?\\]\\s+\\S+\\s+\\[.*?\\]\\s+(.*)$");
 
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Dino\\Desktop\\PROJEKT\\WebTrackly\\logs\\pogreske.log"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Dominik\\Desktop\\PROJEKT\\logs\\pogreske.log"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 Matcher matcher = pattern.matcher(line);

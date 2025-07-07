@@ -191,7 +191,7 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         try{
             gender = GenderType.valueOf(genderTypeString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidDataException("Unknown gender type: " + genderTypeString);
+            throw new InvalidDataException("Unknown gender type: " + genderTypeString, e);
         }
 
         String username = resultSet.getString("USERNAME");

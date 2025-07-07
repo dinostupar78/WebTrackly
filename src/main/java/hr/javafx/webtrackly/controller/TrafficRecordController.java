@@ -128,7 +128,7 @@ public class TrafficRecordController {
         List<TrafficRecord> initialTrafficRecordList;
         try{
             initialTrafficRecordList = trafficRecordRepository.findAll();
-        } catch (RepositoryException e) {
+        } catch (RepositoryException _) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
             alert.showAndWait();
             return;

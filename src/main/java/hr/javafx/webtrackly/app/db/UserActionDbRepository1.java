@@ -163,7 +163,7 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         try{
             behaviourType = BehaviourType.valueOf(action.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidDataException("Unknown behaviour type: " + action);
+            throw new InvalidDataException("Unknown behaviour type: " + action, e);
         }
 
         Long websiteId = resultSet.getLong("WEBSITE_ID");

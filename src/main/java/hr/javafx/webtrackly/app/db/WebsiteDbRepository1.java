@@ -203,7 +203,7 @@ public class WebsiteDbRepository1<T extends Website> extends AbstractDbRepositor
             websiteType = WebsiteType.valueOf(websiteCat.toUpperCase());
         } catch (IllegalArgumentException e){
             log.error("Device type not found! {}", websiteCat);
-            throw new InvalidDataException("Device type not found!" + websiteCat);
+            throw new InvalidDataException("Device type not found!" + websiteCat, e);
         }
         String websiteDescription = resultSet.getString("WEBSITE_DESCRIPTION");
         Set<User> users = fetchUsersForWebsite(id);

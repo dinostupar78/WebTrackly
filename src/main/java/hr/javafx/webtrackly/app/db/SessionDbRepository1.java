@@ -163,7 +163,7 @@ public class SessionDbRepository1<T extends Session> extends AbstractDbRepositor
             deviceType = DeviceType.valueOf(deviceTypeStr.toUpperCase());
         } catch (IllegalArgumentException e){
             log.error("Device type not found! {}", deviceTypeStr);
-            throw new InvalidDataException("Device type not found!" + deviceTypeStr);
+            throw new InvalidDataException("Device type not found!" + deviceTypeStr, e);
         }
 
         LocalDateTime startTime = resultSet.getTimestamp("START_TIME").toLocalDateTime();
