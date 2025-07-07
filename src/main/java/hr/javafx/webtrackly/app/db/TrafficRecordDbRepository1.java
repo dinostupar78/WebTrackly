@@ -10,7 +10,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 /**
  * Klasa koja predstavlja repozitorij za upravljanje prometnim zapisima u bazi podataka.

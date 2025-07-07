@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 /**
  * Kontroler za dodavanje korisnika u aplikaciji WebTrackly.

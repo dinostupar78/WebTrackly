@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 /**
  * Klasa koja predstavlja repozitorij za upravljanje sesijama u bazi podataka.

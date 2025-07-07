@@ -11,7 +11,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 /**
  * Klasa koja predstavlja repozitorij za korisnike u bazi podataka.

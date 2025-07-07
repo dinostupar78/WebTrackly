@@ -11,11 +11,11 @@ import java.io.IOException;
  * Inicijalizira primarni prozor aplikacije i prikazuje početni ekran.
  */
 
-public class HelloApplication extends Application {
+public class App extends Application {
     /**
      * Logger za praćenje događaja u aplikaciji.
      */
-    public static final Logger log = LoggerFactory.getLogger(HelloApplication.class);
+    public static final Logger log = LoggerFactory.getLogger(App.class);
 
     /**
      * Metoda koja se poziva prilikom pokretanja aplikacije.
@@ -27,7 +27,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         log.info("Application started!");
-        stage.setTitle("Hello!");
+        stage.setTitle("WebTrackly");
         stage.setScene(new FirstScreenController().showWelcomeScreen());
         stage.show();
 

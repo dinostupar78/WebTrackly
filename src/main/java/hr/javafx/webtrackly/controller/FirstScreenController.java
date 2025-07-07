@@ -2,7 +2,7 @@ package hr.javafx.webtrackly.controller;
 import hr.javafx.webtrackly.app.model.MarketingRole;
 import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserSession;
-import hr.javafx.webtrackly.main.HelloApplication;
+import hr.javafx.webtrackly.main.App;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
 import hr.javafx.webtrackly.utils.ScreenChangeUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
@@ -18,7 +18,7 @@ import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 
 /**
@@ -82,7 +82,7 @@ public class FirstScreenController {
      */
 
     public Scene showWelcomeScreen() {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/hr/javafx/webtrackly/welcomeScreen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/hr/javafx/webtrackly/welcomeScreen.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 1144, 771);

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Properties;
 
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 public class DbActiveUtil {
     private DbActiveUtil() {}

@@ -13,7 +13,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import java.time.LocalDate;
 import java.util.Optional;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 /**
  * Kontroler za registraciju korisnika u aplikaciji WebTrackly.

@@ -6,7 +6,7 @@ import hr.javafx.webtrackly.utils.DbActiveUtil;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 
 /**
  * Klasa koja predstavlja repozitorij za korisnike u bazi podataka.

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 import static hr.javafx.webtrackly.utils.DateFormatterUtil.formatLocalDateTime;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 import static java.lang.Boolean.FALSE;

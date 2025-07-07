@@ -84,7 +84,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>hr.javafx.webtrackly/hr.javafx.webtrackly.main.HelloApplication</mainClass>
+                            <mainClass>hr.javafx.webtrackly/hr.javafx.webtrackly.main.App</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

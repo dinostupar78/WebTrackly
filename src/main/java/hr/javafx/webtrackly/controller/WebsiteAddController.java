@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
-import static hr.javafx.webtrackly.main.HelloApplication.log;
+import static hr.javafx.webtrackly.main.App.log;
 import static hr.javafx.webtrackly.utils.ShowAlertUtil.showAlert;
 
 /**
