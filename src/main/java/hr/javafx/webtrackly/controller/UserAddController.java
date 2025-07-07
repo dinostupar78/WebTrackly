@@ -9,10 +9,8 @@ import hr.javafx.webtrackly.utils.DataSerializeUtil;
 import hr.javafx.webtrackly.utils.PasswordUtil;
 import hr.javafx.webtrackly.utils.ShowAlertUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -49,7 +47,7 @@ public class UserAddController {
     private TextField userTextFieldEmail;
 
     @FXML
-    private TextField userTextFieldPassword;
+    private PasswordField userPasswordFieldPassword;
 
     @FXML
     private ComboBox<Website> userComboBoxWebsite;
@@ -122,7 +120,7 @@ public class UserAddController {
             errorMessages.append(e.getMessage()).append("\n");
         }
 
-        String password = userTextFieldPassword.getText();
+        String password = userPasswordFieldPassword.getText();
         if(password.isEmpty()){
             errorMessages.append("Password is required!\n");
         }
@@ -232,7 +230,7 @@ public class UserAddController {
         userComboBoxGender.getSelectionModel().clearSelection();
         userTextFieldUsername.clear();
         userTextFieldEmail.clear();
-        userTextFieldPassword.clear();
+        userPasswordFieldPassword.clear();
         userComboBoxWebsite.getSelectionModel().clearSelection();
     }
 }

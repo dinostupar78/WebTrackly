@@ -1,4 +1,5 @@
 package hr.javafx.webtrackly.controller;
+
 import hr.javafx.webtrackly.app.db.TrafficRecordDbRepository1;
 import hr.javafx.webtrackly.app.db.UserActionDbRepository1;
 import hr.javafx.webtrackly.app.enums.BehaviourType;
@@ -20,12 +21,13 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
+
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
@@ -132,43 +134,66 @@ public class TrafficRecordController {
             return;
         }
 
-        initialTrafficRecordList.forEach(traffic -> {
-            LocalDateTime end   = traffic.getTimeOfVisit();
+        List<UserAction> allClicks = userActionRepository.findAll().stream()
+                .filter(ua -> ua.getAction() == BehaviourType.CLICK)
+                .toList();
+
+        Map<Long, List<UserAction>> clicksByWebsite = new HashMap<>();
+        for (UserAction ua : allClicks) {
+            Long websiteId = ua.getUser().getWebsiteId();
+            if (!clicksByWebsite.containsKey(websiteId)) {
+                clicksByWebsite.put(websiteId, new ArrayList<>());
+            }
+            clicksByWebsite.get(websiteId).add(ua);
+        }
+
+        for (TrafficRecord trafficRecord : initialTrafficRecordList) {
+            LocalDateTime end   = trafficRecord.getTimeOfVisit();
             LocalDateTime start = end.minusHours(24);
+            Long websiteId = trafficRecord.getWebsite().getId();
 
-            List<UserAction> clicks = userActionRepository.findAll().stream()
-                    .filter(ua -> ua.getAction() == BehaviourType.CLICK)
-                    .filter(ua -> !ua.getTimestamp().isBefore(start) && !ua.getTimestamp().isAfter(end))
-                    .filter(ua -> ua.getUser().getWebsiteId().equals(traffic.getWebsite().getId()))
-                    .toList();
+            List<UserAction> websiteClicks = new ArrayList<>();
+            List<UserAction> bucket = clicksByWebsite.getOrDefault(websiteId, new ArrayList<>());
+            for (UserAction ua : bucket) {
+                if (!ua.getTimestamp().isBefore(start) && !ua.getTimestamp().isAfter(end)) {
+                    websiteClicks.add(ua);
+                }
+            }
 
-            traffic.setPageViews(clicks.size());
+            Integer totalClicks = websiteClicks.size();
+            trafficRecord.setPageViews(totalClicks);
 
-            Map<Long, Long> clicksPerUser = clicks.stream()
-                    .collect(Collectors.groupingBy(ua -> ua.getUser().getId(),
-                            Collectors.counting()
-                    ));
+            Map<Long, Long> clicksPerUser = new HashMap<>();
+            for (UserAction ua : websiteClicks) {
+                Long userId = ua.getUser().getId();
+                if (clicksPerUser.containsKey(userId)) {
+                    clicksPerUser.put(userId, clicksPerUser.get(userId) + 1);
+                } else {
+                    clicksPerUser.put(userId, 1L);
+                }
+            }
 
-            Long uniqueUsers = (long) clicksPerUser.size();
+            long uniqueUsers = clicksPerUser.size();
 
-            BigDecimal pageViews = BigDecimal.valueOf(clicks.size());
-            Long bounces = clicksPerUser.values().stream()
-                    .filter(click -> click == 1)
-                    .count();
+            long bounces = 0;
+            for (Long count : clicksPerUser.values()) {
+                if (count == 1L) {
+                    bounces++;
+                }
+            }
 
             BigDecimal bounceRate;
-
             if (uniqueUsers > 0) {
-                bounceRate = BigDecimal.valueOf((double) bounces / uniqueUsers * 100)
+                bounceRate = BigDecimal
+                        .valueOf((double) bounces / uniqueUsers * 100)
                         .setScale(2, RoundingMode.HALF_UP);
             } else {
                 bounceRate = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
             }
 
-            traffic.setBounceRate(bounceRate);
-            traffic.setPageViews(pageViews.intValue());
+            trafficRecord.setBounceRate(bounceRate);
 
-        });
+        }
 
         String trafficRecordID = trafficTextFieldID.getText();
         if(!(trafficRecordID.isEmpty())){
@@ -208,9 +233,9 @@ public class TrafficRecordController {
         DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("MM-dd HH:mm");
 
         List<TrafficRecord> recent = new ArrayList<>();
-        for (TrafficRecord r : data) {
-            if (!r.getTimeOfVisit().isBefore(last24hours)) {
-                recent.add(r);
+        for (TrafficRecord trafficRecordData : data) {
+            if (!trafficRecordData.getTimeOfVisit().isBefore(last24hours)) {
+                recent.add(trafficRecordData);
             }
         }
 

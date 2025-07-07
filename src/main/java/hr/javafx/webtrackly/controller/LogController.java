@@ -1,10 +1,14 @@
 package hr.javafx.webtrackly.controller;
+
 import hr.javafx.webtrackly.app.model.LogEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,8 +16,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import static hr.javafx.webtrackly.main.HelloApplication.log;
-import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * Kontroler za upravljanje prikazom i filtriranjem logova u aplikaciji WebTrackly.
@@ -23,12 +27,6 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class LogController {
     @FXML
     private DatePicker logDatePickerDate;
-
-    @FXML
-    private ComboBox<String> logComboBoxLogLevel;
-
-    @FXML
-    private TextField logTextFieldKeyword;
 
     @FXML
     private TableView<LogEntry> logTableView;
@@ -60,9 +58,6 @@ public class LogController {
      */
 
     public void filterLogs() {
-        logComboBoxLogLevel.setItems(observableArrayList("ALL", "INFO", "WARNING", "ERROR", "DEBUG"));
-        logComboBoxLogLevel.setValue("ALL");
-
         Pattern pattern = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3})\\s+(\\S+)\\s+\\[.*?\\]\\s+\\S+\\s+\\[.*?\\]\\s+(.*)$");
 
         try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Dino\\Desktop\\PROJEKT\\WebTrackly\\logs\\pogreske.log"))) {
@@ -84,13 +79,9 @@ public class LogController {
 
         logTableView.setItems(logEntries);
 
-        String keyword = logTextFieldKeyword.getText().toLowerCase();
-        String selectedLevel = logComboBoxLogLevel.getValue();
         LocalDate selectedDate = logDatePickerDate.getValue();
 
         List<LogEntry> filtered = logEntries.stream()
-                .filter(log -> keyword.isEmpty() || log.getMessage().toLowerCase().contains(keyword))
-                .filter(log -> selectedLevel == null || selectedLevel.equals("ALL") || log.getLevel().equalsIgnoreCase(selectedLevel))
                 .filter(log -> {
                     if (selectedDate == null)
                         return true;

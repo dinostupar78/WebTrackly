@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -23,8 +24,8 @@
                 <TextField fx:id="userTextFieldFirstName" layoutX="277.0" layoutY="93.0" prefHeight="35.0" prefWidth="112.0" promptText="First Name" styleClass="search-input" />
                 <TextField fx:id="userTextFieldLastName" layoutX="277.0" layoutY="143.0" prefHeight="25.0" prefWidth="112.0" promptText="Last Name" styleClass="search-input" />
                 <TextField fx:id="userTextFieldNationality" layoutX="277.0" layoutY="236.0" prefHeight="35.0" prefWidth="112.0" promptText="Nationality" styleClass="search-input" />
+            <PasswordField fx:id="userPasswordFieldPassword" layoutX="277.0" layoutY="414.0" promptText="Password" styleClass="passwordField-input" />
                 <TextField fx:id="userTextFieldUsername" layoutX="277.0" layoutY="323.0" prefHeight="35.0" prefWidth="112.0" promptText="Username" styleClass="search-input" />
-                <TextField fx:id="userTextFieldPassword" layoutX="279.0" layoutY="411.0" prefHeight="35.0" prefWidth="112.0" promptText="Password" styleClass="search-input" />
                 <Button layoutX="349.0" layoutY="508.0" onAction="#addUser" prefHeight="32.0" prefWidth="82.0" styleClass="action-button" text="Add" />
                 <Label layoutX="339.0" layoutY="19.0" styleClass="panel-header" text="Add User" />
                 <ComboBox fx:id="userComboBoxWebsite" layoutX="279.0" layoutY="459.0" prefHeight="35.0" prefWidth="150.0" promptText="Website" styleClass="search-combo" />

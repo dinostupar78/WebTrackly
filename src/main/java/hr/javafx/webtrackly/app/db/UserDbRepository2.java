@@ -138,7 +138,7 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
      */
 
     public Optional<User> findByUsername(String username) {
-        String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID WHERE USERNAME = ?";
+        String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID FROM APP_USER WHERE USERNAME = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -166,7 +166,7 @@ public class UserDbRepository2<T extends User> extends UserDbRepository1<T> {
 
     public Optional<User> findByEmail(String email) {
 
-        String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID WHERE EMAIL = ?";
+        String sql = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID FROM APP_USER WHERE EMAIL = ?";
         try (Connection connection = DbActiveUtil.connectToDatabase();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
