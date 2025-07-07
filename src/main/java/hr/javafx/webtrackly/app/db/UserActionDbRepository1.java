@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.InvalidDataException;
@@ -10,14 +9,19 @@ import hr.javafx.webtrackly.app.model.User;
 import hr.javafx.webtrackly.app.model.UserAction;
 import hr.javafx.webtrackly.app.model.Website;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Klasa koja predstavlja repozitorij za upravljanje korisničkim akcijama u bazi podataka.
+ * Nasljeđuje apstraktnu klasu AbstractDbRepository i implementira metode za dohvat i spremanje korisničkih akcija.
+ *
+ * @param <T> Tip korisničke akcije koja se pohranjuje u repozitorij.
+ */
 
 public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY =
@@ -25,6 +29,13 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     private static final String FIND_ALL_QUERY =
             "SELECT ID, USER_ID, SESSION_ID, ACTION, WEBSITE_ID, ACTION_TIMESTAMP, DETAILS FROM USER_ACTION";
+
+    /**
+     * Metoda za dohvat korisničke akcije prema ID-u.
+     * Ako akcija s danim ID-om ne postoji, baca se EntityNotFoundException.
+     * @param id ID korisničke akcije koju tražimo.
+     * @return Korisnička akcija s danim ID-om.
+     */
 
     @Override
     public T findById(Long id) {
@@ -46,6 +57,12 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         }
     }
 
+    /**
+     * Metoda za dohvat svih korisničkih akcija iz baze podataka.
+     * Ako dođe do greške prilikom dohvaćanja, baca se RepositoryException.
+     * @return Lista svih korisničkih akcija.
+     */
+
     @Override
     public List<T> findAll(){
         List<T> actions = new ArrayList<>();
@@ -62,6 +79,12 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         }
         return actions;
     }
+
+    /**
+     * Metoda za spremanje liste korisničkih akcija u bazu podataka.
+     * Ako dođe do greške prilikom spremanja, baca se RepositoryException.
+     * @param entities Lista korisničkih akcija koje se spremaju.
+     */
 
     @Override
     public void save(List<T> entities){
@@ -88,6 +111,12 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
 
     }
 
+    /**
+     * Metoda za spremanje pojedinačne korisničke akcije u bazu podataka.
+     * Ako dođe do greške prilikom spremanja, baca se RepositoryException.
+     * @param entity Korisnička akcija koja se sprema.
+     */
+
     @Override
     public void save(T entity){
         String sql = "INSERT INTO USER_ACTION (USER_ID, SESSION_ID, ACTION, WEBSITE_ID, ACTION_TIMESTAMP, DETAILS) " +
@@ -109,6 +138,14 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
         }
 
     }
+
+    /**
+     * Privatna metoda za ekstrakciju korisničke akcije iz ResultSet-a.
+     * @param resultSet ResultSet iz kojeg se ekstraktira korisnička akcija.
+     * @return Korisnička akcija ekstraktirana iz ResultSet-a.
+     * @throws SQLException Ako dođe do greške prilikom čitanja ResultSet-a.
+     * @throws InvalidDataException Ako su podaci u ResultSet-u nevažeći.
+     */
 
     private static UserAction extractFromUserActionResultSet(ResultSet resultSet) throws SQLException, InvalidDataException {
         Long id = resultSet.getLong("ID");
@@ -146,7 +183,6 @@ public class UserActionDbRepository1<T extends UserAction> extends AbstractDbRep
                 .setActionTimestamp(startTime)
                 .setDetails(details)
                 .build();
-
     }
 
 }

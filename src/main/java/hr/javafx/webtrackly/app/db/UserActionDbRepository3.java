@@ -1,17 +1,27 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.BehaviourType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
 
+/**
+ * Klasa koja predstavlja repozitorij za rad s korisničkim akcijama u bazi podataka.
+ * Ova klasa omogućuje dohvat najčešće korištene akcije i brojanje akcija po vrsti.
+ * Implementira sinkronizaciju kako bi se spriječili problemi s višestrukim pristupom bazi podataka.
+ */
+
 public class UserActionDbRepository3 {
 
     private boolean dbLock = false;
+
+    /**
+     * Dohvaća najčešće korištenu akciju iz baze podataka.
+     * @return Optional koji sadrži najčešću akciju ako postoji, inače prazan Optional.
+     * @throws RepositoryException ako dođe do greške pri radu s bazom podataka.
+     */
 
     public synchronized Optional<BehaviourType> findMostFrequentAction() {
         while (dbLock) {
@@ -46,6 +56,13 @@ public class UserActionDbRepository3 {
             notifyAll();
         }
     }
+
+    /**
+     * Broji koliko puta je određena akcija izvršena u bazi podataka.
+     * @param action Vrsta akcije za koju se broji broj izvršenja.
+     * @return Broj izvršenja navedene akcije.
+     * @throws RepositoryException ako dođe do greške pri radu s bazom podataka.
+     */
 
     public synchronized Integer countByAction(BehaviourType action) {
         while (dbLock) {

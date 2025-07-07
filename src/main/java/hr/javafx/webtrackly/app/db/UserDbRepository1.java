@@ -1,5 +1,4 @@
 package hr.javafx.webtrackly.app.db;
-
 import hr.javafx.webtrackly.app.enums.GenderType;
 import hr.javafx.webtrackly.app.exception.DbConnectionException;
 import hr.javafx.webtrackly.app.exception.InvalidDataException;
@@ -7,14 +6,19 @@ import hr.javafx.webtrackly.app.exception.EntityNotFoundException;
 import hr.javafx.webtrackly.app.exception.RepositoryException;
 import hr.javafx.webtrackly.app.model.*;
 import hr.javafx.webtrackly.utils.DbActiveUtil;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static hr.javafx.webtrackly.main.HelloApplication.log;
+
+/**
+ * Klasa koja predstavlja repozitorij za korisnike u bazi podataka.
+ * Nasljeđuje apstraktnu klasu AbstractDbRepository i implementira metode za dohvat i spremanje korisnika.
+ *
+ * @param <T> Tip korisnika koji se koristi u repozitoriju.
+ */
 
 public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
     private static final String FIND_BY_ID_QUERY = "SELECT ID, FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID FROM APP_USER WHERE ID = ?";
@@ -26,6 +30,10 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
     private static final String ROLE_MARKETING = "Marketing";
 
     private static final String ROLE_USER = "User";
+
+    /**
+     * Konstruktor koji inicijalizira repozitorij korisnika.
+     */
 
     @Override
     public T findById(Long id){
@@ -47,6 +55,13 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         }
     }
 
+    /**
+     * Metoda koja dohvaća sve korisnike iz baze podataka.
+     *
+     * @return Lista svih korisnika.
+     * @throws RepositoryException Ako dođe do greške prilikom dohvaćanja korisnika.
+     */
+
     @Override
     public List<T> findAll(){
         List<T> users = new ArrayList<>();
@@ -63,6 +78,13 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         }
         return users;
     }
+
+    /**
+     * Metoda koja sprema listu korisnika u bazu podataka.
+     *
+     * @param entities Lista korisnika koji se spremaju.
+     * @throws RepositoryException Ako dođe do greške prilikom spremanja korisnika.
+     */
 
     @Override
     public void save(List<T> entities) {
@@ -106,6 +128,13 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
         }
     }
 
+    /**
+     * Metoda koja sprema pojedinačnog korisnika u bazu podataka.
+     *
+     * @param entity Korisnik koji se sprema.
+     * @throws RepositoryException Ako dođe do greške prilikom spremanja korisnika.
+     */
+
     @Override
     public void save(T entity) {
         String sql = "INSERT INTO APP_USER (FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, NATIONALITY, GENDER_TYPE, USERNAME, EMAIL, PASSWORD, ROLE, WEBSITE_ID) " +
@@ -139,6 +168,15 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
             throw new RepositoryException("Error while saving user to database");
         }
     }
+
+    /**
+     * Metoda koja dohvaća korisnika iz ResultSet-a.
+     *
+     * @param resultSet ResultSet iz kojeg se dohvaća korisnik.
+     * @return Korisnik koji je dohvaćen iz ResultSet-a.
+     * @throws InvalidDataException Ako su podaci u ResultSet-u neispravni.
+     * @throws SQLException Ako dođe do greške prilikom dohvaćanja podataka iz ResultSet-a.
+     */
 
     public static User extractUserFromResultSet(ResultSet resultSet) throws InvalidDataException, SQLException {
         Long id = resultSet.getLong("ID");
@@ -188,7 +226,6 @@ public class UserDbRepository1<T extends User> extends AbstractDbRepository<T> {
                 .setRole(role)
                 .setWebsiteId(websiteId)
                 .build();
-
     }
 
 }
