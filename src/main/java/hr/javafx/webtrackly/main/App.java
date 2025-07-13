@@ -15,7 +15,6 @@ public class App extends Application {
     /**
      * Logger za praćenje događaja u aplikaciji.
      */
-
     public static final Logger log = LoggerFactory.getLogger(App.class);
 
     /**
