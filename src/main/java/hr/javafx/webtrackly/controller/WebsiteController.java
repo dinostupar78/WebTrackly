@@ -167,7 +167,7 @@ public class WebsiteController {
         List<Website> initialWebsiteList;
         try{
             initialWebsiteList = websiteRepository.findAll();
-        } catch (RepositoryException e) {
+        } catch (RepositoryException _) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
             alert.showAndWait();
             return;

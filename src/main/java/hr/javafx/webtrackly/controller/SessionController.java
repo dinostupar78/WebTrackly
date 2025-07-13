@@ -146,7 +146,7 @@ public class SessionController {
         List<Session> initialSessionList;
         try{
             initialSessionList = sessionRepository.findAll();
-        } catch (RepositoryException e) {
+        } catch (RepositoryException _) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Database is offline. Please check your connection.");
             alert.showAndWait();
             return;
