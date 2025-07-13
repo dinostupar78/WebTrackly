@@ -152,6 +152,7 @@ public class SessionController {
             return;
         }
 
+
         String sessionID = sessionTextFieldID.getText();
         if(!(sessionID.isEmpty())){
             initialSessionList = initialSessionList.stream()
