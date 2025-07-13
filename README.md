@@ -7,32 +7,33 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Features](#-features)  
-- [Demo](#-demo)  
-- [Technologies](#-technologies)  
-- [Prerequisites](#-prerequisites)  
-- [Installation & Running](#-installation--running)  
+- [Features](#features)  
+- [Demo](#demo)  
+- [Technologies](#technologies)  
+- [Prerequisites](#prerequisites)  
+- [Installation & Running](#installation--running)  
+
 ---
 
-## 🚀 Features
+## Features
 
 - Connects to an embedded H2 database and shows Website → User analytics  
 - Real-time traffic and performance monitoring with JavaFX UI updates  
 - User management: create, update, delete, search by username/email  
 - Modular codebase: OOP, Builder pattern, custom exceptions, multithreading  
-- CSV export and data serialization of user actions
+- CSV export and data serialization of user actions  
 
 ---
 
-## 📺 Demo
+## Demo
 
-_Insert a short GIF or link to video demo here (e.g. under `docs/demo.gif`)._
+_Insert a short GIF or link to video demo here (e.g. `docs/demo.gif`)._
 
 ---
 
-## 🛠️ Technologies
+## Technologies
 
 - **Java 23**  
 - **JavaFX** (FXML + CSS styling)  
@@ -43,15 +44,15 @@ _Insert a short GIF or link to video demo here (e.g. under `docs/demo.gif`)._
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 - Java 23 (JDK)  
 - Maven 3.8+  
-- Git
+- Git  
 
 ---
 
-## ⚙️ Installation & Running
+## Installation & Running
 
 1. **Clone the repo**  
    ```bash
