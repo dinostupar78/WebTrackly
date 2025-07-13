@@ -3,7 +3,7 @@
 > **WebTrackly** is a desktop analytics tool written in Java/JavaFX for tracking and visualizing website traffic.  
 > Final project for Java Programming course.
 
-![WebTrackly Screenshot](<img width="1147" height="801" alt="dashboard" src="https://github.com/user-attachments/assets/04293b74-abd4-47b7-b9f9-4ed27b28815b" />)
+![WebTrackly Screenshot](https://github.com/user-attachments/assets/744f53cc-346b-4fb1-ae23-393fa8c1bb61)
 
 ---
 
