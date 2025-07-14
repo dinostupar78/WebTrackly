@@ -10,7 +10,6 @@
 ## Table of Contents
 
 - [Features](#features)  
-- [Demo](#demo)  
 - [Technologies](#technologies)  
 - [Prerequisites](#prerequisites)  
 - [Installation & Running](#installation--running)  
@@ -27,11 +26,6 @@
 
 ---
 
-## Demo
-
-_Insert a short GIF or link to video demo here (e.g. `docs/demo.gif`)._
-
----
 
 ## Technologies
 
