@@ -1,6 +1,6 @@
 # WebTrackly
 
-> **WebTrackly** is a desktop analytics tool written in Java/JavaFX for tracking and visualizing website traffic.  
+> **WebTrackly** is a desktop analytics tool written in Java for tracking and visualizing website traffic.  
 
 ![WebTrackly Screenshot](https://github.com/user-attachments/assets/43bf9366-4db9-4f26-b132-eca6e8b472b0)
 
