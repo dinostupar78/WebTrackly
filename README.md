@@ -21,7 +21,7 @@
 - Real-time traffic and performance monitoring with JavaFX UI updates  
 - User management: create, update, delete, search by username/email  
 - Modular codebase: OOP, Builder pattern, custom exceptions, multithreading  
-- CSV export and data serialization of user actions  
+- Data serialization of user actions  
 
 ---
 
